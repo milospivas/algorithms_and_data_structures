@@ -50,3 +50,29 @@ class QuickSort:
         QuickSort.sort(a, start, pivot)
         QuickSort.sort(a, pivot+1, stop)
 
+
+a = []
+QuickSort.sort(a)
+assert a == sorted(a)
+
+n = 10
+r = range(n)
+a = list(r)
+
+repetitions = 100
+
+for i in range(repetitions):
+    shuffle(a)
+    # print("List:", a)
+    QuickSort.sort(a)
+    assert a == sorted(a)
+    # print("Sorted:", a)
+
+a = a + a
+
+for i in range(repetitions):
+    shuffle(a)
+    # print("List:", a)
+    QuickSort.sort(a)
+    assert a == sorted(a)
+    # print("Sorted:", a)
