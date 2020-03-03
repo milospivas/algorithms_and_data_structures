@@ -1,7 +1,17 @@
+/**
+    QuickSort.h
+    Purpose: QuickSort declaration
+
+    @author Miloš Pivaš
+    @version 0.0.1 03/20
+*/
+
 #pragma once
 #include <iostream>
 #include <vector>
 #include <random>
+
+// TODO add function documentation
 
 namespace QuickSort {
     template <typename T>

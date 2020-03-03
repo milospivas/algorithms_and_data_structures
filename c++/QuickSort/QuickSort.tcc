@@ -1,3 +1,11 @@
+/**
+    QuickSort.tcc
+    Purpose: QuickSort implementation with random pivot selection
+
+    @author Miloš Pivaš
+    @version 0.0.1 03/20
+*/
+
 #include "QuickSort.h"
 
 template <typename T>
