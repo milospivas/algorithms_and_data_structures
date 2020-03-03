@@ -33,3 +33,20 @@ class QuickSort:
 
         QuickSort.swap(a, start, i)
         return i
+
+    @staticmethod
+    def sort(a : list, start : int = 0, stop : int = None) -> None:
+        'Recursive Quicksort function'
+        if stop is None:
+            stop = len(a)
+            
+        n = stop - start
+        if n <= 1:
+            return
+    
+        pivot = randrange(start, stop)
+        pivot = QuickSort.partition(a, start, stop, pivot)
+
+        QuickSort.sort(a, start, pivot)
+        QuickSort.sort(a, pivot+1, stop)
+
