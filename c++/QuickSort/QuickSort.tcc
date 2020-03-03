@@ -1,7 +1,7 @@
 #include "QuickSort.h"
-#include <iostream>
 
-std::vector<int> QuickSort::swap(std::vector<int> &a, size_t i, size_t j) {
+template <typename T>
+std::vector<T> QuickSort::swap(std::vector<T> &a, size_t i, size_t j) {
     if (i == j) {
         return a;
     }
@@ -16,7 +16,8 @@ size_t QuickSort::get_pivot(std::mt19937 gen, size_t start, size_t end) {
     return dis(gen);
 }
 
-size_t QuickSort::partition(std::vector<int> &a, size_t start, size_t end, size_t p) {
+template <typename T>
+size_t QuickSort::partition(std::vector<T> &a, size_t start, size_t end, size_t p) {
     swap(a, start, p);
     size_t i = start;
     for (size_t j = start+1; j < end; j++) {
@@ -29,7 +30,8 @@ size_t QuickSort::partition(std::vector<int> &a, size_t start, size_t end, size_
     return i;
 }
 
-std::vector<int> QuickSort::quicksort_rec(std::vector<int> &a, size_t start, size_t end, std::mt19937 gen) {
+template <typename T>
+std::vector<T> QuickSort::quicksort_rec(std::vector<T> &a, size_t start, size_t end, std::mt19937 gen) {
     size_t n = end - start; // TODO Maybe check if n < 0
     if (n <= 1) {
         return a;
@@ -42,7 +44,8 @@ std::vector<int> QuickSort::quicksort_rec(std::vector<int> &a, size_t start, siz
     return a;
 }
 
-std::vector<int> QuickSort::sort(std::vector<int> &a) {
+template <typename T>
+std::vector<T> QuickSort::sort(std::vector<T> &a) {
     size_t n = a.size();
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()

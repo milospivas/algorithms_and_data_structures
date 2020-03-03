@@ -9,7 +9,7 @@ int main() {
     }
     std::cout << std::endl;
 
-    QuickSort::sort(A);
+    QuickSort::sort<int>(A);
     
     for (size_t i = 0; i < n; i++) {
         std::cout << A[i] << " ";
