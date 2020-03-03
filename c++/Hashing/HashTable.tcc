@@ -1,6 +1,7 @@
 /**
-    HashTable.cpp
-    Purpose: Hash table implementation.
+    HashTable.tcc
+    Purpose: Hash table implementation using
+    universal hashing, chaining and table doubling.
 
     @author Miloš Pivaš
     @version 0.0.1 02/20
@@ -13,7 +14,6 @@
  * @param x the number to be rounded.
  * @return the smallest power of 2 greater than or equal to x.
  * */
-
 inline size_t nextpow2 (size_t x) {
     if (x < 0)
         return 0;

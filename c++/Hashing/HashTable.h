@@ -1,6 +1,6 @@
 /**
-    HashTable.cpp
-    Purpose: Hash table implementation.
+    HashTable.h
+    Purpose: Hash table declaration.
 
     @author Miloš Pivaš
     @version 0.0.1 02/20
