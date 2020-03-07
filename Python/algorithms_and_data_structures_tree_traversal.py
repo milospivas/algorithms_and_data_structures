@@ -2,6 +2,10 @@
     1)  preorder:   root, left, right 
     2)  inorder:    left, root, right
     3)  postorder:  left, right, root
+
+    recursive - uses stack space which can be relatively limited
+    iterative - uses dynamically allocated stack which can be as large as available RAM
+    Morris - uses constant memory by changing the tree's structure (and properly restoring it)
 """
 class Tree(object):
     'A simple Tree node class'
