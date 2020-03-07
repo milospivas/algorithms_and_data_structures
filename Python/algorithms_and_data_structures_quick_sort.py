@@ -26,18 +26,19 @@ class QuickSort:
         QuickSort.swap(a, start, pivot)
         # now the pivot element is at a[start]
 
-        #   j will point to the first unpartitioned element
-        #   i+1 will point to the first element which is either:
-        #       greater than or equal to the pivot: a[start]
-        #       unpartitioned (and i+1 == j will hold True)
-        #   elements in range(start, i+1) are less than the pivot: a[start]
-        #   elements in range(i+1, j) are greater than the pivot: a[start]
-        #   elements in range(j, stop) are unpartitioned
+        # we are iteratively partitioning the array using two indices i, j
+        # into 4 parts:
+        #     1. a[start]            <- the pivot element
+        #     2. a[start+1 : i+1]    <- elements less than or equal to the pivot
+        #     3. a[i+1 : j]          <- elements greater than the pivot
+        #     4. a[j : stop]         <- elements unpartitioned
         i = start
         for j in range(start+1, stop):
             if a[j] < a[start]:
-                QuickSort.swap(a, j, i+1)
+                # element a[j] violates the property of the part 3.
+                # so swap it into part 2.
                 i += 1
+                QuickSort.swap(a, j, i)
 
         QuickSort.swap(a, start, i)
         return i
