@@ -126,12 +126,16 @@ def print_postorder_iter(root):
         # curr is now None
         # the leftmost element is on the top of stack
             
-        top = stack[-1]
+        top = stack[-1]     # peek top
         if (top.r is not None) and (top.r != prev):
+        # check if there is a right subtree and we haven't just returned from there
+            # if so, go there:
             curr = top.r
-            continue
-        prev = stack.pop()
-        print(prev.x, end=" ")
+        else:
+        # both left and right subtrees have been visited
+            # we can safely pop the node from the stack
+            prev = stack.pop()
+            print(prev.x, end=" ")
     return
 
 ### ===================================================    MORRIS    =================================================== 
