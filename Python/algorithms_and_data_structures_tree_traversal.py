@@ -79,7 +79,7 @@ def print_preorder_iter(root):
     curr = root # and root as the current node
     while (curr is not None) or (len(stack) > 0):
         # go as deep as possible to the left of the curr node
-        while (curr is not None):
+        while curr is not None:
             print(curr.x, end=" ")  # visit each node along the way
             stack.append(curr)      # and push the nodes along the way
             curr = curr.l
@@ -98,7 +98,7 @@ def print_inorder_iter(root):
     curr = root # and root as the current node
     while (curr is not None) or (len(stack) > 0):
         # go as deep as possible to the left of the curr node
-        while (curr is not None):
+        while curr is not None:
             stack.append(curr)  # and push the nodes along the way
             curr = curr.l
         # curr is now None
@@ -120,17 +120,18 @@ def print_postorder_iter(root):
     top = None  # top of the stack
     while (curr is not None) or (len(stack) > 0):
         # go as deep as possible to the left of the curr node
-        if curr is not None:
+        while curr is not None:
             stack.append(curr)  # and push the nodes along the way
             curr = curr.l
+        # curr is now None
+        # the leftmost element is on the top of stack
+            
+        top = stack[-1]
+        if (top.r is not None) and (top.r != prev):
+            curr = top.r
             continue
-        else:
-            top = stack[-1]
-            if (top.r is not None) and (top.r != prev):
-                curr = top.r
-                continue
-            prev = stack.pop()
-            print(prev.x, end=" ")
+        prev = stack.pop()
+        print(prev.x, end=" ")
     return
 
 ### ===================================================    MORRIS    =================================================== 
