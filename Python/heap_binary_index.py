@@ -66,9 +66,14 @@ class IndexMinHeap:
         self.stop -= 1
         return idx
     
+    def peek(self) -> int:
+        return self.l[self.a[self.start]]
+
+    def __len__(self):
+        return self.stop - self.start
+
     def __str__(self):
         return '['+', '.join(str(self.l[idx]) for idx in self.a[self.start : self.stop])+']'
-
 
 
 def test(l):
