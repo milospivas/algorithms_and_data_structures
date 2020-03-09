@@ -79,3 +79,13 @@ s = "aabaaabaabaabaabaaaaaaabaaa"
 p = "aabaabaaa"
 idx = KMP.find(s, p)
 assert p == s[idx : idx + len(p)]
+
+s = "sdfadfasfasd"
+p = "asdf"
+idx = KMP.find(s, p)
+assert idx == -1
+
+s = "2121212121212122121212121212122112"
+p = "2112"
+idx = KMP.find(s, p)
+assert p == s[idx : idx + len(p)]
