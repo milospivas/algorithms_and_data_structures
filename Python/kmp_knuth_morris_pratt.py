@@ -24,11 +24,11 @@ class KMP:
                 j = 0
         return t
 
-def print_preprocessing(p : str) -> None:
-    'for preprocess testing'
-    t = KMP.preprocess(p)
+def print_preprocessing(p : str, t: list) -> None:
+    'for preprocessing testing'
     for c, i in zip(p, t):
         print(c, i)
 
 p = "abcdabca"
-print_preprocessing(p)
+t = KMP.preprocess(p)
+print_preprocessing(p, t)
