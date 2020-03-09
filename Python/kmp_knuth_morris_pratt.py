@@ -21,12 +21,15 @@ class KMP:
                 t[i] = t[i-1] + 1
                 j += 1
             else:
-                j = 0
+                while j > 0 and p[i] != p[j]:
+                    j = t[j-1]
+
                 if p[i] == p[j]:
-                    t[i] = 1
+                    t[i] = t[j] + 1
                     j += 1
-                
+            
         return t
+
 
 def print_preprocessing(p : str, t: list) -> None:
     'for preprocessing testing'
@@ -40,5 +43,9 @@ t = KMP.preprocess(p)
 print_preprocessing(p, t)
 
 p = "abcdabcabcd"
+t = KMP.preprocess(p)
+print_preprocessing(p, t)
+
+p = "aabaabaaa"
 t = KMP.preprocess(p)
 print_preprocessing(p, t)
