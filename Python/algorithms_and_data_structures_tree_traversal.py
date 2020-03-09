@@ -24,7 +24,6 @@ def print_preorder(root):
     print(root.x, end=" ")
     print_preorder(root.l)
     print_preorder(root.r)
-    pass
 
 def print_inorder(root):
     'Recursively traverse the tree in inorder and print elements'
@@ -34,7 +33,6 @@ def print_inorder(root):
     print_inorder(root.l)
     print(root.x, end=" ")
     print_inorder(root.r)
-    pass
 
 def print_postorder(root):
     'Recursively traverse the tree in postorder and print elements'
@@ -44,7 +42,6 @@ def print_postorder(root):
     print_postorder(root.l)
     print_postorder(root.r)
     print(root.x, end=" ")
-    pass
 
 ### =================================================== ITERATIVE =================================================== 
 #   =================================================== abandoned ===================================================
@@ -67,7 +64,6 @@ def print_preorder_iter_first_thougt(root):
             stack.append(curr.r)
         if curr.l is not None:
             stack.append(curr.l)
-    pass
 
 ### =================================================== ITERATIVE =================================================== 
 #   =================================================== one stack =================================================== 
@@ -89,7 +85,6 @@ def print_preorder_iter(root):
         curr = stack.pop()  # get the root
 
         curr = curr.r   # go to the right subtree
-    pass
 
 def print_inorder_iter(root):
     'Iteratively traverse the tree in inorder and print elements'
@@ -108,7 +103,6 @@ def print_inorder_iter(root):
         print(curr.x, end=" ")
 
         curr = curr.r   # go to the right subtree
-    pass
 
 
 def print_postorder_iter(root):
@@ -136,7 +130,6 @@ def print_postorder_iter(root):
             # we can safely pop the node from the stack
             prev = stack.pop()
             print(prev.x, end=" ")
-    return
 
 ### ===================================================    MORRIS    =================================================== 
 #   =================================================== const. space =================================================== 
