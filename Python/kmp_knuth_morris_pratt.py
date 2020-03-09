@@ -30,6 +30,25 @@ class KMP:
             
         return t
 
+    @staticmethod
+    def find(s : str, p : str) -> int:
+        'Given strings s and p, find the starting index of the first occurrence p in s. Return -1 if there is none.'
+        t = KMP.preprocess(p)
+
+        i = j = 0
+        while i < len(s) and j < len(p):
+            if s[i] == p[j]:
+                i += 1
+                j += 1
+                if j == len(p):
+                    return i - len(p)
+            else:
+                if j == 0:
+                    i += 1
+                else:
+                    j = t[j-1]                
+
+        return -1
 
 def print_preprocessing(p : str, t: list) -> None:
     'for preprocessing testing'
@@ -37,15 +56,26 @@ def print_preprocessing(p : str, t: list) -> None:
     for c, i in zip(p, t):
         print(c, i)
 
-# preprocessing testing
+# # preprocessing testing
+# p = "abcdabca"
+# t = KMP.preprocess(p)
+# print_preprocessing(p, t)
+
+# p = "abcdabcabcd"
+# t = KMP.preprocess(p)
+# print_preprocessing(p, t)
+
+# p = "aabaabaaa"
+# t = KMP.preprocess(p)
+# print_preprocessing(p, t)
+
+# find testing
+s = "abcdabcyabcdabca"
 p = "abcdabca"
-t = KMP.preprocess(p)
-print_preprocessing(p, t)
+idx = KMP.find(s, p)
+assert p == s[idx : idx + len(p)]
 
-p = "abcdabcabcd"
-t = KMP.preprocess(p)
-print_preprocessing(p, t)
-
+s = "aabaaabaabaabaabaaaaaaabaaa"
 p = "aabaabaaa"
-t = KMP.preprocess(p)
-print_preprocessing(p, t)
+idx = KMP.find(s, p)
+assert p == s[idx : idx + len(p)]
