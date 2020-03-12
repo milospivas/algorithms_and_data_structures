@@ -61,12 +61,16 @@ class AdjacencySet:
         if not self.directed:
             self.add_directed(v, u)
 
+    def vertices(self):
+        'Returns the list of vertices in the graph'
+        return self.a.keys()
+
     def neighbors(self, u : any):
         'Return the set of neighbors of u'
         if u in self.a:
             return self.a[u]
         else:
-            return None
+            return set()
 
     def __str__(self):
         s = "Edges are:\n"
