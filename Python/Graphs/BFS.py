@@ -18,7 +18,7 @@ def BFS_list(s, Adj) -> (dict, dict):
         frontier = next
         i += 1
 
-    return level, parent
+    return parent, level
 
 def BFS(s, Adj) -> (dict, dict):
     'The "propper" queue version of the BFS'
@@ -34,7 +34,7 @@ def BFS(s, Adj) -> (dict, dict):
                 parent[v] = u
                 frontier.add_tail(v)
 
-    return level, parent
+    return parent, level
 
 
 # Testing --------------------------------------
@@ -51,18 +51,19 @@ for i in range(n):
 print(Adj)
 
 s = input("Input the starting vertex for BFS:\n")
-level1, parent1 = BFS_list(s, Adj)
-
-print("Levels:")
-for u, lvl in level1.items():
-    print(u, lvl)
+# with the python list
+parent1, level1 = BFS_list(s, Adj)
 
 print("Parents:")
 for u, p in parent1.items():
     print(u, p)
 
-# 
-level2, parent2 = BFS(s, Adj)
+print("Levels:")
+for u, lvl in level1.items():
+    print(u, lvl)
+
+# with the queue
+parent2, level2 = BFS(s, Adj)
 
 # check if the returned dictionaries are the same:
 for u, lvl in level1.items():
