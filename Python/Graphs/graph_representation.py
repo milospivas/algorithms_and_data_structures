@@ -42,18 +42,23 @@ class AdjacencySet:
     def __init__(self, directed : bool = True):
         self.a = {}
         self.directed = directed
-        self.V = 0
+        self.V = set()
         self.E = 0
 
     def add_directed(self, u : any, v : any):
         'Add a directed edge from u to v to the graph.'
         if u not in self.a:
             self.a[u] = set()
-            self.V += 1
         
         if v not in self.a[u]:
             self.a[u].add(v)
-            self.E += 1        
+            self.E += 1
+        
+        if u not in self.V:
+            self.V.add(u)
+
+        if v not in self.V:
+            self.V.add(v)
 
     def add(self, u : any, v : any):
         'Add an edge u->v i.e. u-v to the graph'
@@ -63,7 +68,7 @@ class AdjacencySet:
 
     def vertices(self):
         'Returns the list of vertices in the graph'
-        return self.a.keys()
+        return self.V
 
     def neighbors(self, u : any):
         'Return the set of neighbors of u'
