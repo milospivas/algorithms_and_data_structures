@@ -51,6 +51,20 @@ class LinkedList:
             self.tail = None
         return val
 
+    def peek_head(self):
+        'Peek at the value in head'
+        if self.head is not None:
+            return self.head.val
+        else:
+            return None
+    
+    def peek_tail(self):
+        'Peek at the value in tail'
+        if self.tail is not None:
+            return self.tail.val
+        else:
+            return None
+
     def __len__(self):
         'Returns the length of the list'
         return self.n
