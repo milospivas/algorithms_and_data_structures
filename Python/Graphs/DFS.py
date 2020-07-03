@@ -93,6 +93,52 @@ def DFS_flood_fill_iter(Adj):
                     stack.pop_head()
     return parent, level
 
+
+def top_sort(Adj):
+    'Top sort via iterative version of DFS'
+    # collecting all starting points:    
+    starting_vertices = set()
+    for u in Adj.vertices():
+        if u not in Adj.vertices_incoming():
+        # if u is a vertex without ingoing edges,
+            starting_vertices.add(u)
+    
+    if len(starting_vertices) == 0:
+        raise AssertionError("Graph is cyclic. Topological sorting isn't possible")
+
+    parent = {}
+    # level = {}
+    stack = LinkedList()
+    top_sorted = LinkedList()
+
+    for s in starting_vertices:
+        parent[s] = None
+        # level[s] = 0
+
+        stack.add_head(s)
+
+        while len(stack) > 0:
+            u = stack.peek_head()
+
+            vertex_unfinished = False
+            for v in Adj.neighbors(u):
+                if v not in parent:
+                    vertex_unfinished = True # mark the vertex as unfinished
+                    # and add its neighbor to the stack
+                    parent[v] = u
+                    # level[v] = level[u] + 1
+                    stack.add_head(v)
+                    break
+            
+            if vertex_unfinished:
+                continue
+            else:
+            # if the vertex has no neighbors to visit, pop it from the stack
+                u = stack.pop_head()
+                top_sorted.add_head(u)
+
+    return top_sorted
+
 # Testing --------------------------------------
 c = input("Directed graph? Y/N\n")
 is_directed = (c == "y") or (c == "Y")
@@ -106,46 +152,51 @@ for i in range(n):
 
 print(Adj)
 
-# Single source DFS
-s = input("Input the starting vertex for DFS:\n")
-print('DFS:')
-parent, level = DFS(s, Adj)
-print("parents:")
-for u, p in parent.items():
-    print(u, p)
+# TopSort
+print("TopSort:")
+sorted_vertices = top_sort(Adj)
+print(sorted_vertices)
 
-print("levels:")
-for u, lvl in level.items():
-    print(u, lvl)
+# # Single source DFS
+# s = input("Input the starting vertex for DFS:\n")
+# print('DFS:')
+# parent, level = DFS(s, Adj)
+# print("parents:")
+# for u, p in parent.items():
+#     print(u, p)
 
-print('DFS_iter:')
-parent, level = DFS_iter(s, Adj)
-print("parents:")
-for u, p in parent.items():
-    print(u, p)
+# print("levels:")
+# for u, lvl in level.items():
+#     print(u, lvl)
 
-print("levels:")
-for u, lvl in level.items():
-    print(u, lvl)
+# print('DFS_iter:')
+# parent, level = DFS_iter(s, Adj)
+# print("parents:")
+# for u, p in parent.items():
+#     print(u, p)
 
-print('Flood fill:')
-parent_fill, level_fill = DFS_flood_fill(Adj)
-print("parents:")
-for u, p in parent_fill.items():
-    print(u, p)
+# print("levels:")
+# for u, lvl in level.items():
+#     print(u, lvl)
 
-print("levels:")
-for u, lvl in level_fill.items():
-    print(u, lvl)
+# print('Flood fill:')
+# parent_fill, level_fill = DFS_flood_fill(Adj)
+# print("parents:")
+# for u, p in parent_fill.items():
+#     print(u, p)
 
-print('Flood fill iter:')
-parent_fill, level_fill = DFS_flood_fill(Adj)
-print("parents:")
-for u, p in parent_fill.items():
-    print(u, p)
+# print("levels:")
+# for u, lvl in level_fill.items():
+#     print(u, lvl)
 
-print("levels:")
-for u, lvl in level_fill.items():
-    print(u, lvl)
+# print('Flood fill iter:')
+# parent_fill, level_fill = DFS_flood_fill(Adj)
+# print("parents:")
+# for u, p in parent_fill.items():
+#     print(u, p)
+
+# print("levels:")
+# for u, lvl in level_fill.items():
+#     print(u, lvl)
 
 print("Exiting...")

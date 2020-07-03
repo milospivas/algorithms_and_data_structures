@@ -43,6 +43,7 @@ class AdjacencySet:
         self.a = {}
         self.directed = directed
         self.V = set()
+        self.incoming = set()
         self.E = 0
 
     def add_directed(self, u : any, v : any):
@@ -59,6 +60,9 @@ class AdjacencySet:
 
         if v not in self.V:
             self.V.add(v)
+        
+        if v not in self.incoming:
+            self.incoming.add(v)
 
     def add(self, u : any, v : any):
         'Add an edge u->v i.e. u-v to the graph'
@@ -76,6 +80,9 @@ class AdjacencySet:
             return self.a[u]
         else:
             return set()
+
+    def vertices_incoming(self):
+        return self.incoming
 
     def __str__(self):
         s = "Edges are:\n"

@@ -68,3 +68,17 @@ class LinkedList:
     def __len__(self):
         'Returns the length of the list'
         return self.n
+
+    def __str__(self):
+        'Turns the list into a string for printing'
+        aux = self.head
+        s = "["
+        while aux is not None:
+            s += str(aux.val)
+            if aux.next is not None:
+                s += ", "
+            else:
+                s += "]"
+            aux = aux.next
+        
+        return s
