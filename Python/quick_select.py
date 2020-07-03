@@ -22,14 +22,16 @@ class QuickSelect:
 
     @staticmethod
     def partition(a: list, start: int, stop: int, pivot: int) -> int:
-        'Partition the list a[start:stop] around a[pivot]'
+        'Partitions the list a[start:stop] around a[pivot]'
+        
         QuickSelect.swap(a, start, pivot)
         # now the pivot element is at a[start]
 
         #   j will point to the first unpartitioned element
         #   i+1 will point to the first element which is either:
-        #       greater than or equal to the pivot: a[start]
-        #       unpartitioned (and i+1 == j will hold True)
+        #       1. greater than or equal to the pivot: a[start],
+        #           or
+        #       2. unpartitioned (and i+1 == j will hold True)
         #   elements in range(start, i+1) are less than the pivot: a[start]
         #   elements in range(i+1, j) are greater than the pivot: a[start]
         #   elements in range(j, stop) are unpartitioned
