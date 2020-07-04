@@ -39,8 +39,8 @@ class QuickSelect:
             if a[j] < a[start]:
             # if element a[j] violates the property of the part 3.
                 # swap it into part 2.
-                QuickSelect.swap(a, j, i+1)
                 i += 1
+                QuickSelect.swap(a, j, i)
 
         QuickSelect.swap(a, start, i)
         return i
