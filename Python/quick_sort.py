@@ -22,12 +22,13 @@ class QuickSort:
 
     @staticmethod
     def partition(a : list, start : int, stop : int, pivot : int) -> int:
-        'Partition the list a[start:stop] around a[pivot]'
+        'Partitions the list a[start:stop] around a[pivot]'
+        
         QuickSort.swap(a, start, pivot)
         # now the pivot element is at a[start]
 
-        # we are iteratively partitioning the array using two indices i, j
-        # into 4 parts:
+        # using two indices i and j,
+        # we are iteratively partitioning the array into 4 parts:
         #     1. a[start]            <- the pivot element
         #     2. a[start+1 : i+1]    <- elements less than or equal to the pivot
         #     3. a[i+1 : j]          <- elements greater than the pivot
@@ -35,8 +36,8 @@ class QuickSort:
         i = start
         for j in range(start+1, stop):
             if a[j] < a[start]:
-                # element a[j] violates the property of the part 3.
-                # so swap it into part 2.
+            # if element a[j] violates the property of the part 3.
+                # swap it into part 2.
                 i += 1
                 QuickSort.swap(a, j, i)
 
@@ -46,6 +47,7 @@ class QuickSort:
     @staticmethod
     def sort(a : list, start : int = 0, stop : int = None) -> None:
         'Recursive Quicksort function'
+        
         if stop is None:
             stop = len(a)
             
