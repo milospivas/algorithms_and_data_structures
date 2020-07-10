@@ -119,6 +119,8 @@ class AdjacencySet:
                     s += "\n"
         return s
 
+    def __len__(self):
+        return len(self.V)
 
 # n = 10
 # Adj = AdjacencyList(n, False)
@@ -134,5 +136,7 @@ class AdjacencySet:
 # Adj.add(3, 7, 55)
 # Adj.add(5, 3, 73)
 # print(Adj)
+# print(Adj.V)
+# print(len(Adj))
 
 # print("Exiting...")
