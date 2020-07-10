@@ -40,20 +40,26 @@ class AdjacencySet:
     'Implements adjacency list as a hashmap of hashsets.'
 
     def __init__(self, directed : bool = True):
-        self.a = {}
         self.directed = directed
+        self.fromto = {}    # keeps the outgoing edges
+        self.tofrom = {}    # keeps the incoming edges
         self.V = set()
-        self.incoming = set()
         self.E = 0
 
     def add_directed(self, u : any, v : any):
         'Add a directed edge from u to v to the graph.'
-        if u not in self.a:
-            self.a[u] = set()
+        if u not in self.fromto:
+            self.fromto[u] = set()
         
-        if v not in self.a[u]:
-            self.a[u].add(v)
+        if v not in self.fromto[u]:
+            self.fromto[u].add(v)
             self.E += 1
+        
+        if v not in self.tofrom:
+            self.tofrom[v] = set()
+        
+        if u not in self.tofrom[v]:
+            self.tofrom[v].add(u)
         
         if u not in self.V:
             self.V.add(u)
@@ -61,8 +67,6 @@ class AdjacencySet:
         if v not in self.V:
             self.V.add(v)
         
-        if v not in self.incoming:
-            self.incoming.add(v)
 
     def add(self, u : any, v : any):
         'Add an edge u->v i.e. u-v to the graph'
@@ -71,23 +75,35 @@ class AdjacencySet:
             self.add_directed(v, u)
 
     def vertices(self):
-        'Returns the list of vertices in the graph'
+        'Return the list of vertices in the graph'
         return self.V
 
     def neighbors(self, u : any):
         'Return the set of neighbors of u'
-        if u in self.a:
-            return self.a[u]
+        if u in self.fromto:
+            return self.fromto[u]
         else:
             return set()
 
+    def neighbors_incoming(self, u : any):
+        'Return the set of vertices who\'s neighbor is u'
+        if u in self.tofrom:
+            return self.tofrom[u]
+        else:
+            return set()
+
+    def vertices_outgoing(self):
+        'Return the set vertices with outgoing edges'
+        return set(self.fromto.keys())
+                 
     def vertices_incoming(self):
-        return self.incoming
+        'Return the set vertices with incoming edges'
+        return set(self.tofrom.keys())
 
     def __str__(self):
         s = "Edges are:\n"
-        for u in self.a:
-            for v in self.a[u]:
+        for u in self.fromto:
+            for v in self.fromto[u]:
                 if self.directed or v >= u:
                     s = s + str(u) + " - " + str(v) + "\n"
         return s
