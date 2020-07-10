@@ -1,7 +1,6 @@
 ''' Author: Miloš Pivaš, student
 '''
 
-from lists import LinkedList
 from graph_representation import AdjacencySet
 
 def bellman_ford_sssp(Adj, s):
