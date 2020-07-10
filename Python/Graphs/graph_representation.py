@@ -39,14 +39,16 @@ class AdjacencyList:
 class AdjacencySet:
     'Implements adjacency list as a hashmap of hashsets.'
 
-    def __init__(self, directed : bool = True):
+    def __init__(self, directed : bool = True, weighted : bool = False):
         self.directed = directed
+        self.weighted = weighted
         self.fromto = {}    # keeps the outgoing edges
         self.tofrom = {}    # keeps the incoming edges
+        self.W = {}         # keeps the weights of edges
         self.V = set()
         self.E = 0
 
-    def add_directed(self, u : any, v : any):
+    def add_directed(self, u : any, v : any, w = None):
         'Add a directed edge from u to v to the graph.'
         if u not in self.fromto:
             self.fromto[u] = set()
@@ -66,13 +68,19 @@ class AdjacencySet:
 
         if v not in self.V:
             self.V.add(v)
+
+        if self.weighted:
+            if u not in self.W:
+                self.W[u] = {}
+            
+            self.W[u][v] = w
         
 
-    def add(self, u : any, v : any):
+    def add(self, u : any, v : any, w = None):
         'Add an edge u->v i.e. u-v to the graph'
-        self.add_directed(u, v)
+        self.add_directed(u, v, w)
         if not self.directed:
-            self.add_directed(v, u)
+            self.add_directed(v, u, w)
 
     def vertices(self):
         'Return the list of vertices in the graph'
@@ -105,7 +113,10 @@ class AdjacencySet:
         for u in self.fromto:
             for v in self.fromto[u]:
                 if self.directed or v >= u:
-                    s = s + str(u) + " - " + str(v) + "\n"
+                    s += str(u) + " - " + str(v)
+                    if self.weighted:
+                        s += ', w = ' + str(self.W[u][v])
+                    s += "\n"
         return s
 
 
@@ -117,11 +128,11 @@ class AdjacencySet:
 # Adj.add(5, 3)
 # print(Adj)
 
-# Adj = AdjacencySet()
-# Adj.add(1, 2)
-# Adj.add(2, 1)
-# Adj.add(3, 7)
-# Adj.add(5, 3)
+# Adj = AdjacencySet(weighted=True)
+# Adj.add(1, 2, 42)
+# Adj.add(2, 1, 21)
+# Adj.add(3, 7, 55)
+# Adj.add(5, 3, 73)
 # print(Adj)
 
 # print("Exiting...")
