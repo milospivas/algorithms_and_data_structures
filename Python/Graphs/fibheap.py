@@ -34,8 +34,9 @@ class FibonacciHeap:
 
         BASE_DEGREE = 1     # or maybe keep it as 0
 
-        def __init__(self, key):
+        def __init__(self, name, key):
             self.key = key
+            self.name = name
             self.parent = None
             self.children = set()
             self.lost_a_child = False
@@ -43,6 +44,7 @@ class FibonacciHeap:
 
     def __init__(self):
         self.root_list = {}
+        self.node_index = {}
         self.min = float('Inf')
         self.min_node = None
 
@@ -68,12 +70,16 @@ class FibonacciHeap:
         return node
 
 
-    def push(self, key):
+    def push(self, name, key):
         'Insert a key into the Fibonacci heap'
 
-        new_node = self.Node(key)
+        new_node = self.Node(name, key)
         self.push_node(new_node)
 
+        if name in self.node_index:
+            raise Exception("Node with the same name is already in the heap!")
+
+        self.node_index[name] = new_node
         return new_node
 
 
@@ -130,29 +136,30 @@ class FibonacciHeap:
             return None
 
         # else
-        old_min = self.min
-
-        self.root_list[self.min_node.degree].remove(self.min_node)
+        old_min = self.min_node
         
+        self.root_list[old_min.degree].remove(old_min)
+        self.node_index.pop(old_min.name)
+
         for c in self.min_node.children:
             self.push_node(c)   # this also updates min
         
         self.merge()
         
-        return old_min
+        return (old_min.name, old_min.key)
 
 
 # ### ----- testing -----
-# x = FibonacciHeap.Node(42)
-# fh = FibonacciHeap()
-# fh.push(333)
-# fh.push(42)
-# fh.push(73)
-# fh.push(2112)
+x = FibonacciHeap.Node('X', 42)
+fh = FibonacciHeap()
+fh.push('A', 333)
+fh.push('B', 42)
+fh.push('C', 73)
+fh.push('D', 2112)
 
-# fh.merge()
+fh.merge()
 
-# x = fh.pop_min()
+name, key = fh.pop_min()
 
-# print("Exiting...")
+print("Exiting...")
         
