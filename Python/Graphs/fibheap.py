@@ -62,6 +62,8 @@ class FibonacciHeap:
         if node.key < self.min:
             self.min = node.key
             self.min_node = node
+        
+        node.parent = None
 
     def push(self, key):
         'Insert a key into the Fibonacci heap'
