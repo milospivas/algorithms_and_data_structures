@@ -133,20 +133,32 @@ class FibonacciHeap:
                 - updates min;
         '''
         if self.min_node is None:
-            return None
+            return None, None
 
         # else
-        old_min = self.min_node
+        # store old min
+        old_min_node = self.min_node
         
-        self.root_list[old_min.degree].remove(old_min)
-        self.node_index.pop(old_min.name)
+        # remove it from the heap
+        self.root_list[old_min_node.degree].remove(old_min_node)
+        self.node_index.pop(old_min_node.name)
+        
+        # find new min
+        self.min_node = None
+        self.min = float('Inf')
+        for node_list in self.root_list.values():
+            for node in node_list:
+                if node.key < self.min:
+                    self.min = node.key
+                    self.min_node = node
 
-        for c in self.min_node.children:
-            self.push_node(c)   # this also updates min
+        # promote the children of the old min to root list
+        for c in old_min_node.children:
+            self.push_node(c)   # updates min
         
         self.merge()
         
-        return (old_min.name, old_min.key)
+        return (old_min_node.name, old_min_node.key)
 
 
 # ### ----- testing -----
@@ -159,7 +171,10 @@ fh.push('D', 2112)
 
 fh.merge()
 
-name, key = fh.pop_min()
+name = 'X'
+while name is not None:
+    name, key = fh.pop_min()
+    print(name, key)
 
 print("Exiting...")
         
