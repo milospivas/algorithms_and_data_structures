@@ -109,11 +109,7 @@ class FibonacciHeap:
         Starting from the smallest ones, merge all pairs of trees
         until there are no two of the same degree.
         Two trees are mereged by making the tree with the larger root
-        a child of the other tree's root.'
-
-        Returns
-        -------
-            Nothing
+        a child of the other tree's root.
         '''
 
         degrees = list(self.root_list.keys())
@@ -220,10 +216,6 @@ class FibonacciHeap:
         new_key : int
             The new, decreased key value
 
-        Returns
-        -------
-        Nothing
-        
         Raises
         ------
         Exception
