@@ -117,6 +117,27 @@ class FibonacciHeap:
                 # add the new tree to the root list
                 self.root_list[smaller.degree].add(smaller)
 
+    def pop_min(self):
+        ''' Removes and returns the minimum element.
+            Side-effects:
+                - promotes min's children to root list;
+                - performs merge();
+                - updates min;
+        '''
+        if self.min_node is None:
+            return None
+
+        # else
+        old_min = self.min
+
+        self.root_list[self.min_node.degree].remove(self.min_node)
+        
+        for c in self.min_node.children:
+            self.push_node(c)   # this also updates min
+        
+        self.merge()
+        
+        return old_min     
 
 # ### ----- testing -----
 # x = FibonacciHeap.Node(42)
@@ -127,6 +148,8 @@ class FibonacciHeap:
 # fh.push(2112)
 
 # fh.merge()
+
+# x = fh.pop_min()
 
 # print("Exiting...")
         
