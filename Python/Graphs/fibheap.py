@@ -52,9 +52,12 @@ class FibonacciHeap:
         self.min_node = None
 
     def get_min(self):
-        'Return the minimum key'
+        'Return the name and key of the minimum element'
 
-        return self.min
+        if self.min_node is not None:
+            return self.min_node.name, self.min_node.key
+        else:
+            return None, None
 
     def push_node(self, node):
         'Add a node to the root list'
@@ -74,7 +77,7 @@ class FibonacciHeap:
 
 
     def push(self, name, key):
-        'Insert a key into the Fibonacci heap'
+        'Insert a node with given name and key into the Fibonacci heap'
 
         new_node = self.Node(name, key)
         self.push_node(new_node)
@@ -132,7 +135,7 @@ class FibonacciHeap:
 
 
     def pop_min(self):
-        ''' Removes and returns the minimum element.
+        ''' Removes the minimum element and returns its name and key.
             Side-effects:
                 - promotes min's children to root list;
                 - performs merge();
@@ -166,7 +169,7 @@ class FibonacciHeap:
         
         self.merge()
         
-        return (old_min_node.name, old_min_node.key)
+        return old_min_node.name, old_min_node.key
 
 
     def decrease_key(self, name, new_key):
