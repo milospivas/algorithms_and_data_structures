@@ -3,8 +3,6 @@
     Author: Miloš Pivaš, student
 '''
 
-from collections import deque
-
 class FibonacciHeap:
     '''Implements Fibonacci Heap operations:
             0. get_min()    - return the minimum element
@@ -79,13 +77,14 @@ class FibonacciHeap:
         Two trees are mereged by making the tree with the larger root
         a child of the other tree's root.'
         '''
-        degrees = deque(sorted(self.root_list.keys()))
+        degrees = list(self.root_list.keys())
+        degrees.sort(key = lambda x: -x)
 
         while len(degrees) > 0:
-            d = degrees.popleft()
+            d = degrees.pop()
 
             while len(self.root_list[d]) >= 2:
-            # until there is less than 2 trees of the degree d
+            # until there less than 2 trees of the degree d remain
 
                 # pop two trees
                 larger = self.root_list[d].pop()
@@ -97,25 +96,19 @@ class FibonacciHeap:
                     larger = smaller
                     smaller = aux
                 
-                # merge the two trees
+                # merge the two d-degree trees into one 2*d-degree tree
                 smaller.children.add(larger)
+                larger.parent = smaller
                 smaller.degree = 2*d
 
-
-                if 2*d not in self.root_list:
-                # if no trees of the 2*d degree existed
-                    # init. the root list entry
-                    self.root_list[smaller.degree] = set()
-
-                    
-                    if len(self.root_list[d]) >= 2:
-                    # if there is another pair of trees of the degree d to be merged
-                        # push 2*d to the list of degrees to be processed
-                        # (we will now have to merge at least one pair of 2*d degree trees)
-                        degrees.appendleft(2*d)
-
-                # add the new tree to the root list
-                self.root_list[smaller.degree].add(smaller)
+                self.push_node(smaller)
+                
+                if (len(self.root_list[d]) >= 2) and ((degrees == []) or (degrees[-1] != 2*d)):
+                # if there is another pair of trees of the degree d to be merged
+                # and the degree 2*d isn't next to be processed
+                    # push 2*d to the list of degrees to be processed
+                    # (we will now have to merge at least one pair of 2*d degree trees)
+                    degrees.append(2*d)
 
     def pop_min(self):
         ''' Removes and returns the minimum element.
