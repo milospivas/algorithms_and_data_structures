@@ -122,13 +122,19 @@ class FibonacciHeap:
 
 
     def merge(self):
-        ''' Merge all pairs of trees of the same degree.
-        (the degree is tree size i.e. the number of nodes in the tree)
+        ''' Merge all pairs of trees of the same degree in the heap's root list.
+
+        The degree is tree size i.e. the number of nodes in the tree.
         Starting from the smallest ones, merge all pairs of trees
         until there are no two of the same degree.
         Two trees are mereged by making the tree with the larger root
         a child of the other tree's root.'
+
+        Returns
+        -------
+            Nothing
         '''
+
         degrees = list(self.root_list.keys())
         degrees.sort(key = lambda x: -x)
 
