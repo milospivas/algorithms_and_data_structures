@@ -288,35 +288,35 @@ class FibonacciHeap:
         self.push_node(curr)
 
 
-# ### ----- testing -----
-# x = FibonacciHeap.Node('X', 42)
-# fh = FibonacciHeap()
-# fh.push('A', 10)
-# fh.push('B', 11)
-# fh.push('C', 12)
-# fh.push('D', 13)
-# fh.push('E', 14)
-# fh.push('F', 15)
-# fh.push('G', 16)
-# fh.push('H', 17)
+# # ### ----- testing -----
+# # x = FibonacciHeap.Node('X', 42)
+# # fh = FibonacciHeap()
+# # fh.push('A', 10)
+# # fh.push('B', 11)
+# # fh.push('C', 12)
+# # fh.push('D', 13)
+# # fh.push('E', 14)
+# # fh.push('F', 15)
+# # fh.push('G', 16)
+# # fh.push('H', 17)
 
-# fh.merge()
+# # fh.merge()
 
-# # name = 'X'
-# # while name is not None:
-# #     name, key = fh.pop_min()
-# #     print(name, key)
+# # # name = 'X'
+# # # while name is not None:
+# # #     name, key = fh.pop_min()
+# # #     print(name, key)
 
-# fh.decrease_key('H', 7)
-# fh.decrease_key('G', 6)
-# fh.decrease_key('F', 5)
-# fh.decrease_key('E', 4)
-# # fh.decrease_key('D', 3)
-# # fh.decrease_key('B', 1)
-# # fh.decrease_key('C', 2)
-# # fh.decrease_key('A', 0)
+# # fh.decrease_key('H', 7)
+# # fh.decrease_key('G', 6)
+# # fh.decrease_key('F', 5)
+# # fh.decrease_key('E', 4)
+# # # fh.decrease_key('D', 3)
+# # # fh.decrease_key('B', 1)
+# # # fh.decrease_key('C', 2)
+# # # fh.decrease_key('A', 0)
 
-help(FibonacciHeap)
+# help(FibonacciHeap)
 
-print("Exiting...")
+# print("Exiting...")
         
