@@ -52,7 +52,15 @@ class FibonacciHeap:
         self.min_node = None
 
     def get_min(self):
-        'Return the name and key of the minimum element'
+        '''Return the name and key of the minimum element
+        
+        Returns
+        -------
+        (str, int)
+            (name, key) pair of the minimum key element
+        (None, None)
+            if the heap is empty
+        '''
 
         if self.min_node is not None:
             return self.min_node.name, self.min_node.key
@@ -277,6 +285,7 @@ class FibonacciHeap:
 # # fh.decrease_key('C', 2)
 # # fh.decrease_key('A', 0)
 
+help(FibonacciHeap)
 
-# print("Exiting...")
+print("Exiting...")
         
