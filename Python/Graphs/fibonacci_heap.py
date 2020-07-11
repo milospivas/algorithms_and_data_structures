@@ -32,7 +32,7 @@ class FibonacciHeap:
         
         Returns
         -------
-        (str, int)
+        (str, int/float)
             (name, key) pair of the minimum key element
         (None, None)
             if the heap is empty
@@ -78,7 +78,7 @@ class FibonacciHeap:
         ----------
         name : str
             a name assigned to the node
-        key : int
+        key : int/float
             a key assigned to the node
         
         Returns
@@ -159,7 +159,7 @@ class FibonacciHeap:
             
         Returns
         -------
-        (str, int)
+        (str, int/float)
             (name, key) pair of the minimum key element
         (None, None)
             if the heap is empty
@@ -213,7 +213,7 @@ class FibonacciHeap:
         ----------
         name : str
             The name of the element who's key is to be decreased
-        new_key : int
+        new_key : int/float
             The new, decreased key value
 
         Raises
