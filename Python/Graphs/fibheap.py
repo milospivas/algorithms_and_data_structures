@@ -4,31 +4,7 @@
 '''
 
 class FibonacciHeap:
-    '''Implements Fibonacci Heap operations:
-            0. get_min()        - return the minimum element's name and key
-            1. push(name, key)  - add a node with given [name] and [key] to the root list
-                                check and update min;
-            2. merge()      - merge all pairs of trees of the same degree,
-                (the degree is tree size i.e. the number of nodes in the tree),
-                starting from the smallest ones,
-                until there are no two of the same degree;
-                Two trees are mereged by making the tree with the larger root
-                a child of the other tree's root.
-            3. pop_min()    - remove the min;
-                promotes its children to root list;
-                merge();
-                update min;
-            4. decrease_key(name, new_key)  - decrease the key of the node [name] to [new_key];
-                If the new key doesn't maintain the heap property:
-                1. Promote the node (with its children) to the root list;
-                2. Decrease the parent's degree
-                3. If the parent's flag was already raised,
-                        goto 1. with current node's parent as the new current node
-                4. Else:
-                    Raise its parent's lost_a_child flag;
-                    go up the tree and decrease the parent's degree
-                decrease_key() method is lazy   - it doesn't clean up, it leaves the clean up to pop_min().
-    '''
+    '''Implements Fibonacci Heap'''
 
     v = '0.1'
 
