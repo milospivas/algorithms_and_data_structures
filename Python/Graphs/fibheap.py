@@ -220,16 +220,35 @@ class FibonacciHeap:
 
 
     def decrease_key(self, name, new_key):
-        ''' Decrease the key of the node name to new_key;
-            If the new key doesn't maintain the heap property:
-                1. Promote the node (with its children) to the root list;
-                2. Decrease the parent's degree
-                3. If the parent's flag was already raised,
-                        goto 1. with current node's parent as the new current node
-                4. Else:
-                    Raise its parent's lost_a_child flag;
-                    go up the tree and decrease the parent's degree
+        ''' Decreases the key of the node with given name to new_key.
+
+        If the new key doesn't maintain the heap property:
+            1. Promote the node (with its children) to the root list;
+            2. Decrease the parent's degree
+            3. If the parent's flag was already raised,
+                    goto 1. with current node's parent as the new current node
+            4. Else:
+                - Raise its parent's lost_a_child flag;
+                - Go up the tree and decrease each parent's degree
+                by the degree removed from the tree
+
+        Parameters
+        ----------
+        name : str
+            The name of the element who's key is to be decreased
+        new_key : int
+            The new, decreased key value
+
+        Returns
+        -------
+        Nothing
+        
+        Raises
+        ------
+        Exception
+            If new_key isn't smaller than the current one
         '''
+                        
         # get the node
         curr = self.node_index[name]
                 
