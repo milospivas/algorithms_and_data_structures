@@ -53,18 +53,23 @@ class FibonacciHeap:
 
         return self.min
 
-    def push(self, key):
+    def push_node(self, node):
         'Add a node to the root list'
 
-        if self.Node.BASE_DEGREE not in self.root_list:
-            self.root_list[self.Node.BASE_DEGREE] = set()
+        if node.degree not in self.root_list:
+            self.root_list[node.degree] = set()
+
+        self.root_list[node.degree].add(node)
+    
+        if node.key < self.min:
+            self.min = node.key
+            self.min_node = node
+
+    def push(self, key):
+        'Insert a key into the Fibonacci heap'
 
         aux = self.Node(key)
-        self.root_list[self.Node.BASE_DEGREE].add(aux)
-    
-        if key < self.min:
-            self.min = key
-            self.min_node = aux
+        self.push_node(aux)
 
     def merge(self):
         ''' Merge all pairs of trees of the same degree.
