@@ -173,12 +173,21 @@ class FibonacciHeap:
 
 
     def pop_min(self):
-        ''' Removes the minimum element and returns its name and key.
-            Side-effects:
-                - promotes min's children to root list;
-                - performs merge();
-                - updates min;
+        ''' Removes the minimum-key element and returns its name and key.
+            
+        Side-effects:
+            - promotes min's children to heap's root list;
+            - performs merge();
+            - updates min;
+            
+        Returns
+        -------
+        (str, int)
+            (name, key) pair of the minimum key element
+        (None, None)
+            if the heap is empty
         '''
+
         if self.min_node is None:
             return None, None
 
