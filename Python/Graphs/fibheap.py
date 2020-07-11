@@ -5,9 +5,9 @@
 
 class FibonacciHeap:
     '''Implements Fibonacci Heap operations:
-            0. get_min()    - return the minimum element
-            1. push(key)    - add a node to the root list
-                            check and update min;
+            0. get_min()        - return the minimum element's name and key
+            1. push(name, key)  - add a node with given [name] and [key] to the root list
+                                check and update min;
             2. merge()      - merge all pairs of trees of the same degree,
                 (the degree is tree size i.e. the number of nodes in the tree),
                 starting from the smallest ones,
@@ -18,13 +18,16 @@ class FibonacciHeap:
                 promotes its children to root list;
                 merge();
                 update min;
-            4. decrease(key, new_key) - decreases the key key;
-                if the new value doesn't keep the heap property:
-                    promotes the node (with its children) to the root list;
-                    raises its parent's lost_a_child flag;
-                    if the flag was already raised,
-                        promote the parent (with its children) to the root list;
-                decrease() method is lazy   - it doesn't clean up, it leaves the clean up to pop_min().
+            4. decrease_key(name, new_key)  - decrease the key of the node [name] to [new_key];
+                If the new key doesn't maintain the heap property:
+                1. Promote the node (with its children) to the root list;
+                2. Decrease the parent's degree
+                3. If the parent's flag was already raised,
+                        goto 1. with current node's parent as the new current node
+                4. Else:
+                    Raise its parent's lost_a_child flag;
+                    go up the tree and decrease the parent's degree
+                decrease_key() method is lazy   - it doesn't clean up, it leaves the clean up to pop_min().
     '''
 
     v = '0.1'
@@ -138,7 +141,6 @@ class FibonacciHeap:
         if self.min_node is None:
             return None, None
 
-        # else
         # store old min
         old_min_node = self.min_node
         
@@ -167,20 +169,111 @@ class FibonacciHeap:
         return (old_min_node.name, old_min_node.key)
 
 
+    def decrease_key(self, name, new_key):
+        ''' Decrease the key of the node name to new_key;
+            If the new key doesn't maintain the heap property:
+                1. Promote the node (with its children) to the root list;
+                2. Decrease the parent's degree
+                3. If the parent's flag was already raised,
+                        goto 1. with current node's parent as the new current node
+                4. Else:
+                    Raise its parent's lost_a_child flag;
+                    go up the tree and decrease the parent's degree
+        '''
+        # get the node
+        curr = self.node_index[name]
+                
+        # decrease the key
+        if new_key > curr.key:
+            raise Exception('New key does not decrease the old key')
+        curr.key = new_key
+
+        # check if it maintains the heap property
+        if curr.parent is None or curr.parent.key <= curr.key:
+            return
+
+        degree_removed = 0
+        done = False
+
+        while not done:
+            # cut the node from its parent
+            parent = curr.parent
+            parent.children.remove(curr)
+
+            # add the node's degree to degree_removed accumulator
+            degree_removed += curr.degree
+
+            # promote the node to the root list
+            self.push_node(curr)
+            
+            # go up the tree
+            curr = parent
+
+            # if we're at the root, save the degree
+            if curr.parent is None:
+                old_degree = curr.degree
+            
+            # decrease the degree
+            curr.degree -= degree_removed
+
+            if curr.parent is not None:
+            # if we aren't in the root 
+                if not curr.lost_a_child:
+                # if the node hasn't already lost a child
+                    curr.parent.lost_a_child = True
+                    done = True
+            else:
+            # if we are in the root
+                done = True
+        
+        # go up the tree and decrease the degree by degree_removed
+        while curr.parent is not None:
+            curr = curr.parent
+            
+            if curr.parent is None:
+            # if we've reached the root of the tree
+                # save the old degree
+                old_degree = curr.degree
+
+            curr.degree -= degree_removed
+
+        # remove the tree from the old degree entry
+        self.root_list[old_degree].remove(curr)
+        if len(self.root_list[old_degree]) == 0:
+            self.root_list.pop(old_degree)
+        
+        # push the tree to root list (to be in the new degree entry)
+        self.push_node(curr)
+
+
 # ### ----- testing -----
-x = FibonacciHeap.Node('X', 42)
-fh = FibonacciHeap()
-fh.push('A', 333)
-fh.push('B', 42)
-fh.push('C', 73)
-fh.push('D', 2112)
+# x = FibonacciHeap.Node('X', 42)
+# fh = FibonacciHeap()
+# fh.push('A', 10)
+# fh.push('B', 11)
+# fh.push('C', 12)
+# fh.push('D', 13)
+# fh.push('E', 14)
+# fh.push('F', 15)
+# fh.push('G', 16)
+# fh.push('H', 17)
 
-fh.merge()
+# fh.merge()
 
-name = 'X'
-while name is not None:
-    name, key = fh.pop_min()
-    print(name, key)
+# # name = 'X'
+# # while name is not None:
+# #     name, key = fh.pop_min()
+# #     print(name, key)
 
-print("Exiting...")
+# fh.decrease_key('H', 7)
+# fh.decrease_key('G', 6)
+# fh.decrease_key('F', 5)
+# fh.decrease_key('E', 4)
+# # fh.decrease_key('D', 3)
+# # fh.decrease_key('B', 1)
+# # fh.decrease_key('C', 2)
+# # fh.decrease_key('A', 0)
+
+
+# print("Exiting...")
         
