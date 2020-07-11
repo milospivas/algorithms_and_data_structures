@@ -68,7 +68,18 @@ class FibonacciHeap:
             return None, None
 
     def push_node(self, node):
-        'Add a node to the root list'
+        '''Insert a node into the Fibonacci heap's root list
+        
+        Parameters
+        ----------
+        node:   Node
+            a node to be pushed on to the heap
+        
+        Returns
+        -------
+        Node
+            the pushed node
+        '''
 
         if node.degree not in self.root_list:
             self.root_list[node.degree] = set()
