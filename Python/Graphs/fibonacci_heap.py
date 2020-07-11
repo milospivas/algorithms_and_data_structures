@@ -26,6 +26,7 @@ class FibonacciHeap:
         self.node_index = {}
         self.min = float('Inf')
         self.min_node = None
+        self.size = 0
 
     def get_min(self):
         '''Return the name and key of the minimum element
@@ -99,6 +100,9 @@ class FibonacciHeap:
             raise Exception("Node with the same name is already in the heap!")
 
         self.node_index[name] = new_node
+
+        self.size += 1
+
         return new_node
 
 
@@ -165,7 +169,7 @@ class FibonacciHeap:
             if the heap is empty
         '''
 
-        if self.min_node is None:
+        if self.size == 0:
             return None, None
 
         # store old min
@@ -178,7 +182,7 @@ class FibonacciHeap:
         if len(self.root_list[old_min_node.degree]) == 0:
             self.root_list.pop(old_min_node.degree)
 
-        # find new min
+        # update min
         self.min_node = None
         self.min = float('Inf')
         for node_list in self.root_list.values():
@@ -192,6 +196,8 @@ class FibonacciHeap:
             self.push_node(c)   # updates min
         
         self.merge()
+
+        self.size -= 1
         
         return old_min_node.name, old_min_node.key
 
@@ -287,36 +293,35 @@ class FibonacciHeap:
         # push the tree to root list (to be in the new degree entry)
         self.push_node(curr)
 
+    def __len__(self):
+        return self.size
 
-# # ### ----- testing -----
-# # x = FibonacciHeap.Node('X', 42)
-# # fh = FibonacciHeap()
-# # fh.push('A', 10)
-# # fh.push('B', 11)
-# # fh.push('C', 12)
-# # fh.push('D', 13)
-# # fh.push('E', 14)
-# # fh.push('F', 15)
-# # fh.push('G', 16)
-# # fh.push('H', 17)
+# ### ----- testing -----
+# # help(FibonacciHeap)
 
-# # fh.merge()
+# fh = FibonacciHeap()
+# fh.push('A', 10)
+# fh.push('B', 11)
+# fh.push('C', 12)
+# fh.push('D', 13)
+# fh.push('E', 14)
+# fh.push('F', 15)
+# fh.push('G', 16)
+# fh.push('H', 17)
 
-# # # name = 'X'
-# # # while name is not None:
-# # #     name, key = fh.pop_min()
-# # #     print(name, key)
+# fh.merge()
 
-# # fh.decrease_key('H', 7)
-# # fh.decrease_key('G', 6)
-# # fh.decrease_key('F', 5)
-# # fh.decrease_key('E', 4)
-# # # fh.decrease_key('D', 3)
-# # # fh.decrease_key('B', 1)
-# # # fh.decrease_key('C', 2)
-# # # fh.decrease_key('A', 0)
+# fh.decrease_key('H', 7)
+# fh.decrease_key('G', 6)
+# fh.decrease_key('F', 5)
+# fh.decrease_key('E', 4)
+# # fh.decrease_key('D', 3)
+# # fh.decrease_key('B', 1)
+# # fh.decrease_key('C', 2)
+# # fh.decrease_key('A', 0)
 
-# help(FibonacciHeap)
+# while len(fh) > 0:
+#     name, key = fh.pop_min()
+#     print(name, key)
 
 # print("Exiting...")
-        
