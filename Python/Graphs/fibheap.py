@@ -65,11 +65,17 @@ class FibonacciHeap:
         
         node.parent = None
 
+        return node
+
+
     def push(self, key):
         'Insert a key into the Fibonacci heap'
 
-        aux = self.Node(key)
-        self.push_node(aux)
+        new_node = self.Node(key)
+        self.push_node(new_node)
+
+        return new_node
+
 
     def merge(self):
         ''' Merge all pairs of trees of the same degree.
@@ -112,6 +118,7 @@ class FibonacciHeap:
                     # (we will now have to merge at least one pair of 2*d degree trees)
                     degrees.append(2*d)
 
+
     def pop_min(self):
         ''' Removes and returns the minimum element.
             Side-effects:
@@ -132,7 +139,8 @@ class FibonacciHeap:
         
         self.merge()
         
-        return old_min     
+        return old_min
+
 
 # ### ----- testing -----
 # x = FibonacciHeap.Node(42)
