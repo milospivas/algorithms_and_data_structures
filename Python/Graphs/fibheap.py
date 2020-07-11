@@ -11,7 +11,7 @@ class FibonacciHeap:
     class Node:
         'Implements a Node in the Fibonacci Heap'
 
-        BASE_DEGREE = 1     # or maybe keep it as 0
+        BASE_DEGREE = 1
 
         def __init__(self, name, key):
             self.key = key
