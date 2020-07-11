@@ -123,6 +123,9 @@ class FibonacciHeap:
                     # push 2*d to the list of degrees to be processed
                     # (we will now have to merge at least one pair of 2*d degree trees)
                     degrees.append(2*d)
+                
+            if len(self.root_list[d]) == 0:
+                self.root_list.pop(d)
 
 
     def pop_min(self):
@@ -143,6 +146,9 @@ class FibonacciHeap:
         self.root_list[old_min_node.degree].remove(old_min_node)
         self.node_index.pop(old_min_node.name)
         
+        if len(self.root_list[old_min_node.degree]) == 0:
+            self.root_list.pop(old_min_node.degree)
+
         # find new min
         self.min_node = None
         self.min = float('Inf')
