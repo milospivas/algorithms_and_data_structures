@@ -59,13 +59,12 @@ class FibonacciHeap:
         if self.Node.BASE_DEGREE not in self.root_list:
             self.root_list[self.Node.BASE_DEGREE] = set()
 
-        if key not in self.root_list[self.Node.BASE_DEGREE]:
-            aux = self.Node(key)
-            self.root_list[self.Node.BASE_DEGREE].add(aux)
-        
-            if key < self.min:
-                self.min = key
-                self.min_node = aux
+        aux = self.Node(key)
+        self.root_list[self.Node.BASE_DEGREE].add(aux)
+    
+        if key < self.min:
+            self.min = key
+            self.min_node = aux
 
     def merge(self):
         ''' Merge all pairs of trees of the same degree.
