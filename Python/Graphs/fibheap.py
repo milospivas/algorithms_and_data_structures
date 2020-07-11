@@ -109,6 +109,11 @@ class FibonacciHeap:
         -------
         Node
             inserted node's reference
+
+        Raises
+        ------
+        Exception
+            If a node with the same name is already in the heap
         '''
 
         new_node = self.Node(name, key)
