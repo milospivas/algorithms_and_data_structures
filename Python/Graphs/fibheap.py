@@ -96,7 +96,20 @@ class FibonacciHeap:
 
 
     def push(self, name, key):
-        'Insert a node with given name and key into the Fibonacci heap'
+        '''Insert a node with given name and key into the Fibonacci heap
+        
+        Parameters
+        ----------
+        name : str
+            a name assigned to the node
+        key : int
+            a key assigned to the node
+        
+        Returns
+        -------
+        Node
+            inserted node's reference
+        '''
 
         new_node = self.Node(name, key)
         self.push_node(new_node)
