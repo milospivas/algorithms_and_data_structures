@@ -37,4 +37,39 @@ Intro:
     A priority queue Q is going to hold all unvisited vertices.
     The priorities are the d-values - distances from source node S to all other vertices.
 """
-# TODO implement and document Dijkstra
+
+from graph_representation import AdjacencySet
+
+def relax(u, v, Adj : AdjacencySet, d : dict, Pi : dict):
+    '''Relax the path to v via edge u-w.
+
+    Parameters
+    ----------
+    u : str/int
+        The vertex to relax by.
+    v : str/int
+        The vertex who's path value is to be relax.
+    Adj : AdjacencySet
+        Datastructure for graph representation.
+    d : dict
+        The hashmap of current path lengths.
+    Pi :
+        The hashmap of predecessor nodes in the paths coming from source.
+
+    Raises
+    ------
+    Exception
+        'u is not in graph' if u is not in graph.
+    Exception
+        'v is not connected to u' if v is not connected to u.
+    '''
+
+    if not u in Adj.W:
+        raise Exception('u is not in graph')
+    if not v in Adj.W[v]:
+        raise Exception('v is not connected to u')
+
+    if d[u] + Adj.W[u][v] < d[v]:
+        d[v] = d[u] + Adj.W[u][v]
+        Pi[v] = u
+
