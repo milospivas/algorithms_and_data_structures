@@ -24,10 +24,11 @@ class Dijkstra:
 
         For Dijkstra we need some ADTs (Abstract Data Structures):
         Adj - an AdjacencySet for graph representation.
-        d - a hashmap that is going to hold current (and finally shortest) distances from source to each node.
-        S - a set that is going to hold all vertices that we know the shortest paths to.
-        Q - a priority queue (with decrease_key() operation) that is going to hold all unvisited vertices.
+        d   - a hashmap that is going to hold current (and finally shortest) distances from source to each node.
+        S   - a hashset that is going to hold all vertices that we know the shortest paths to.
+        Q   - a priority queue (with decrease_key() operation) that is going to hold all unvisited vertices.
             Q's priorities are the d[] values.
+        Pi  - a hashmap that maps vertices to their predecessor nodes in the paths coming from the source.
 
     Time Complexity
     ---------------
