@@ -307,6 +307,17 @@ class FibonacciHeap:
 
         return (self.size == 0)
 
+    def __str__(self):
+        ''' Return str(self) '''
+        
+        s = ''
+
+        for node in self.node_index.values():
+            s += 'name=' + str(node.name) + ' key=' + str(node.key) + '\n'
+
+        return s
+
+
 # ### ----- testing -----
 # # help(FibonacciHeap)
 
