@@ -39,6 +39,8 @@ Intro:
 """
 
 from graph_representation import AdjacencySet
+from fibonacci_heap import FibonacciHeap
+
 
 def relax(u, v, Adj : AdjacencySet, d : dict, Pi : dict):
     '''Relax the path to v via edge u-w.
@@ -73,3 +75,74 @@ def relax(u, v, Adj : AdjacencySet, d : dict, Pi : dict):
         d[v] = d[u] + Adj.W[u][v]
         Pi[v] = u
 
+
+def dijkstra(Adj : AdjacencySet, s):
+    '''Dijkstra\'s algorithm for single-source shortest paths
+    
+    Works in graphs without negative cycles.
+
+    Parameters
+    ----------
+    Adj : AdjacencySet
+        Datastructure for graph representation.
+    s : str/int
+        The source vertex.
+
+
+    Returns
+    -------
+    (d : dict, Pi : dict)
+        Tuple of two hashmaps.
+        d maps vertices to shortest path lengths from source.
+        Pi maps vertices to their predecessor nodes in the paths coming from the source.
+    '''
+
+    # initialization
+    d = {v:float('Inf') for v in Adj.V}
+    d[s] = 0
+
+    Pi = {}
+    Q = FibonacciHeap()
+
+    S = set()
+    for u in Adj.V:
+        if u == s:
+            Q.push(s, 0)
+        else:
+            Q.push(u, float('Inf'))
+    
+    Q.__str__()
+    while not Q.empty():
+        u, key = Q.pop_min()
+        d[u] = key
+        S.add(u)
+        for v in Adj.neighbors(u):
+            if v not in S:
+                relax(u, v, Adj, d, Pi)
+                Q.decrease_key(v, d[v])
+
+    return d, Pi
+
+
+# ### testing
+
+# ''' Example from MIT OCW Intro to Algorithms lecture 16:
+# https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-006-introduction-to-algorithms-fall-2011/lecture-videos/MIT6_006F11_lec16.pdf
+# '''
+# Adj = AdjacencySet(directed=True, weighted=True)
+# Adj.add_directed('A', 'B', 10)
+# Adj.add_directed('A', 'C', 3)
+# Adj.add_directed('B', 'C', 1)
+# Adj.add_directed('B', 'D', 2)
+# Adj.add_directed('C', 'B', 4)
+# Adj.add_directed('C', 'D', 8)
+# Adj.add_directed('C', 'E', 2)
+# Adj.add_directed('D', 'E', 7)
+# Adj.add_directed('E', 'D', 9)
+
+# d, Pi = dijkstra(Adj, 'A')
+
+# print(d)
+# print(Pi)
+
+# print('Exiting...')
