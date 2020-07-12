@@ -52,9 +52,9 @@ def relax(u, v, Adj : AdjacencySet, d : dict, Pi : dict):
     Adj : AdjacencySet
         Datastructure for graph representation.
     d : dict
-        The hashmap of current path lengths.
-    Pi :
-        The hashmap of predecessor nodes in the paths coming from source.
+        Maps vertices to current path lengths from source.
+    Pi : dict
+        Maps vertices to their predecessor nodes in the paths coming from the source.
 
     Raises
     ------
