@@ -66,7 +66,7 @@ def relax(u, v, Adj : AdjacencySet, d : dict, Pi : dict):
 
     if not u in Adj.W:
         raise Exception('u is not in graph')
-    if not v in Adj.W[v]:
+    if not v in Adj.W[u]:
         raise Exception('v is not connected to u')
 
     if d[u] + Adj.W[u][v] < d[v]:
