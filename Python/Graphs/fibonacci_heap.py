@@ -296,6 +296,17 @@ class FibonacciHeap:
     def __len__(self):
         return self.size
 
+    def empty(self):
+        '''Check if the heap is empty
+        
+        Returns
+        -------
+        bool
+            True if the heap is empty, False otherwise
+        '''
+
+        return (self.size == 0)
+
 # ### ----- testing -----
 # # help(FibonacciHeap)
 
@@ -320,7 +331,7 @@ class FibonacciHeap:
 # # fh.decrease_key('C', 2)
 # # fh.decrease_key('A', 0)
 
-# while len(fh) > 0:
+# while not fh.empty():
 #     name, key = fh.pop_min()
 #     print(name, key)
 
