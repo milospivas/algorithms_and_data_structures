@@ -1,6 +1,6 @@
 ''' Dynamic Programming: n-th Fibonacci number
 
-    Author: Milos Pivas, student
+    Author: Miloš Pivaš, student
 '''
 
 ### Naive recursion
