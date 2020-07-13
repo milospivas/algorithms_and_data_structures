@@ -18,7 +18,7 @@ def fib_nr(n):
     Returns
     -------
     int
-        n-th Fibonacci number (starting from 1, 1,...)
+        n-th Fibonacci number (starting from 0, 1,...)
     '''
     
     if n < 0:
@@ -51,7 +51,7 @@ def fib_rc(n, cache = None):
     Returns
     -------
     int
-        n-th Fibonacci number (starting from 1, 1,...)
+        n-th Fibonacci number (starting from 0, 1,...)
     '''
     
     if n < 0:
@@ -89,7 +89,7 @@ def fib_bu(n):
     Returns
     -------
     int
-        n-th Fibonacci number (starting from 1, 1,...)
+        n-th Fibonacci number (starting from 0, 1,...)
     '''    
 
     if n < 0:
