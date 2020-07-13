@@ -129,6 +129,8 @@ def test_fib(fib, ins = None, outs = None):
         Passed/Not passed the test
     '''
 
+    help(fib)
+
     if ins is None:
         ins     = [   -1, 0, 1, 2, 3, 4, 5, 6, 7]
     if outs is None:
