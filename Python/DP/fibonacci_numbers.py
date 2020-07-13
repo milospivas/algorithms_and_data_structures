@@ -76,6 +76,45 @@ def fib_rc(n, cache = None):
             return f
 
 
+### Iterative bottom-up
+
+def fib_bu(n):
+    ''' Returns n-th Fibonacci number.
+
+    Iterative, bottom-up method.
+
+    Parameters
+    ----------
+    n : int
+        Index of the Fibonacci number to be returned.
+    
+    Returns
+    -------
+    int
+        n-th Fibonacci number (starting from 1, 1,...)
+    '''    
+
+    if n < 0:
+        return None
+
+    if n == 0:
+        return 0
+
+    if n == 1:
+        return 1
+
+    f0 = 0
+    f1 = 1
+
+    for _ in range(2, n+1):
+        f2 = f0 + f1
+        f0 = f1
+        f1 = f2
+    
+    return f2
+
+
+
 ### testing
 
 def test_fib(fib, ins = None, outs = None):
@@ -109,5 +148,8 @@ assert test_fib(fib_nr)
 
 # testing recursion with caching (memoization)
 assert test_fib(fib_rc)
+
+# testing iterative bottom-up
+assert test_fib(fib_bu)
 
 print('Exiting...')
