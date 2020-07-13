@@ -27,11 +27,10 @@ def fib_nr(n):
     if n == 0:
         return 0
 
-    elif n == 1:
+    if n == 1:
         return 1
 
-    else:
-        return fib_nr(n-1) + fib_nr(n-2)
+    return fib_nr(n-1) + fib_nr(n-2)
 
 
 ### Recursion + caching (memoization)
@@ -61,19 +60,18 @@ def fib_rc(n, cache = None):
     if n == 0:
         return 0
 
-    elif n == 1:
+    if n == 1:
         return 1
 
-    else:
-        if cache is None:
-            cache = {}
-            
-        if n in cache:
-            return cache[n]
-        else:
-            f = fib_rc(n-1, cache) + fib_rc(n-2, cache)
-            cache[n] = f
-            return f
+    if cache is None:
+        cache = {}
+        
+    if n in cache:
+        return cache[n]
+        
+    f = fib_rc(n-1, cache) + fib_rc(n-2, cache)
+    cache[n] = f
+    return f
 
 
 ### Iterative bottom-up
