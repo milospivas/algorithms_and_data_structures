@@ -70,7 +70,7 @@ def justify_nr(words, line_width, i = 0):
     n_remaining = n-i
 
     if n_remaining == 0:
-        return [i], 0
+        return [], 0
 
     min_score = float('inf')
 
