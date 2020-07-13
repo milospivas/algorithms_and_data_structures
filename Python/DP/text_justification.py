@@ -91,6 +91,68 @@ def justify_nr(words, line_width, i = 0):
     return min_indices, min_score
 
 
+### Recursive DP with caching (memoization)
+
+def justify_rc(words, line_width, i = 0, cache = None):
+    ''' Insert new lines into given text to justify it.
+
+    Parameters
+    ----------
+    words : list
+        The list of words representing text to be justified.
+    line_width : int
+        Line width in number of characters.
+    [i : int]
+        Index of the word from which to start justifying.
+    [cache : dict]
+        Dictionary of already calculated solutions.
+
+    Returns
+    -------
+    (list, int)
+    list
+        A list of indices where to insert new lines.
+    int
+        Accumulated badness score 
+        (='inf' if there is a word larger than the line_width).
+    '''
+
+    # calculate the number of remaining words
+    n = len(words)
+    n_remaining = n-i
+
+    if n_remaining == 0:
+        return [], 0
+
+    if cache is None:
+        cache = {}
+
+    min_score = float('inf')
+
+    # for every of the remaining words
+    for j in range(i+1, n+1):
+    # pick a break-point for the new line
+        # justify the rest of words after new line
+
+        if j in cache:
+            # get it from cache if it's already computed
+            later_indices, score = cache[j]
+        else:
+            # compute it
+            later_indices, score = justify_rc(words, line_width, j, cache)
+            cache[j] = (later_indices, score)
+
+        # add the score for the current line
+        score += badness(words, i, j, line_width)
+        
+        # keep min
+        if score < min_score:
+            min_score = score
+            min_indices = later_indices + [j]
+
+    return min_indices, min_score
+
+
 ### testing
 
 def test(words, line_width, justfy_function):
@@ -148,7 +210,10 @@ def test(words, line_width, justfy_function):
 text = '12345678901 123 123 123 123'
 words = text.split(' ')
 line_width = 11
+
 test(words, line_width, justify_nr)
+
+test(words, line_width, justify_rc)
 
 
 print('Exiting...')
