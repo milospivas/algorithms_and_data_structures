@@ -1,4 +1,5 @@
 ''' Dynamic Programming: Text justification
+    Problem: Split text into lines of limitted line width, minimizing white space.
 
     Author: Miloš Pivaš, student
 '''
