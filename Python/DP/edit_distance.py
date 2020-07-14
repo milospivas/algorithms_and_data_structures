@@ -49,12 +49,6 @@ def edit_distance_nr(x, y, operations, i = 0, j = 0):
         Computetd edit distance.
     '''
 
-    ''' Loking at x[i] and y[j], for each i and j, options are:
-            delete x[i],    costs 1
-            insert y[j],    costs 1
-            replace x[i] by y[j], costs 1
-    '''
-
     if (i == len(x)) and (j == len(y)):
         return 0
     
@@ -101,12 +95,6 @@ def edit_distance_rc(x, y, operations, i = 0, j = 0, cache = None):
     -------
     int
         Computetd edit distance.
-    '''
-
-    ''' Loking at x[i] and y[j], for each i and j, options are:
-            delete x[i],    costs 1
-            insert y[j],    costs 1
-            replace x[i] by y[j], costs 1
     '''
 
     if (i == len(x)) and (j == len(y)):
@@ -176,6 +164,7 @@ def test_ed(x, y, operations, true_ed, edit_distance_func):
             -------
             int
                 Computetd edit distance.
+
     Returns
     -------
     bool
