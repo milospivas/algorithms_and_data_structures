@@ -177,6 +177,7 @@ def test_ed(x, y, operations, true_ed, edit_distance_func):
 
 
 help(edit_distance_nr)
+help(edit_distance_rc)
 
 # building operations list
 delete = Operation(1, 1, 0)
