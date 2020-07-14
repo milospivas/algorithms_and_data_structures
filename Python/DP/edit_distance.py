@@ -78,6 +78,48 @@ def edit_distance_nr(x, y, operations, i = 0, j = 0):
 
 
 ### testing
+
+def test_ed(x, y, operations, true_ed, edit_distance_func):
+    ''' Auto tests edit distance function
+
+    Parameters
+    ----------
+    x : str
+        First string.
+    y : str
+        Second string.
+    operations : list
+        List of available operations
+    true_ed : int
+        True solution
+    edit_distance_func : function handle
+        Function to be tested with following interface:
+            Parameters
+            ----------
+            x : str
+                First string.
+            y : str
+                Second string.
+            operations : list
+                List of available operations
+
+            Returns
+            -------
+            int
+                Computetd edit distance.
+    Returns
+    -------
+    bool
+        Passed/Not passed the test.
+    '''
+
+    ed = edit_distance_func(x, y, operations)
+
+    return ed == true_ed
+
+
+help(edit_distance_nr)
+
 # building operations list
 delete = Operation(1, 1, 0)
 insert = Operation(1, 0, 1)
@@ -86,16 +128,12 @@ operations = [delete, insert, replace]
 
 x = 'a'
 y = 'a'
-ed = edit_distance_nr(x, y, operations)
-print('x:', x)
-print('y:', y)
-print('ed:', ed)
+true_ed = 0
+assert test_ed(x, y, operations, true_ed, edit_distance_nr)
 
 x = 'abacab'
 y = 'ahab'
-ed = edit_distance_nr(x, y, operations)
-print('x:', x)
-print('y:', y)
-print('ed:', ed)
+true_ed = 3
+assert test_ed(x, y, operations, true_ed, edit_distance_nr)
 
 print('Exiting...')
