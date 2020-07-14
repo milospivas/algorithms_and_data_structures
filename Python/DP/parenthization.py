@@ -37,6 +37,8 @@ def cost_mm(A_shape, B_shape):
 def parenthesize_nr(A_shapes, i = 0, j = None):
     ''' Finds optimal way to parenthesize a matrix multiplication expression.
 
+    Naive recursive method (without caching).
+
     Parameters
     ----------
     A_shapes : list
@@ -101,6 +103,8 @@ def parenthesize_rc(A_shapes, i = 0, j = None, cache = None):
         Index of the first matrix in the expression.
     [j : int]
         Index of the last matrix in the expression.
+    [cache : dict]
+        The hashmap of already computed solutions.
 
     Returns
     -------
