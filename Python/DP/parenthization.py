@@ -158,6 +158,8 @@ def parenthesize_rc(A_shapes, i = 0, j = None, cache = None):
 def test_parenthesization(A_shape, parenthesize_func):
     ''' Tests parenthesize_func on A_shape
     '''
+    
+    help(parenthesize_func)
 
     indices, cost = parenthesize_func(A_shape)
 
