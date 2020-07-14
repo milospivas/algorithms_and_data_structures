@@ -48,7 +48,10 @@ def parenthesize_nr(A_shapes, i = 0, j = None):
 
     Returns
     -------
-
+    list
+        Represents the order of multiplications via a list of indices.
+    int
+        Total cost of multiplication.
     '''
 
     if j is None:
