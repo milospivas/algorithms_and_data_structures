@@ -87,22 +87,22 @@ def parenthesize_nr(A_shapes, i = 0, j = None):
 
 
 ### testing
+def test_parenthesization(A_shape, parenthesize_func):
+    ''' Tests parenthesize_func on A_shape
+    '''
+
+    indices, cost = parenthesize_func(A_shape)
+
+    print('shapes:', A_shape)
+    print('product indices:', indices)
+    print('cost:', cost)
+    print()
+
+
 A_shape = [(2, 1), (1, 2), (2, 1)]
-
-indices, cost = parenthesize_nr(A_shape)
-
-print('shapes:', A_shape)
-print('product indices:', indices)
-print('cost:', cost)
-print()
+test_parenthesization(A_shape, parenthesize_nr)
 
 A_shape = [(1, 2), (2, 1), (1, 2)]
-
-indices, cost = parenthesize_nr(A_shape)
-
-print('shapes:', A_shape)
-print('product indices:', indices)
-print('cost:', cost)
-print()
+test_parenthesization(A_shape, parenthesize_nr)
 
 print('Exiting...')
