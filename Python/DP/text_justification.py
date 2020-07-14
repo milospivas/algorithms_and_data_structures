@@ -1,6 +1,6 @@
 ''' Dynamic Programming: Text justification
 
-    Author: Miloš Pivaš
+    Author: Miloš Pivaš, student
 '''
 
 
