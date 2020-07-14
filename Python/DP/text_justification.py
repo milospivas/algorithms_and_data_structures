@@ -153,6 +153,70 @@ def justify_rc(words, line_width, i = 0, cache = None):
     return min_indices, min_score
 
 
+### Iterative DP bottom-up
+
+def justify_bu(words, line_width):
+    ''' Insert new lines into given text to justify it.
+
+    Parameters
+    ----------
+    words : list
+        The list of words representing text to be justified.
+    line_width : int
+        Line width in number of characters.
+
+    Returns
+    -------
+    (list, int)
+    list
+        A list of indices where to insert new lines.
+    int
+        Accumulated badness score 
+        (='inf' if there is a word larger than the line_width).
+    '''
+
+    n = len(words)
+
+    # init cache
+    cache = {}
+    cache[n] = ([], 0)
+
+    for i in range(n-1, -1, -1):
+    # iterate in topologicaly sorted order,
+    # from the end of the text to the begining
+    
+        min_score = float('inf')
+        
+        # for every of the remaining words
+        for j in range(i+1, n+1):
+        # pick a break-point for the next line
+            # justify the rest of words after new line
+
+            # retrieve the score for the next lines
+            _, score = cache[j]
+            
+            # add the score for the current line
+            score += badness(words, i, j, line_width)
+
+            # keep min
+            if score < min_score:
+                min_score = score
+                min_index = j
+        
+        # retrieve optimum indices
+        min_indices, _ = cache[min_index]
+        
+        # add the break-point index (if it is a new index)
+        if (len(min_indices) == 0) or (min_index != min_indices[-1]):
+            min_indices += [min_index]
+
+        # store min in cache
+        cache[i] = (min_indices, min_score)
+
+    # solution is in cache for the whole text
+    return cache[0]
+
+
 ### testing
 
 def test(words, line_width, justfy_function):
@@ -214,6 +278,8 @@ line_width = 11
 test(words, line_width, justify_nr)
 
 test(words, line_width, justify_rc)
+
+test(words, line_width, justify_bu)
 
 
 print('Exiting...')
