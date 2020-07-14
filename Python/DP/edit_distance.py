@@ -77,6 +77,75 @@ def edit_distance_nr(x, y, operations, i = 0, j = 0):
     return min_cost
 
 
+### Recursive DP + caching
+
+def edit_distance_rc(x, y, operations, i = 0, j = 0, cache = None):
+    ''' Calculate edit distance between strings x and y.
+
+    Parameters
+    ----------
+    x : str
+        First string.
+    y : str
+        Second string.
+    operations : list
+        List of available operations
+    [i : int]
+        Starting index of the first string.
+    [j : int]
+        Starting index of the second string.
+    [cache : dict]
+        Hashmap of already computed solutions.
+
+    Returns
+    -------
+    int
+        Computetd edit distance.
+    '''
+
+    ''' Loking at x[i] and y[j], for each i and j, options are:
+            delete x[i],    costs 1
+            insert y[j],    costs 1
+            replace x[i] by y[j], costs 1
+    '''
+
+    if (i == len(x)) and (j == len(y)):
+        return 0
+    
+    # cache init
+    if cache is None:
+        cache = {}
+
+    min_cost = float('Inf')
+    # try available operations that surely transform the strings
+    for o in operations:
+        if (i + o.dx <= len(x)) and (j + o.dy <= len(y)):
+            next_i = i + o.dx
+            next_j = j + o.dy
+
+            if (next_i, next_j) in cache:
+                next_cost = cache[(next_i, next_j)]
+            else:
+                next_cost = edit_distance_rc(x, y, operations, next_i, next_j, cache)
+
+            cost = o.cost + next_cost
+
+            if cost < min_cost:
+                min_cost = cost
+    
+    # try not doing anything if characters already match:
+    if (i < len(x)) and (j < len(y)) and (x[i] == y[j]):
+        cost = 0 + edit_distance_nr(x, y, operations, i+1, j+1)
+        
+        if cost < min_cost:
+            min_cost = cost
+
+    # save in cache
+    cache[(i, j)] = min_cost
+
+    return min_cost
+
+
 ### testing
 
 def test_ed(x, y, operations, true_ed, edit_distance_func):
@@ -130,10 +199,12 @@ x = 'a'
 y = 'a'
 true_ed = 0
 assert test_ed(x, y, operations, true_ed, edit_distance_nr)
+assert test_ed(x, y, operations, true_ed, edit_distance_rc)
 
 x = 'abacab'
 y = 'ahab'
 true_ed = 3
 assert test_ed(x, y, operations, true_ed, edit_distance_nr)
+assert test_ed(x, y, operations, true_ed, edit_distance_rc)
 
 print('Exiting...')
