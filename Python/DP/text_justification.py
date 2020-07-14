@@ -46,6 +46,8 @@ def badness(words, i, j, line_width):
 def justify_nr(words, line_width, i = 0):
     ''' Insert new lines into given text to justify it.
 
+    Naive recursive method using dynamic programming (without caching - hence naive).
+
     Parameters
     ----------
     words : list
@@ -95,6 +97,8 @@ def justify_nr(words, line_width, i = 0):
 
 def justify_rc(words, line_width, i = 0, cache = None):
     ''' Insert new lines into given text to justify it.
+
+    Recursive method using dynamic programming with caching (memoization).
 
     Parameters
     ----------
@@ -157,6 +161,8 @@ def justify_rc(words, line_width, i = 0, cache = None):
 
 def justify_bu(words, line_width):
     ''' Insert new lines into given text to justify it.
+
+    Iterative, bottom-up method using dynamic programming.
 
     Parameters
     ----------
