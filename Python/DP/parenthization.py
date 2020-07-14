@@ -158,6 +158,65 @@ def parenthesize_rc(A_shapes, i = 0, j = None, cache = None):
     return min_indices, min_cost
 
 
+### Iterative, bottom-up DP with caching (memoization)
+
+def parenthesize_bu(A_shapes):
+    ''' Finds optimal way to parenthesize a matrix multiplication expression.
+
+    Iterative, bottom-up, dynamic programming method with caching (memoization).
+    
+    Parameters
+    ----------
+    A_shapes : list
+        List of (int, int) tuples, representing shapes of matrices.
+
+    Returns
+    -------
+    list
+        Represents the order of multiplications via a list of indices.
+    int
+        Total cost of multiplication.
+    '''
+    
+    N = len(A_shape)
+    
+    # cache init
+    cache = {}
+    for i in range(N):
+        cache[(i, i+1)] = ([], 0)
+    
+    # for each subsequence length bigger than 1
+    for n in range(2, N+1):
+        # for each starting index of the subsequence
+        for i in range(N - n + 1):
+            # compute ending index
+            j = i + n
+
+            # find optimum point
+            min_cost = float('Inf')
+            for k in range(i+1, j):
+                indices_l, cost_l = cache[(i, k)]
+                indices_r, cost_r = cache[(k, j)]
+
+                L_shape = (A_shapes[i][0], A_shapes[k-1][1])
+                R_shape = (A_shapes[k][0], A_shapes[j-1][1])
+                cost = cost_mm(L_shape, R_shape)
+
+                cost += cost_l + cost_r
+                
+                if cost < min_cost:
+                    min_cost = cost
+                    min_index = k
+                    min_indices_l = indices_l
+                    min_indices_r = indices_r
+            
+            min_indices = min_indices_l + min_indices_r + [min_index]
+            
+            cache[(i, j)] = min_indices, min_cost
+
+    return cache[(0, N)]
+
+
 ### testing
 def test_parenthesization(A_shape, parenthesize_func):
     ''' Tests parenthesize_func on A_shape
@@ -186,5 +245,12 @@ test_parenthesization(A_shape, parenthesize_rc)
 
 A_shape = [(1, 2), (2, 1), (1, 2)]
 test_parenthesization(A_shape, parenthesize_rc)
+
+# test bottom-up iteration with caching
+A_shape = [(2, 1), (1, 2), (2, 1)]
+test_parenthesization(A_shape, parenthesize_bu)
+
+A_shape = [(1, 2), (2, 1), (1, 2)]
+test_parenthesization(A_shape, parenthesize_bu)
 
 print('Exiting...')
