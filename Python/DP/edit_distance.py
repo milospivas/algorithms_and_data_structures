@@ -123,8 +123,13 @@ def edit_distance_rc(x, y, operations, i = 0, j = 0, cache = None):
     
     # try not doing anything if characters already match:
     if (i < len(x)) and (j < len(y)) and (x[i] == y[j]):
-        cost = 0 + edit_distance_nr(x, y, operations, i+1, j+1)
+        next_i, next_j = i+1, j+1
         
+        if (next_i, next_j) in cache:
+            cost = cache[(next_i, next_j)]
+        else:
+            cost = edit_distance_rc(x, y, operations, next_i, next_j, cache)
+
         if cost < min_cost:
             min_cost = cost
 
