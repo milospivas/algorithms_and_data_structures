@@ -55,8 +55,10 @@ def edit_distance_nr(x, y, operations, i = 0, j = 0):
     min_cost = float('Inf')
     # try available operations that surely transform the strings
     for o in operations:
-        if (i + o.dx <= len(x)) and (j + o.dy <= len(y)):
-            cost = o.cost + edit_distance_nr(x, y, operations, i + o.dx, j + o.dy)
+        next_i, next_j = i + o.dx, j + o.dy
+        
+        if (next_i <= len(x)) and (next_j <= len(y)):
+            cost = o.cost + edit_distance_nr(x, y, operations, next_i, next_j)
 
             if cost < min_cost:
                 min_cost = cost
@@ -108,8 +110,7 @@ def edit_distance_rc(x, y, operations, i = 0, j = 0, cache = None):
     # try available operations that surely transform the strings
     for o in operations:
         if (i + o.dx <= len(x)) and (j + o.dy <= len(y)):
-            next_i = i + o.dx
-            next_j = j + o.dy
+            next_i, next_j = i + o.dx, j + o.dy
 
             if (next_i, next_j) in cache:
                 next_cost = cache[(next_i, next_j)]
