@@ -28,7 +28,9 @@ class Operation:
 ### Naive recursive DP
 
 def edit_distance_nr(x, y, operations, i = 0, j = 0):
-    ''' Calculate edit distance between strings x and y.
+    ''' Calculates edit distance between strings x and y.
+
+    Naive recursive, dynamic programming method (without caching).
 
     Parameters
     ----------
@@ -76,7 +78,9 @@ def edit_distance_nr(x, y, operations, i = 0, j = 0):
 ### Recursive DP + caching
 
 def edit_distance_rc(x, y, operations, i = 0, j = 0, cache = None):
-    ''' Calculate edit distance between strings x and y.
+    ''' Calculates edit distance between strings x and y.
+
+    Recursive, dynamic programming method with caching (memoization).
 
     Parameters
     ----------
@@ -160,6 +164,12 @@ def edit_distance_bu(x, y, operations):
     -------
     int
         Computetd edit distance.
+
+    Raises
+    ------
+    Exception
+        'Can\'t work with operations that use more than 1 character'
+        if any given operation uses more than 1 character per string.
     '''
 
     for o in operations:
