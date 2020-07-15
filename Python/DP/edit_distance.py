@@ -17,9 +17,23 @@ class Operation:
         The amount of characters in x the operation uses.
     dy : int
         The amount of characters in y the operation uses.
+
+    Raises
+    ------
+    Exception
+        Constructor raises 'Can\'t work with negative number of characters.'
+        exception if negative values for dx or dy are passed to it.
+        
     '''
 
     def __init__(self, cost, dx, dy):
+        ''' Constructor.
+
+        See help(Operation) for more details.
+        '''
+
+        if dx < 0 or dy < 0:
+            raise Exception('Can\'t work with negative number of characters.')
         self.cost = cost
         self.dx = dx
         self.dy = dy
@@ -272,6 +286,19 @@ def test_ed(x, y, operations, true_ed, edit_distance_func):
 
     return ed == true_ed
 
+
+help(Operation)
+
+# Can't work with negative number of characters
+try:
+    o = Operation(42, -1, 0)
+except Exception as e:
+    print(e)
+
+try:
+    o = Operation(42, 0, -1)
+except Exception as e:
+    print(e)
 
 help(edit_distance_nr)
 help(edit_distance_rc)
