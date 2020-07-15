@@ -139,6 +139,87 @@ def edit_distance_rc(x, y, operations, i = 0, j = 0, cache = None):
     return min_cost
 
 
+### Iterative, bottom-up DP with caching
+
+def edit_distance_bu(x, y, operations):
+    ''' Calculates edit distance between strings x and y.
+    
+    Iterative, bottom-up, dynamic programming method.
+
+    Parameters
+    ----------
+    x : str
+        First string.
+    y : str
+        Second string.
+    operations : list
+        List of available operations
+
+    Returns
+    -------
+    int
+        Computetd edit distance.
+    '''
+
+    for o in operations:
+        if o.dx > 1 or o.dy > 1:
+            raise Exception('Can\'t work with operations that use more than 1 character')
+    
+    # cache init
+    cache = {}
+    # start at the end of strings
+    cache[(len(x), len(y))] = 0
+
+    # move "left"
+    i_start, j_start = len(x), len(y)-1
+
+    while True:
+        # get the starting point
+        i, j = i_start, j_start
+
+        while True:
+            # process the element
+
+            min_cost = float('Inf')
+            # try available operations that surely transform the strings
+            for o in operations:
+                if (i + o.dx <= len(x)) and (j + o.dy <= len(y)):
+                    next_i, next_j = i + o.dx, j + o.dy
+
+                    next_cost = cache[(next_i, next_j)]
+                    cost = o.cost + next_cost
+
+                    if cost < min_cost:
+                        min_cost = cost
+                    
+            # try not doing anything if characters already match:
+            if (i < len(x)) and (j < len(y)) and (x[i] == y[j]):
+                cost = cache[(i+1, j+1)]
+                
+                if cost < min_cost:
+                    min_cost = cost
+
+            # save in cache
+            cache[(i, j)] = min_cost
+
+
+            # move to the next element
+            i -= 1
+            j += 1
+            # if off the grid, move to the next starting point
+            if i < 0 or j > len(y):
+                break
+        
+        if j_start-1 >= 0:      # if possible
+            j_start -= 1        #   move "left"
+        elif i_start-1 >= 0:    # else, if possible
+            i_start -= 1        #   move "up"
+        else:                   # else:
+            break               #   we're done
+
+    return cache[(0,0)]
+
+
 ### testing
 
 def test_ed(x, y, operations, true_ed, edit_distance_func):
@@ -183,6 +264,7 @@ def test_ed(x, y, operations, true_ed, edit_distance_func):
 
 help(edit_distance_nr)
 help(edit_distance_rc)
+help(edit_distance_bu)
 
 # building operations list
 delete = Operation(1, 1, 0)
@@ -195,11 +277,13 @@ y = 'a'
 true_ed = 0
 assert test_ed(x, y, operations, true_ed, edit_distance_nr)
 assert test_ed(x, y, operations, true_ed, edit_distance_rc)
+assert test_ed(x, y, operations, true_ed, edit_distance_bu)
 
 x = 'abacab'
 y = 'ahab'
 true_ed = 3
 assert test_ed(x, y, operations, true_ed, edit_distance_nr)
 assert test_ed(x, y, operations, true_ed, edit_distance_rc)
+assert test_ed(x, y, operations, true_ed, edit_distance_bu)
 
 print('Exiting...')
