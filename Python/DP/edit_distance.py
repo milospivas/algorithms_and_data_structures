@@ -227,6 +227,12 @@ def edit_distance_bu(x, y, operations):
             # save in cache
             cache[(i, j)] = min_cost
 
+            # this optimises the cache space to use only O(len(x)+len(y)) space
+            # instead of O(len(x)*len(y))
+            if (i+2, j) in cache:
+                cache.pop(i+2, j)
+            if (i, j+2) in cache:
+                cache.pop(i, j+2)
 
             # move to the next element
             i -= 1
