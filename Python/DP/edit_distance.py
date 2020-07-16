@@ -2,6 +2,9 @@
     "Given two strings x and y, what is the cheapest possible sequence of character edits
     (insert c, delete c, replace c -> c') to transform x into y?"
 
+    It doesn't have to be strings and characters.
+    The functions also work with any iterables whose elements can be compared with '==' operator.
+
     Author: Miloš Pivaš, student
 '''
 
@@ -305,41 +308,48 @@ def test_ed(x, y, operations, true_ed, edit_distance_func):
     return ed == true_ed
 
 
-help(Operation)
+# help(Operation)
 
-# Can't work with negative number of characters
-try:
-    o = Operation(42, -1, 0)
-except Exception as e:
-    print(e)
+# # Can't work with negative number of elements
+# try:
+#     o = Operation(42, -1, 0)
+# except Exception as e:
+#     print(e)
 
-try:
-    o = Operation(42, 0, -1)
-except Exception as e:
-    print(e)
+# try:
+#     o = Operation(42, 0, -1)
+# except Exception as e:
+#     print(e)
 
-help(edit_distance_nr)
-help(edit_distance_rc)
-help(edit_distance_bu)
+# help(edit_distance_nr)
+# help(edit_distance_rc)
+# help(edit_distance_bu)
 
-# building operations list
-delete = Operation(1, 1, 0)
-insert = Operation(1, 0, 1)
-replace = Operation(1, 1, 1)
-operations = [delete, insert, replace]
+# # building operations list
+# delete = Operation(1, 1, 0)
+# insert = Operation(1, 0, 1)
+# replace = Operation(1, 1, 1)
+# operations = [delete, insert, replace]
 
-x = 'a'
-y = 'a'
-true_ed = 0
-assert test_ed(x, y, operations, true_ed, edit_distance_nr)
-assert test_ed(x, y, operations, true_ed, edit_distance_rc)
-assert test_ed(x, y, operations, true_ed, edit_distance_bu)
+# x = 'a'
+# y = 'a'
+# true_ed = 0
+# assert test_ed(x, y, operations, true_ed, edit_distance_nr)
+# assert test_ed(x, y, operations, true_ed, edit_distance_rc)
+# assert test_ed(x, y, operations, true_ed, edit_distance_bu)
 
-x = [1,2,1,3,1,2]   #'abacab'
-y = [1,42,1,2]  #'ahab'
-true_ed = 3
-assert test_ed(x, y, operations, true_ed, edit_distance_nr)
-assert test_ed(x, y, operations, true_ed, edit_distance_rc)
-assert test_ed(x, y, operations, true_ed, edit_distance_bu)
+# x = 'abacab'
+# y = 'ahab'
+# true_ed = 3
+# assert test_ed(x, y, operations, true_ed, edit_distance_nr)
+# assert test_ed(x, y, operations, true_ed, edit_distance_rc)
+# assert test_ed(x, y, operations, true_ed, edit_distance_bu)
 
-print('Exiting...')
+# x = [1,2,1,3,1,2]   # represents 'abacab'
+# y = [1,8,1,2]       # represents 'ahab'
+# true_ed = 3
+# assert test_ed(x, y, operations, true_ed, edit_distance_nr)
+# assert test_ed(x, y, operations, true_ed, edit_distance_rc)
+# assert test_ed(x, y, operations, true_ed, edit_distance_bu)
+
+# print('Exiting...')
