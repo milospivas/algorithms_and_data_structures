@@ -42,39 +42,39 @@ class Operation:
 ### Naive recursive DP
 
 def edit_distance_nr(x, y, operations, i = 0, j = 0):
-    ''' Calculates edit distance between strings x and y.
+    ''' Calculates edit distance between iterables x and y.
 
     Naive recursive, dynamic programming method (without caching).
 
     Parameters
     ----------
-    x : str
-        First string.
-    y : str
-        Second string.
+    x : iterable
+        First iterable (elements must also support '==' operator).
+    y : iterable
+        Second iterable (elements must also support '==' operator).
     operations : list
-        List of available operations
+        List of Operation() objects. List of available operations.
     [i : int]
-        Starting index of the first string.
+        Starting index of the first iterable.
     [j : int]
-        Starting index of the second string.
+        Starting index of the second iterable.
 
     Returns
     -------
     int, list
         int - Computed edit distance.
         list - of (operation, int, int) tuples describing what operation
-        was performed on what characters in x and y.
+        was performed on what element in x and y.
         operation is None if nothing was done.
-        The first int is the index of the character in x.
-        The second int is the index of the character in y.
+        The first int is the index of the element in x.
+        The second int is the index of the element in y.
     '''
 
     if (i == len(x)) and (j == len(y)):
         return 0, []
     
     min_cost = float('Inf')
-    # try available operations that surely transform the strings
+    # try available operations that surely transform the iterables
     for o in operations:
         next_i, next_j = i + o.dx, j + o.dy
         
@@ -86,7 +86,7 @@ def edit_distance_nr(x, y, operations, i = 0, j = 0):
                 min_cost = cost
                 min_next_operations = next_operations + [(o, i, j)]
     
-    # try not doing anything if characters already match:
+    # try not doing anything if elements already match:
     if (i < len(x)) and (j < len(y)) and (x[i] == y[j]):
         cost, next_operations = edit_distance_nr(x, y, operations, i+1, j+1)
         
