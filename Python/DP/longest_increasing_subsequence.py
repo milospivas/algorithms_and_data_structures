@@ -31,6 +31,12 @@ def longest_increasing_subsequence(a, sort_func = None, empty_object = None, app
     -------
     iterable
         Longest increasing subsequence.
+
+    Raises
+    ------
+    Exception
+        'Please provide the sort function.'
+        If type(a) isn't str or list and sort_func isn't given.
     '''
 
     if type(a) is str:
@@ -44,6 +50,8 @@ def longest_increasing_subsequence(a, sort_func = None, empty_object = None, app
         sol = longest_common_subsequence(a, a_sorted)
 
     else:
+        if (sort_func is None):
+            raise Exception('Please provide the sort function.')
         a_sorted = sort_func(a)
         sol = longest_common_subsequence(a, a_sorted, empty_object, append_func, is_inplace)
 
