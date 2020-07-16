@@ -61,12 +61,17 @@ def edit_distance_nr(x, y, operations, i = 0, j = 0):
 
     Returns
     -------
-    int
-        Computetd edit distance.
+    int, list
+        int - Computed edit distance.
+        list - of (operation, int, int) tuples describing what operation
+        was performed on what characters in x and y.
+        operation is None if nothing was done.
+        The first int is the index of the character in x.
+        The second int is the index of the character in y.
     '''
 
     if (i == len(x)) and (j == len(y)):
-        return 0
+        return 0, []
     
     min_cost = float('Inf')
     # try available operations that surely transform the strings
@@ -74,19 +79,22 @@ def edit_distance_nr(x, y, operations, i = 0, j = 0):
         next_i, next_j = i + o.dx, j + o.dy
         
         if (next_i <= len(x)) and (next_j <= len(y)):
-            cost = o.cost + edit_distance_nr(x, y, operations, next_i, next_j)
+            next_cost, next_operations = edit_distance_nr(x, y, operations, next_i, next_j)
+            cost = next_cost + o.cost 
 
             if cost < min_cost:
                 min_cost = cost
+                min_next_operations = next_operations + [(o, i, j)]
     
     # try not doing anything if characters already match:
     if (i < len(x)) and (j < len(y)) and (x[i] == y[j]):
-        cost = 0 + edit_distance_nr(x, y, operations, i+1, j+1)
+        cost, next_operations = edit_distance_nr(x, y, operations, i+1, j+1)
         
         if cost < min_cost:
             min_cost = cost
-
-    return min_cost
+            min_next_operations = next_operations + [(None, i, j)]
+        
+    return min_cost, min_next_operations
 
 
 ### Recursive DP + caching
@@ -316,18 +324,30 @@ insert = Operation(1, 0, 1)
 replace = Operation(1, 1, 1)
 operations = [delete, insert, replace]
 
-x = 'a'
-y = 'a'
-true_ed = 0
-assert test_ed(x, y, operations, true_ed, edit_distance_nr)
-assert test_ed(x, y, operations, true_ed, edit_distance_rc)
-assert test_ed(x, y, operations, true_ed, edit_distance_bu)
+# x = 'a'
+# y = 'a'
+# true_ed = 0
+# assert test_ed(x, y, operations, true_ed, edit_distance_nr)
+# assert test_ed(x, y, operations, true_ed, edit_distance_rc)
+# assert test_ed(x, y, operations, true_ed, edit_distance_bu)
+
+# x = 'abacab'
+# y = 'ahab'
+# true_ed = 3
+# assert test_ed(x, y, operations, true_ed, edit_distance_nr)
+# assert test_ed(x, y, operations, true_ed, edit_distance_rc)
+# assert test_ed(x, y, operations, true_ed, edit_distance_bu)
 
 x = 'abacab'
 y = 'ahab'
-true_ed = 3
-assert test_ed(x, y, operations, true_ed, edit_distance_nr)
-assert test_ed(x, y, operations, true_ed, edit_distance_rc)
-assert test_ed(x, y, operations, true_ed, edit_distance_bu)
+replace.cost = float('Inf')
+ed, performed_operations = edit_distance_nr(x, y, operations)
+print('Longest common subsequence is:')
+performed_operations.sort(key = lambda tpl : tpl[1])
+for tpl in performed_operations:
+    o, i, j = tpl
+    if o is None:
+        print(x[i], end='')
+print()
 
 print('Exiting...')
