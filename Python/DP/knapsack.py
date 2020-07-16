@@ -2,6 +2,10 @@
     N items have mass m[i], and value v[i].
     Find the optimal subset of items that maximize the total value,
     but whose total mass doesn't exceed the maximum carrying capacity of the knapsack - M.
+    
+    The problem is solvable in pseudopolynomial time O(N*M).
+    It is pseudopolynomial because the input is given in O(N) + O(logM) space.
+    (M is just a number - it is written in logM space).
 
     Author: Miloš Pivaš, student
 '''
