@@ -7,21 +7,21 @@
 
 
 class Operation:
-    ''' Describes an operation via its cost and which characters it uses.
+    ''' Describes an operation via its cost and which elements it uses.
     
     Attributes
     ----------
     cost : int
         Operation cost
     dx : int
-        The amount of characters in x the operation uses.
+        The amount of elements in x the operation uses.
     dy : int
-        The amount of characters in y the operation uses.
+        The amount of elements in y the operation uses.
 
     Raises
     ------
     Exception
-        Constructor raises 'Can\'t work with negative number of characters.'
+        Constructor raises 'Can\'t work with negative number of elements.'
         exception if negative values for dx or dy are passed to it.
         
     '''
@@ -33,7 +33,7 @@ class Operation:
         '''
 
         if dx < 0 or dy < 0:
-            raise Exception('Can\'t work with negative number of characters.')
+            raise Exception('Can\'t work with negative number of elements.')
         self.cost = cost
         self.dx = dx
         self.dy = dy
@@ -316,41 +316,41 @@ def test_ed(x, y, operations, true_ed, edit_distance_func):
     return ed == true_ed
 
 
-# help(Operation)
+help(Operation)
 
-# # Can't work with negative number of characters
-# try:
-#     o = Operation(42, -1, 0)
-# except Exception as e:
-#     print(e)
+# Can't work with negative number of characters
+try:
+    o = Operation(42, -1, 0)
+except Exception as e:
+    print(e)
 
-# try:
-#     o = Operation(42, 0, -1)
-# except Exception as e:
-#     print(e)
+try:
+    o = Operation(42, 0, -1)
+except Exception as e:
+    print(e)
 
-# help(edit_distance_nr)
-# help(edit_distance_rc)
-# help(edit_distance_bu)
+help(edit_distance_nr)
+help(edit_distance_rc)
+help(edit_distance_bu)
 
-# # building operations list
-# delete = Operation(1, 1, 0)
-# insert = Operation(1, 0, 1)
-# replace = Operation(1, 1, 1)
-# operations = [delete, insert, replace]
+# building operations list
+delete = Operation(1, 1, 0)
+insert = Operation(1, 0, 1)
+replace = Operation(1, 1, 1)
+operations = [delete, insert, replace]
 
-# x = 'a'
-# y = 'a'
-# true_ed = 0
-# assert test_ed(x, y, operations, true_ed, edit_distance_nr)
-# assert test_ed(x, y, operations, true_ed, edit_distance_rc)
-# assert test_ed(x, y, operations, true_ed, edit_distance_bu)
+x = 'a'
+y = 'a'
+true_ed = 0
+assert test_ed(x, y, operations, true_ed, edit_distance_nr)
+assert test_ed(x, y, operations, true_ed, edit_distance_rc)
+assert test_ed(x, y, operations, true_ed, edit_distance_bu)
 
-# x = 'abacab'
-# y = 'ahab'
-# true_ed = 3
-# assert test_ed(x, y, operations, true_ed, edit_distance_nr)
-# assert test_ed(x, y, operations, true_ed, edit_distance_rc)
-# assert test_ed(x, y, operations, true_ed, edit_distance_bu)
+x = [1,2,1,3,1,2]   #'abacab'
+y = [1,42,1,2]  #'ahab'
+true_ed = 3
+assert test_ed(x, y, operations, true_ed, edit_distance_nr)
+assert test_ed(x, y, operations, true_ed, edit_distance_rc)
+assert test_ed(x, y, operations, true_ed, edit_distance_bu)
 
-# print('Exiting...')
+print('Exiting...')
