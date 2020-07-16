@@ -8,28 +8,46 @@
 from longest_common_subsequence import longest_common_subsequence
 
 
-def longest_increasing_subsequence(a):
-    ''' Returns longest increasing subsequence (LIS) of the given list.
+def longest_increasing_subsequence(a, sort_func = None, empty_object = None, append_func = None, is_inplace = None):
+    ''' Returns longest increasing subsequence (LIS) of the given iterable.
 
     Subsequence doesn't have to be made out of contiguous elements.
     Uses longest common subsequence with the sorted input.
     
     Parameters
     ----------
-    a : str
-        Input string.
+    a : iterable
+        Input iterable. Must be sequential and elements must also support '==' operator.
+    [sort_func : function handle]
+        Function that sorts the input iterable.
+    [empty_object : any]
+        Empty object of the same class as x and y.
+    [append_func : function handle]
+        Function that appends values to the end of the object of the same class as x and y.
+    [is_inplace : bool]
+        Type of the append function. True if it operates in-place, False otherwise.
     
     Returns
     -------
-    list
+    iterable
         Longest increasing subsequence.
     '''
 
-    a_list = [x for x in a]
-    a_list.sort()
-    a_sorted = ''.join(a_list)
+    if type(a) is str:
+        a_list = [x for x in a]
+        a_list.sort()
+        a_sorted = ''.join(a_list)
+        sol = longest_common_subsequence(a, a_sorted)
 
-    return longest_common_subsequence(a, a_sorted)
+    elif type(a) is list:
+        a_sorted = sorted(a)
+        sol = longest_common_subsequence(a, a_sorted)
+
+    else:
+        a_sorted = sort_func(a)
+        sol = longest_common_subsequence(a, a_sorted, empty_object, append_func, is_inplace)
+
+    return sol
 
 
 ### Naive recursive (no caching)
@@ -94,15 +112,28 @@ def longest_increasing_subsequence_nr(a):
     return sol
 
 
-a = '131231'
+# # a = '131231'
 
-for lis_func in [longest_increasing_subsequence, longest_increasing_subsequence_nr]:
+# # for lis_func in [longest_increasing_subsequence, longest_increasing_subsequence_nr]:
 
-    lis = lis_func(a)
+# #     lis = lis_func(a)
 
-    print(lis)
+# #     print(lis)
 
-print('Exiting...')
+# a = '131231'
+# lis = longest_increasing_subsequence(a)
+# print(lis)
+
+# a = [1,3,1,2,3,1]
+# lis = longest_increasing_subsequence(a)
+# print(lis)
+
+# import numpy as np
+# a = np.array([1,3,1,2,3,1])
+# lis = longest_increasing_subsequence(a, np.sort, np.array([]), np.append, False)
+# print(lis)
+
+# print('Exiting...')
 
 
     
