@@ -40,16 +40,19 @@ def knapsack_nr(m, v, M, n = None, i = 0):
     if i == len(m):
         return 0, []
     
+    # try excluding the item
     val_excl, indices_excl = knapsack_nr(m, v, M, n, i + 1)
+    sol = val_excl, indices_excl
 
+    # try including the item
     if n - m[i] >= 0:
         val_incl, indices_incl = knapsack_nr(m, v, M, n - m[i], i + 1)
         val_incl += v[i]
 
         if val_incl > val_excl:
-            return val_incl, indices_incl + [i]
+            sol = val_incl, indices_incl + [i]
     
-    return val_excl, indices_excl
+    return sol
 
 
 # Recursive variant with caching (memoization)
@@ -90,14 +93,15 @@ def knapsack_rc(m, v, M, n = None, i = 0, cache = None):
     if cache is None:
         cache = {}
 
-
+    # try excluding the item
     if (n, i+1) in cache:
         val_excl, indices_excl = cache[(n, i+1)]
     else:
         val_excl, indices_excl = knapsack_rc(m, v, M, n, i + 1, cache)
 
-    sol = None
+    sol = val_excl, indices_excl
 
+    # try including the item
     if n - m[i] >= 0:
         if (n-m[i], i+1) in cache:
             val_incl, indices_incl = cache[(n-m[i], i+1)]
@@ -107,10 +111,7 @@ def knapsack_rc(m, v, M, n = None, i = 0, cache = None):
 
         if val_incl > val_excl:
             sol = val_incl, indices_incl + [i]
-    
-    if sol is None:
-        sol = val_excl, indices_excl
-    
+  
     cache[(n, i)] = sol
     return sol
     
