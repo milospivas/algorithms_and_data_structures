@@ -121,12 +121,17 @@ def edit_distance_rc(x, y, operations, i = 0, j = 0, cache = None):
 
     Returns
     -------
-    int
-        Computetd edit distance.
+    int, list
+        int - Computed edit distance.
+        list - of (operation, int, int) tuples describing what operation
+        was performed on what characters in x and y.
+        operation is None if nothing was done.
+        The first int is the index of the character in x.
+        The second int is the index of the character in y.
     '''
 
     if (i == len(x)) and (j == len(y)):
-        return 0
+        return 0, []
     
     # cache init
     if cache is None:
@@ -139,31 +144,33 @@ def edit_distance_rc(x, y, operations, i = 0, j = 0, cache = None):
             next_i, next_j = i + o.dx, j + o.dy
 
             if (next_i, next_j) in cache:
-                next_cost = cache[(next_i, next_j)]
+                next_cost, next_operations = cache[(next_i, next_j)]
             else:
-                next_cost = edit_distance_rc(x, y, operations, next_i, next_j, cache)
+                next_cost, next_operations = edit_distance_rc(x, y, operations, next_i, next_j, cache)
 
             cost = o.cost + next_cost
 
             if cost < min_cost:
                 min_cost = cost
+                min_next_operations = next_operations + [(o, i, j)]
     
     # try not doing anything if characters already match:
     if (i < len(x)) and (j < len(y)) and (x[i] == y[j]):
         next_i, next_j = i+1, j+1
         
         if (next_i, next_j) in cache:
-            cost = cache[(next_i, next_j)]
+            cost, next_operations = cache[(next_i, next_j)]
         else:
-            cost = edit_distance_rc(x, y, operations, next_i, next_j, cache)
+            cost, next_operations = edit_distance_rc(x, y, operations, next_i, next_j, cache)
 
         if cost < min_cost:
             min_cost = cost
+            min_next_operations = next_operations + [(None, i, j)]
 
     # save in cache
-    cache[(i, j)] = min_cost
+    cache[(i, j)] = min_cost, min_next_operations
 
-    return min_cost
+    return min_cost, min_next_operations
 
 
 ### Iterative, bottom-up DP with caching
@@ -341,13 +348,15 @@ operations = [delete, insert, replace]
 x = 'abacab'
 y = 'ahab'
 replace.cost = float('Inf')
-ed, performed_operations = edit_distance_nr(x, y, operations)
-print('Longest common subsequence is:')
-performed_operations.sort(key = lambda tpl : tpl[1])
-for tpl in performed_operations:
-    o, i, j = tpl
-    if o is None:
-        print(x[i], end='')
-print()
+
+for edit_distance_func in [edit_distance_nr, edit_distance_rc]:
+    ed, performed_operations = edit_distance_func(x, y, operations)
+    print('Longest common subsequence is:')
+    performed_operations.sort(key = lambda tpl : tpl[1])
+    for tpl in performed_operations:
+        o, i, j = tpl
+        if o is None:
+            print(x[i], end='')
+    print()
 
 print('Exiting...')
