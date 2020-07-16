@@ -32,9 +32,71 @@ def longest_increasing_subsequence(a):
     return longest_common_subsequence(a, a_sorted)
 
 
-a = '132231'
+### Naive recursive (no caching)
 
-for lis_func in [longest_increasing_subsequence]:
+def longest_increasing_subsequence_nr(a):
+    ''' Returns longest increasing subsequence (LIS) of the given list.
+
+    Subsequence doesn't have to be made out of contiguous elements.
+
+    Parameters
+    ----------
+    a : str
+        Input string.
+    
+    Returns
+    -------
+    str
+        Longest increasing subsequence.
+    '''
+
+    def lis_nr(a, i = 0, prev = '\0'):
+        ''' Returns longest increasing subsequence (LIS)* of the given list.
+
+        Subsequence doesn't have to be made out of contiguous elements.
+        *The subsequence is returned in reversed order
+
+        Parameters
+        ----------
+        a : str
+            Input string.
+        [i : int]
+            Index of the first element from which to start computing the LIS.
+        [prev : str]
+            Previous included element in the list (current maximum).
+
+        Returns
+        -------
+        str
+            Longest increasing subsequence *in reversed order.
+        '''
+        
+        if i == len(a):
+            return ''
+
+        # try excluding the current element
+        list_excl = lis_nr(a, i+1, prev)
+        sol = list_excl
+
+        # try including the current element
+        if a[i] >= prev:
+            list_incl = lis_nr(a, i+1, a[i])
+            list_incl += a[i]
+
+            if len(list_incl) > len(sol):
+                sol = list_incl
+
+        return sol
+    
+    sol_rev = lis_nr(a)
+    sol = sol_rev[::-1]
+
+    return sol
+
+
+a = '131231'
+
+for lis_func in [longest_increasing_subsequence, longest_increasing_subsequence_nr]:
 
     lis = lis_func(a)
 
