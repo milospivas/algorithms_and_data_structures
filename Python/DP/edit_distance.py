@@ -191,8 +191,13 @@ def edit_distance_bu(x, y, operations):
 
     Returns
     -------
-    int
-        Computetd edit distance.
+    int, list
+        int - Computed edit distance.
+        list - of (operation, int, int) tuples describing what operation
+        was performed on what characters in x and y.
+        operation is None if nothing was done.
+        The first int is the index of the character in x.
+        The second int is the index of the character in y.
 
     Raises
     ------
@@ -208,7 +213,7 @@ def edit_distance_bu(x, y, operations):
     # cache init
     cache = {}
     # start at the end of strings
-    cache[(len(x), len(y))] = 0
+    cache[(len(x), len(y))] = 0, []
 
     # move "left"
     i_start, j_start = len(x), len(y)-1
@@ -226,21 +231,24 @@ def edit_distance_bu(x, y, operations):
                 if (i + o.dx <= len(x)) and (j + o.dy <= len(y)):
                     next_i, next_j = i + o.dx, j + o.dy
 
-                    next_cost = cache[(next_i, next_j)]
+                    next_cost, next_operations = cache[(next_i, next_j)]
                     cost = o.cost + next_cost
 
                     if cost < min_cost:
                         min_cost = cost
+                        min_next_operations = next_operations + [(o, i, j)]
+
                     
             # try not doing anything if characters already match:
             if (i < len(x)) and (j < len(y)) and (x[i] == y[j]):
-                cost = cache[(i+1, j+1)]
+                cost, next_operations = cache[(i+1, j+1)]
                 
                 if cost < min_cost:
                     min_cost = cost
+                    min_next_operations = next_operations + [(None, i, j)]
 
             # save in cache
-            cache[(i, j)] = min_cost
+            cache[(i, j)] = min_cost, min_next_operations
 
             # this optimises the cache space to use only O(len(x)+len(y)) space
             # instead of O(len(x)*len(y))
@@ -349,7 +357,7 @@ x = 'abacab'
 y = 'ahab'
 replace.cost = float('Inf')
 
-for edit_distance_func in [edit_distance_nr, edit_distance_rc]:
+for edit_distance_func in [edit_distance_nr, edit_distance_rc, edit_distance_bu]:
     ed, performed_operations = edit_distance_func(x, y, operations)
     print('Longest common subsequence is:')
     performed_operations.sort(key = lambda tpl : tpl[1])
