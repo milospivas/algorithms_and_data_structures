@@ -316,41 +316,41 @@ def test_ed(x, y, operations, true_ed, edit_distance_func):
     return ed == true_ed
 
 
-help(Operation)
+# help(Operation)
 
-# Can't work with negative number of characters
-try:
-    o = Operation(42, -1, 0)
-except Exception as e:
-    print(e)
+# # Can't work with negative number of characters
+# try:
+#     o = Operation(42, -1, 0)
+# except Exception as e:
+#     print(e)
 
-try:
-    o = Operation(42, 0, -1)
-except Exception as e:
-    print(e)
+# try:
+#     o = Operation(42, 0, -1)
+# except Exception as e:
+#     print(e)
 
-help(edit_distance_nr)
-help(edit_distance_rc)
-help(edit_distance_bu)
+# help(edit_distance_nr)
+# help(edit_distance_rc)
+# help(edit_distance_bu)
 
-# building operations list
-delete = Operation(1, 1, 0)
-insert = Operation(1, 0, 1)
-replace = Operation(1, 1, 1)
-operations = [delete, insert, replace]
+# # building operations list
+# delete = Operation(1, 1, 0)
+# insert = Operation(1, 0, 1)
+# replace = Operation(1, 1, 1)
+# operations = [delete, insert, replace]
 
-x = 'a'
-y = 'a'
-true_ed = 0
-assert test_ed(x, y, operations, true_ed, edit_distance_nr)
-assert test_ed(x, y, operations, true_ed, edit_distance_rc)
-assert test_ed(x, y, operations, true_ed, edit_distance_bu)
+# x = 'a'
+# y = 'a'
+# true_ed = 0
+# assert test_ed(x, y, operations, true_ed, edit_distance_nr)
+# assert test_ed(x, y, operations, true_ed, edit_distance_rc)
+# assert test_ed(x, y, operations, true_ed, edit_distance_bu)
 
-x = 'abacab'
-y = 'ahab'
-true_ed = 3
-assert test_ed(x, y, operations, true_ed, edit_distance_nr)
-assert test_ed(x, y, operations, true_ed, edit_distance_rc)
-assert test_ed(x, y, operations, true_ed, edit_distance_bu)
+# x = 'abacab'
+# y = 'ahab'
+# true_ed = 3
+# assert test_ed(x, y, operations, true_ed, edit_distance_nr)
+# assert test_ed(x, y, operations, true_ed, edit_distance_rc)
+# assert test_ed(x, y, operations, true_ed, edit_distance_bu)
 
-print('Exiting...')
+# print('Exiting...')
