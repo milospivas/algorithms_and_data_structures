@@ -1,12 +1,13 @@
 ''' Dynamic Programming: Longest Common Subsequence
 
+    Depends on: edit_distance.py
+
     Author: Miloš Pivaš
 '''
 
 from edit_distance import Operation
 from edit_distance import edit_distance_bu
 
-### using edit distance
 
 def longest_common_subsequence(x, y):
     ''' Finds the longest common subsequence of given strings.
@@ -43,16 +44,16 @@ def longest_common_subsequence(x, y):
     return s
 
 
-### testing
+# ### testing
 
-x = 'herllembo'
-y = 'chelilott'
+# x = 'herllembo'
+# y = 'chelilott'
 
-x = ''.join(x.split(' '))
-y = ''.join(y.split(' '))
+# x = ''.join(x.split(' '))
+# y = ''.join(y.split(' '))
 
-lcs = longest_common_subsequence(x,y)
+# lcs = longest_common_subsequence(x,y)
 
-assert 'hello' == lcs
+# assert 'hello' == lcs
 
-print('Exiting...')
+# print('Exiting...')
