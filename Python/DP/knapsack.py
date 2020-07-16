@@ -128,7 +128,7 @@ print('val:', val)
 print('indices:', indices)
 
 
-val, indices = knapsack_nr(m, v, M)
+val, indices = knapsack_rc(m, v, M)
 
 print('val:', val)
 print('indices:', indices)
