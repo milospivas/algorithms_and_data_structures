@@ -1,6 +1,6 @@
 {
     "python.pythonPath": "C:\\Users\\Ultrabook\\AppData\\Local\\Programs\\Python\\Python38\\python.exe",
-    "python.envFile": "${workspaceFolder}/.env",
+    "python.autoComplete.extraPaths": ["./Python/DP", "./Python/Lists, Graphs and Trees"],
     "files.associations": {
         "*.tcc": "cpp",
         "vector": "cpp",
