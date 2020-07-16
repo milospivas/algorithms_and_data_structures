@@ -31,7 +31,7 @@ def knapsack_nr(m, v, M, n = None, i = 0):
     -------
     (float, list)
         float - total accumulated value.
-        list - items' indices
+        list - items' indices.
     '''
 
     if n is None:
@@ -81,7 +81,7 @@ def knapsack_rc(m, v, M, n = None, i = 0, cache = None):
     -------
     (float, list)
         float - total accumulated value.
-        list - items' indices
+        list - items' indices.
     '''
 
     if n is None:
@@ -116,22 +116,73 @@ def knapsack_rc(m, v, M, n = None, i = 0, cache = None):
     return sol
     
 
+# Iterative, bottom-up variant with caching (memoization)
+
+def knapsack_bu(m, v, M):
+    ''' Maximise the value of a knapsack, given the items and mass limit.
+
+    Iterative, bottom-up, dynamic programming method with caching.
+
+    Parameters
+    ----------
+    m : list
+        List of (int) masses of items.
+    v : list
+        List of (float/int) values of items.
+    M : int
+        Total mass limit of the knapsack.
+    
+    Returns
+    -------
+    (float, list)
+        float - total accumulated value.
+        list - items' indices.
+    '''
+
+    # cache init
+    cache = {}
+    for n in range(0, M+1):
+        cache[(n, len(m))] = 0, []  # no items left, any mass
+    for i in range(len(m)+1):
+        cache[(0, i)] = 0, []       # no mass left, any items
+
+    # topological order:
+    # from smallest to largest size:
+    for n in range(1, M+1):
+        # from last to first item:
+        for i in range(len(m)-1, -1, -1):
+
+            # try excluding the item
+            val_excl, indices_excl = cache[(n, i+1)]
+
+            sol = val_excl, indices_excl
+
+            # try including the item
+            if n - m[i] >= 0:
+                val_incl, indices_incl = cache[(n-m[i], i+1)]
+                val_incl += v[i]
+
+                if val_incl > val_excl:
+                    sol = val_incl, indices_incl + [i]
+        
+            cache[(n, i)] = sol
+    
+    return cache[(M, 0)]
+    
+
 ### testing
 
 m = [1,2,3,4]
 v = [1,2,3,42]
 M = 5
 
-val, indices = knapsack_nr(m, v, M)
+for knapsack_func in [knapsack_nr, knapsack_rc, knapsack_bu]:
+    help(knapsack_func)
 
-print('val:', val)
-print('indices:', indices)
+    val, indices = knapsack_func(m, v, M)
 
-
-val, indices = knapsack_rc(m, v, M)
-
-print('val:', val)
-print('indices:', indices)
+    print('val:', val)
+    print('indices:', indices)
 
 
 print('Exiting...')
