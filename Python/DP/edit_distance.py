@@ -311,7 +311,7 @@ def test_ed(x, y, operations, true_ed, edit_distance_func):
         Passed/Not passed the test.
     '''
 
-    ed = edit_distance_func(x, y, operations)
+    ed, _ = edit_distance_func(x, y, operations)
 
     return ed == true_ed
 
@@ -339,32 +339,18 @@ insert = Operation(1, 0, 1)
 replace = Operation(1, 1, 1)
 operations = [delete, insert, replace]
 
-# x = 'a'
-# y = 'a'
-# true_ed = 0
-# assert test_ed(x, y, operations, true_ed, edit_distance_nr)
-# assert test_ed(x, y, operations, true_ed, edit_distance_rc)
-# assert test_ed(x, y, operations, true_ed, edit_distance_bu)
-
-# x = 'abacab'
-# y = 'ahab'
-# true_ed = 3
-# assert test_ed(x, y, operations, true_ed, edit_distance_nr)
-# assert test_ed(x, y, operations, true_ed, edit_distance_rc)
-# assert test_ed(x, y, operations, true_ed, edit_distance_bu)
+x = 'a'
+y = 'a'
+true_ed = 0
+assert test_ed(x, y, operations, true_ed, edit_distance_nr)
+assert test_ed(x, y, operations, true_ed, edit_distance_rc)
+assert test_ed(x, y, operations, true_ed, edit_distance_bu)
 
 x = 'abacab'
 y = 'ahab'
-replace.cost = float('Inf')
-
-for edit_distance_func in [edit_distance_nr, edit_distance_rc, edit_distance_bu]:
-    ed, performed_operations = edit_distance_func(x, y, operations)
-    print('Longest common subsequence is:')
-    performed_operations.sort(key = lambda tpl : tpl[1])
-    for tpl in performed_operations:
-        o, i, j = tpl
-        if o is None:
-            print(x[i], end='')
-    print()
+true_ed = 3
+assert test_ed(x, y, operations, true_ed, edit_distance_nr)
+assert test_ed(x, y, operations, true_ed, edit_distance_rc)
+assert test_ed(x, y, operations, true_ed, edit_distance_bu)
 
 print('Exiting...')
