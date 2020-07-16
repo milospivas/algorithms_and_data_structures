@@ -176,43 +176,33 @@ def edit_distance_rc(x, y, operations, i = 0, j = 0, cache = None):
 ### Iterative, bottom-up DP with caching
 
 def edit_distance_bu(x, y, operations):
-    ''' Calculates edit distance between strings x and y.
+    ''' Calculates edit distance between iterables x and y.
     
     Iterative, bottom-up, dynamic programming method.
 
     Parameters
     ----------
-    x : str
-        First string.
-    y : str
-        Second string.
+    x : iterable
+        First iterable (elements must also support '==' operator).
+    y : iterable
+        Second iterable (elements must also support '==' operator).
     operations : list
-        List of available operations
-
-    Returns
-    -------
-    int, list
-        int - Computed edit distance.
-        list - of (operation, int, int) tuples describing what operation
-        was performed on what characters in x and y.
-        operation is None if nothing was done.
-        The first int is the index of the character in x.
-        The second int is the index of the character in y.
+        List of Operation() objects. List of available operations.
 
     Raises
     ------
     Exception
-        'Can\'t work with operations that use more than 1 character'
-        if any given operation uses more than 1 character per string.
+        'Can\'t work with operations that use more than 1 element'
+        if any given operation uses more than 1 element per iterable.
     '''
 
     for o in operations:
         if o.dx > 1 or o.dy > 1:
-            raise Exception('Can\'t work with operations that use more than 1 character')
+            raise Exception('Can\'t work with operations that use more than 1 element')
     
     # cache init
     cache = {}
-    # start at the end of strings
+    # start at the end of iterables
     cache[(len(x), len(y))] = 0, []
 
     # move "left"
@@ -226,7 +216,7 @@ def edit_distance_bu(x, y, operations):
             # process the element
 
             min_cost = float('Inf')
-            # try available operations that surely transform the strings
+            # try available operations that surely transform the iterables
             for o in operations:
                 if (i + o.dx <= len(x)) and (j + o.dy <= len(y)):
                     next_i, next_j = i + o.dx, j + o.dy
@@ -237,9 +227,8 @@ def edit_distance_bu(x, y, operations):
                     if cost < min_cost:
                         min_cost = cost
                         min_next_operations = next_operations + [(o, i, j)]
-
-                    
-            # try not doing anything if characters already match:
+            
+            # try not doing anything if elements already match:
             if (i < len(x)) and (j < len(y)) and (x[i] == y[j]):
                 cost, next_operations = cache[(i+1, j+1)]
                 
