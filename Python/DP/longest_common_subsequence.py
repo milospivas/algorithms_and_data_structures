@@ -18,9 +18,9 @@ def longest_common_subsequence(x, y, empty_object = None, append_func = None, is
     Parameters
     ----------
     x : iterable
-        First sequential iterable (elements must also support '==' operator).
+        First input iterable. Must be sequential and elements must also support '==' operator.
     y : iterable
-        Second sequential iterable (elements must also support '==' operator).
+        Second input iterable. Must be sequential and elements must also support '==' operator.
     [empty_object : any]
         Empty object of the same class as x and y.
     [append_func : function handle]
