@@ -46,15 +46,17 @@ class Operation:
 
 def edit_distance_nr(x, y, operations, i = 0, j = 0):
     ''' Calculates edit distance between iterables x and y.
-
+    
     Naive recursive, dynamic programming method (without caching).
-
+    
+    For more info on edit distance itself, see: https://en.wikipedia.org/wiki/Edit_distance
+    
     Parameters
     ----------
     x : iterable
-        First iterable (elements must also support '==' operator).
+        First input iterable. Must be sequential and elements must also support '==' operator.
     y : iterable
-        Second iterable (elements must also support '==' operator).
+        Second input iterable. Must be sequential and elements must also support '==' operator.
     operations : list
         List of Operation() objects. List of available operations.
     [i : int]
@@ -77,7 +79,7 @@ def edit_distance_nr(x, y, operations, i = 0, j = 0):
         return 0, []
     
     min_cost = float('Inf')
-    # try available operations that surely transform the iterables
+    # try all available operations that surely transform x into y
     for o in operations:
         next_i, next_j = i + o.dx, j + o.dy
         
