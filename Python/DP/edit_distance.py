@@ -200,12 +200,14 @@ def edit_distance_bu(x, y, operations):
     
     Iterative, bottom-up, dynamic programming method.
 
+    For more info on edit distance itself, see: https://en.wikipedia.org/wiki/Edit_distance
+    
     Parameters
     ----------
     x : iterable
-        First iterable (elements must also support '==' operator).
+        First input iterable. Must be sequential and elements must also support '==' operator.
     y : iterable
-        Second iterable (elements must also support '==' operator).
+        Second input iterable. Must be sequential and elements must also support '==' operator.
     operations : list
         List of Operation() objects. List of available operations.
 
@@ -222,60 +224,64 @@ def edit_distance_bu(x, y, operations):
     
     # cache init
     cache = {}
-    # start at the end of iterables
-    cache[(len(x), len(y))] = 0, []
 
-    # move "left"
-    i_start, j_start = len(x), len(y)-1
+    # We look at the cache as a len(x)+1 by len(y)+1 matrix M[i][j].
+    # We start in the lower right corner, after the ends of x and y:
+    cache[(len(x), len(y))] = 0, []     # our base case.
+
+    # then move to the first field - one "left"
+    i_start, j_start = len(x), len(y)-1     # (corresponds with empty x, end of y)
+
+    # and then we will move "up-right", on each line parallel to the antidiagonal.
+    # .........9
+    # .......8 5
+    # .....7 4 2
+    # ...6 3 1 0
 
     while True:
-        # get the starting point
+        # get the starting point of the current line
         i, j = i_start, j_start
 
         while True:
-            # process the element
-
+            # try all available operations that surely transform x into y,
+            # including not doing anything (if the elements match),
+            # and pick the one with the minimum cost
             min_cost = float('Inf')
-            # try available operations that surely transform the iterables
-            for o in operations:
-                if (i + o.dx <= len(x)) and (j + o.dy <= len(y)):
-                    next_i, next_j = i + o.dx, j + o.dy
+            for o in operations+[None]:
+                if o is None:   # if not doing anything, we move to next elements with 0 cost
+                    curr_cost, next_i, next_j = 0, i + 1, j + 1
+                else:
+                    curr_cost, next_i, next_j = o.cost, i + o.dx, j + o.dy
+
+                if (next_i <= len(x)) and (next_j <= len(y)):
+                    if (o is None) and (x[i] != y[j]):  # if not doing anything, we need the elements to match
+                        continue
 
                     next_cost, next_operations = cache[(next_i, next_j)]
-                    cost = o.cost + next_cost
+                    cost = next_cost + curr_cost
 
                     if cost < min_cost:
                         min_cost = cost
                         min_next_operations = next_operations + [(o, i, j)]
-            
-            # try not doing anything if elements already match:
-            if (i < len(x)) and (j < len(y)) and (x[i] == y[j]):
-                cost, next_operations = cache[(i+1, j+1)]
-                
-                if cost < min_cost:
-                    min_cost = cost
-                    min_next_operations = next_operations + [(None, i, j)]
 
-            # save in cache
+            # save the solution in cache
             cache[(i, j)] = min_cost, min_next_operations
 
-            # this optimises the cache space to use only O(len(x)+len(y)) space
-            # instead of O(len(x)*len(y))
-            if (i+2, j) in cache:
-                cache.pop(i+2, j)
-            if (i, j+2) in cache:
-                cache.pop(i, j+2)
+            # this optimises the cache space to use only O(len(x)+len(y)) space, instead of O(len(x)*len(y)),
+            # by removing the no longer needed elements from the second-previous line
+            cache.pop((i+2, j), None)
 
-            # move to the next element
+            # move to the next element in the line ("up-right")
             i -= 1
             j += 1
             # if off the grid, move to the next starting point
             if i < 0 or j > len(y):
                 break
         
-        if j_start-1 >= 0:      # if possible
+        # move to the start to the next line
+        if j_start-1 >= 0:      # if still on the lower edge,
             j_start -= 1        #   move "left"
-        elif i_start-1 >= 0:    # else, if possible
+        elif i_start-1 >= 0:    # else, if still on the left edge
             i_start -= 1        #   move "up"
         else:                   # else:
             break               #   we're done
