@@ -10,7 +10,9 @@
 
 
 class Operation:
-    ''' Describes an operation via its cost and which elements it uses.
+    ''' Describes an operation in computing edit distance, via its cost and which elements it uses.
+    
+    For more info on edit distance itself, see: https://en.wikipedia.org/wiki/Edit_distance
     
     Attributes
     ----------
@@ -26,7 +28,17 @@ class Operation:
     Exception
         Constructor raises 'Can\'t work with negative number of elements.'
         exception if negative values for dx or dy are passed to it.
-        
+    
+    Examples
+    --------
+    delete = Operation(cost=1, dx=1, dy=0)
+        # Represents deleting the current element in x, costs 1.
+
+    insert = Operation(cost=1, dx=0, dy=1)
+        # Represents inserting the current element from y into x, costs 1.
+
+    replace = Operation(cost=1, dx=1, dy=1)
+        # Represents replacing the current element in x with the current element in y, costs 1.
     '''
 
     def __init__(self, cost, dx, dy):
