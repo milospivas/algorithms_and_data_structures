@@ -87,30 +87,33 @@ def edit_distance_nr(x, y, operations, i = 0, j = 0):
         The second int is the index of the element in y.
     '''
 
+    # base case
     if (i == len(x)) and (j == len(y)):
         return 0, []
     
+    # try all available operations that surely transform x into y,
+    # including not doing anything (if the elements match),
+    # and pick the one with the minimum cost
     min_cost = float('Inf')
-    # try all available operations that surely transform x into y
-    for o in operations:
-        next_i, next_j = i + o.dx, j + o.dy
-        
+    for o in operations+[None]:
+        if o is None:   # if not doing anything, we move to next elements with 0 cost
+            next_i, next_j = i + 1, j + 1
+            curr_cost = 0
+        else:
+            next_i, next_j = i + o.dx, j + o.dy
+            curr_cost = o.cost
+
         if (next_i <= len(x)) and (next_j <= len(y)):
+            if (o is None) and (x[i] != y[j]):  # if not doing anything, we need the elements to match
+                continue
+                
             next_cost, next_operations = edit_distance_nr(x, y, operations, next_i, next_j)
-            cost = next_cost + o.cost 
+            cost = next_cost + curr_cost
 
             if cost < min_cost:
                 min_cost = cost
                 min_next_operations = next_operations + [(o, i, j)]
     
-    # try not doing anything if elements already match:
-    if (i < len(x)) and (j < len(y)) and (x[i] == y[j]):
-        cost, next_operations = edit_distance_nr(x, y, operations, i+1, j+1)
-        
-        if cost < min_cost:
-            min_cost = cost
-            min_next_operations = next_operations + [(None, i, j)]
-        
     return min_cost, min_next_operations
 
 
