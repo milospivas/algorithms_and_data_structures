@@ -123,13 +123,15 @@ def edit_distance_rc(x, y, operations, i = 0, j = 0, cache = None):
     ''' Calculates edit distance between iterables x and y.
 
     Recursive, dynamic programming method with caching (memoization).
-
+    
+    For more info on edit distance itself, see: https://en.wikipedia.org/wiki/Edit_distance
+    
     Parameters
     ----------
     x : iterable
-        First iterable (elements must also support '==' operator).
+        First input iterable. Must be sequential and elements must also support '==' operator.
     y : iterable
-        Second iterable (elements must also support '==' operator).
+        Second input iterable. Must be sequential and elements must also support '==' operator.
     operations : list
         List of Operation() objects. List of available operations.
     [i : int]
@@ -150,6 +152,7 @@ def edit_distance_rc(x, y, operations, i = 0, j = 0, cache = None):
         The second int is the index of the element in y.
     '''
 
+    # base case
     if (i == len(x)) and (j == len(y)):
         return 0, []
     
@@ -157,37 +160,34 @@ def edit_distance_rc(x, y, operations, i = 0, j = 0, cache = None):
     if cache is None:
         cache = {}
 
+    # try all available operations that surely transform x into y,
+    # including not doing anything (if the elements match),
+    # and pick the one with the minimum cost
     min_cost = float('Inf')
-    # try available operations that surely transform the iterables
-    for o in operations:
-        if (i + o.dx <= len(x)) and (j + o.dy <= len(y)):
+    for o in operations+[None]:
+        if o is None:   # if not doing anything, we move to next elements with 0 cost
+            next_i, next_j = i + 1, j + 1
+            curr_cost = 0
+        else:
             next_i, next_j = i + o.dx, j + o.dy
+            curr_cost = o.cost
+
+        if (next_i <= len(x)) and (next_j <= len(y)):
+            if (o is None) and (x[i] != y[j]):  # if not doing anything, we need the elements to match
+                continue
 
             if (next_i, next_j) in cache:
                 next_cost, next_operations = cache[(next_i, next_j)]
             else:
                 next_cost, next_operations = edit_distance_rc(x, y, operations, next_i, next_j, cache)
 
-            cost = o.cost + next_cost
+            cost = next_cost + curr_cost
 
             if cost < min_cost:
                 min_cost = cost
                 min_next_operations = next_operations + [(o, i, j)]
     
-    # try not doing anything if elements already match:
-    if (i < len(x)) and (j < len(y)) and (x[i] == y[j]):
-        next_i, next_j = i+1, j+1
-        
-        if (next_i, next_j) in cache:
-            cost, next_operations = cache[(next_i, next_j)]
-        else:
-            cost, next_operations = edit_distance_rc(x, y, operations, next_i, next_j, cache)
-
-        if cost < min_cost:
-            min_cost = cost
-            min_next_operations = next_operations + [(None, i, j)]
-
-    # save in cache
+    # save the solution in cache
     cache[(i, j)] = min_cost, min_next_operations
 
     return min_cost, min_next_operations
