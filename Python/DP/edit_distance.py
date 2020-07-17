@@ -348,7 +348,7 @@ def test_ed(x, y, operations, true_ed, edit_distance_func):
 # help(edit_distance_rc)
 # help(edit_distance_bu)
 
-# # building operations list
+# # building operations list (for calculating, the Levenshtein distance)
 # delete = Operation(1, 1, 0)
 # insert = Operation(1, 0, 1)
 # replace = Operation(1, 1, 1)
@@ -374,5 +374,12 @@ def test_ed(x, y, operations, true_ed, edit_distance_func):
 # assert test_ed(x, y, operations, true_ed, edit_distance_nr)
 # assert test_ed(x, y, operations, true_ed, edit_distance_rc)
 # assert test_ed(x, y, operations, true_ed, edit_distance_bu)
+
+# import numpy as np
+# x_arr = np.array(x)
+# y_arr = np.array(y)
+# assert test_ed(x_arr, y_arr, operations, true_ed, edit_distance_nr)
+# assert test_ed(x_arr, y_arr, operations, true_ed, edit_distance_rc)
+# assert test_ed(x_arr, y_arr, operations, true_ed, edit_distance_bu)
 
 # print('Exiting...')
