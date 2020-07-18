@@ -8,15 +8,19 @@
 from longest_common_subsequence import longest_common_subsequence
 
 
-def longest_increasing_subsequence(a, sort_func = None, empty_object = None, append_func = None, is_inplace = None):
+def longest_increasing_subsequence(x, sort_func = None, empty_object = None, append_func = None):
     ''' Returns longest increasing subsequence (LIS) of the given iterable.
 
     Subsequence doesn't have to be made out of contiguous elements.
     Uses longest common subsequence with the sorted input.
 
+    Works with iterables of any type, but, of course,
+    in realistic use cases, this would be implemented as a class method,
+    dedicated to specific type.
+
     Parameters
     ----------
-    a : iterable
+    x : iterable
         Input iterable. Must be sequential and elements must also support '==' operator.
     sort_func : function handle, optional
         Function that sorts the input iterable.
@@ -24,8 +28,6 @@ def longest_increasing_subsequence(a, sort_func = None, empty_object = None, app
         Empty object of the same class as x and y.
     append_func : function handle, optional
         Function that appends values to the end of the object of the same class as x and y.
-    is_inplace : bool, optional
-        Type of the append function. True if it operates in-place, False otherwise.
 
     Returns
     -------
@@ -36,24 +38,24 @@ def longest_increasing_subsequence(a, sort_func = None, empty_object = None, app
     ------
     Exception
         'Please provide the sort function.'
-        If type(a) isn't str or list and sort_func isn't given.
+        If type(x) isn't str or list and sort_func isn't given.
     '''
 
-    if type(a) is str:
-        a_list = [x for x in a]
-        a_list.sort()
-        a_sorted = ''.join(a_list)
-        sol = longest_common_subsequence(a, a_sorted)
+    if type(x) is str:
+        x_list = [x for x in x]
+        x_list.sort()
+        x_sorted = ''.join(x_list)
+        sol = longest_common_subsequence(x, x_sorted)
 
-    elif type(a) is list:
-        a_sorted = sorted(a)
-        sol = longest_common_subsequence(a, a_sorted)
+    elif type(x) is list:
+        x_sorted = sorted(x)
+        sol = longest_common_subsequence(x, x_sorted)
 
     else:
         if (sort_func is None):
             raise Exception('Please provide the sort function.')
-        a_sorted = sort_func(a)
-        sol = longest_common_subsequence(a, a_sorted, empty_object, append_func, is_inplace)
+        x_sorted = sort_func(x)
+        sol = longest_common_subsequence(x, x_sorted, empty_object, append_func)
 
     return sol
 
@@ -138,7 +140,7 @@ def longest_increasing_subsequence_nr(a):
 
 # import numpy as np
 # a = np.array([1,3,1,2,3,1])
-# lis = longest_increasing_subsequence(a, np.sort, np.array([]), np.append, False)
+# lis = longest_increasing_subsequence(a, np.sort, np.array([]), np.append)
 # print(lis)
 
 # print('Exiting...')
