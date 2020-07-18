@@ -96,12 +96,12 @@ def knapsack_rc(masses, values, mass_limit):
             return cache[curr_mass_limit, curr_idx]
 
         # try excluding the current item
-        val_excluding, indices_excluding = cache[curr_mass_limit, curr_idx + 1] if (curr_mass_limit, curr_idx+1) in cache else __knapsack_with_caching(curr_mass_limit, curr_idx+1)
+        val_excluding, indices_excluding = __knapsack_with_caching(curr_mass_limit, curr_idx+1)
 
         # try including the current item
         next_mass_limit = curr_mass_limit - masses[curr_idx]
         if next_mass_limit >= 0:
-            val_including, indices_including = cache[next_mass_limit, curr_idx + 1] if (next_mass_limit, curr_idx+1) in cache else __knapsack_with_caching(next_mass_limit, curr_idx+1)
+            val_including, indices_including = __knapsack_with_caching(next_mass_limit, curr_idx+1)
             val_including += values[curr_idx]
             indices_including += [curr_idx]
         else:
