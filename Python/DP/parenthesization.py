@@ -152,11 +152,18 @@ def parenthesize_rc(shapes):
             Total cost of multiplication.
     '''
 
+    def __cache_init():
+        cache = {}
+        subarray_length = 1
+        for start in range(len(shapes)):
+            cache[start, start+subarray_length] = [], 0
+        return cache
+
     def __find_optimal_midpoint(start, stop):
         min_cost = float('Inf')
         for mid in range(start+1, stop):
-            indices_L, cost_L = cache[start, mid] if (start, mid) in cache else __parenthesize(start, mid)
-            indices_R, cost_R = cache[mid, stop] if (mid, stop) in cache else  __parenthesize(mid, stop)
+            indices_L, cost_L = __parenthesize_witch_caching(start, mid)
+            indices_R, cost_R = __parenthesize_witch_caching(mid, stop)
 
             shape_L, shape_R = shapes_of_products(shapes, start, mid, stop)
 
@@ -169,23 +176,27 @@ def parenthesize_rc(shapes):
                 min_index_mid = mid
 
         min_indices = min_indices_L + min_indices_R + [min_index_mid]
-        
+
         return min_indices, min_cost
 
 
-    def __parenthesize(start, stop):
+    def __parenthesize_witch_caching(start, stop):
 
-        if len(shapes[start:stop]) <= 1:
-            return [], 0
+        if (start, stop) in cache:
+            return cache[start, stop]
 
         min_indices, min_cost = __find_optimal_midpoint(start, stop)
+
         cache[start, stop] = min_indices, min_cost
 
         return min_indices, min_cost
 
-    cache = {}
-    start, stop = 0, len(shapes)
-    sol = __parenthesize(start, stop)
+
+    if len(shapes) <= 1:
+        return [], 0
+
+    cache = __cache_init()
+    sol = __parenthesize_witch_caching(start = 0, stop = len(shapes))
     return sol
 
 
@@ -244,6 +255,9 @@ def parenthesize_bu(shapes):
 
         return min_indices, min_cost
 
+    if len(shapes) <= 1:
+        return [], 0
+
     cache = __cache_init()
     topological_order_of_indices = __get_topological_order_of_indices()
 
@@ -298,6 +312,21 @@ for parenthesize_func in [parenthesize_nr, parenthesize_rc, parenthesize_bu]:
     shapes = [(1, 2), (2, 1), (1, 2)]
     true_indices = [1,2]
     true_cost = 4
+    test_parenthesization(shapes, true_indices, true_cost, parenthesize_func)
+
+    shapes = [(1, 2), (2, 1)]
+    true_indices = [1]
+    true_cost = 2
+    test_parenthesization(shapes, true_indices, true_cost, parenthesize_func)
+
+    shapes = [(1, 2)]
+    true_indices = []
+    true_cost = 0
+    test_parenthesization(shapes, true_indices, true_cost, parenthesize_func)
+
+    shapes = []
+    true_indices = []
+    true_cost = 0
     test_parenthesization(shapes, true_indices, true_cost, parenthesize_func)
 
 print('Exiting...')
