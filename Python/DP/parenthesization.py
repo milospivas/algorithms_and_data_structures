@@ -7,7 +7,7 @@
 '''
 
 
-def cost_mm(A_shape, B_shape):
+def cost_mm(shapes, B_shape):
     ''' Calculates the cost of computing a matrix multiplication.
 
     Cost of computing a schoolbook matrix multiplication on two matrices.
@@ -15,7 +15,7 @@ def cost_mm(A_shape, B_shape):
 
     Parameters
     ----------
-    A_shape : (int, int)
+    shapes : (int, int)
         The shape of the first matrix to be multiplied.
     B_shape : (int, int)
         The shape of the second matrix to be multiplied.
@@ -27,10 +27,10 @@ def cost_mm(A_shape, B_shape):
         (inf if the multiplication is impossible)
     '''
 
-    if A_shape[1] != B_shape[0]:
+    if shapes[1] != B_shape[0]:
         return float('Inf')
 
-    return A_shape[0] * A_shape[1] * B_shape[1]
+    return shapes[0] * shapes[1] * B_shape[1]
 
 
 def shape_of_product(shapes, start, stop):
@@ -159,14 +159,14 @@ def parenthesize_rc(shapes):
 
 ### Iterative, bottom-up DP with caching (memoization)
 
-def parenthesize_bu(A_shapes):
+def parenthesize_bu(shapes):
     ''' Finds optimal way to parenthesize a matrix multiplication expression.
 
     Iterative, bottom-up, dynamic programming method with caching (memoization).
 
     Parameters
     ----------
-    A_shapes : list
+    shapes : list
         List of (int, int) tuples, representing shapes of matrices.
 
     Returns
@@ -178,53 +178,57 @@ def parenthesize_bu(A_shapes):
             Total cost of multiplication.
     '''
 
-    N = len(A_shapes)
+    def __cache_init():
+        cache = {}
+        subarray_length = 1
+        for start in range(len(shapes)):
+            cache[start, start+subarray_length] = [], 0
+        return cache
 
-    # cache init
-    cache = {}
-    for i in range(N):
-        cache[(i, i+1)] = ([], 0)
+    def __get_topological_order_of_indices():
+        for subarray_length in range(2, len(shapes)+1):
+            for start in range(len(shapes) - subarray_length + 1):
+                stop = start + subarray_length
+                yield start, stop
 
-    # for each subsequence length bigger than 1
-    for n in range(2, N+1):
-        # for each starting index of the subsequence
-        for i in range(N - n + 1):
-            # compute ending index
-            j = i + n
+    def __find_optimal_midpoint(start, stop):
+        min_cost = float('Inf')
+        for mid in range(start+1, stop):
+            indices_L, cost_L = cache[start, mid]
+            indices_R, cost_R = cache[mid, stop]
 
-            # find optimum point
-            min_cost = float('Inf')
-            for k in range(i+1, j):
-                indices_l, cost_l = cache[(i, k)]
-                indices_r, cost_r = cache[(k, j)]
+            shape_L, shape_R = shape_of_product(shapes, start, mid), shape_of_product(shapes, mid, stop)
 
-                L_shape = (A_shapes[i][0], A_shapes[k-1][1])
-                R_shape = (A_shapes[k][0], A_shapes[j-1][1])
-                cost = cost_mm(L_shape, R_shape)
+            cost = cost_L + cost_R + cost_mm(shape_L, shape_R)
 
-                cost += cost_l + cost_r
+            if cost < min_cost:
+                min_cost = cost
+                min_indices_L = indices_L
+                min_indices_R = indices_R
+                min_index_mid = mid
 
-                if cost < min_cost:
-                    min_cost = cost
-                    min_index = k
-                    min_indices_l = indices_l
-                    min_indices_r = indices_r
+        min_indices = min_indices_L + min_indices_R + [min_index_mid]
 
-            min_indices = min_indices_l + min_indices_r + [min_index]
+        return min_indices, min_cost
 
-            cache[(i, j)] = min_indices, min_cost
+    cache = __cache_init()
+    topological_order_of_indices = __get_topological_order_of_indices()
 
-    return cache[(0, N)]
+    for start, stop in topological_order_of_indices:
+        min_indices, min_cost = __find_optimal_midpoint(start, stop)
+        cache[start, stop] = min_indices, min_cost
+
+    return cache[0, len(shapes)]
 
 
 ### testing
-def test_parenthesization(A_shape, parenthesize_func):
-    ''' Tests parenthesize_func on A_shape
+def test_parenthesization(shapes, parenthesize_func):
+    ''' Tests parenthesize_func on shapes
     '''
 
-    indices, cost = parenthesize_func(A_shape)
+    indices, cost = parenthesize_func(shapes)
 
-    print('shapes:', A_shape)
+    print('shapes:', shapes)
     print('product indices:', indices)
     print('cost:', cost)
     print()
@@ -233,10 +237,10 @@ def test_parenthesization(A_shape, parenthesize_func):
 for parenthesize_func in [parenthesize_nr, parenthesize_rc, parenthesize_bu]:
     help(parenthesize_func)
 
-    A_shape = [(2, 1), (1, 2), (2, 1)]
-    test_parenthesization(A_shape, parenthesize_func)
+    shapes = [(2, 1), (1, 2), (2, 1)]
+    test_parenthesization(shapes, parenthesize_func)
 
-    A_shape = [(1, 2), (2, 1), (1, 2)]
-    test_parenthesization(A_shape, parenthesize_func)
+    shapes = [(1, 2), (2, 1), (1, 2)]
+    test_parenthesization(shapes, parenthesize_func)
 
 print('Exiting...')
