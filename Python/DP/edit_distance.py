@@ -71,14 +71,14 @@ def edit_distance_nr(x, y, operations, i = 0, j = 0):
         Second input iterable. Must be sequential and elements must also support '==' operator.
     operations : list
         List of Operation() objects. List of available operations.
-    [i : int]
+    i : int, optional
         Starting index of the first iterable.
-    [j : int]
+    j : int, optional
         Starting index of the second iterable.
 
     Returns
     -------
-    int, list
+    out : int, list
         int - Computed edit distance.
         list - of (operation, int, int) tuples describing what operation
         was performed on what element in x and y.
@@ -134,16 +134,16 @@ def edit_distance_rc(x, y, operations, i = 0, j = 0, cache = None):
         Second input iterable. Must be sequential and elements must also support '==' operator.
     operations : list
         List of Operation() objects. List of available operations.
-    [i : int]
+    i : int, optional
         Starting index of the first iterable.
-    [j : int]
+    j : int, optional
         Starting index of the second iterable.
-    [cache : dict]
+    cache : dict, optional
         Hashmap of already computed solutions.
 
     Returns
     -------
-    int, list
+    out : int, list
         int - Computed edit distance.
         list - of (operation, int, int) tuples describing what operation
         was performed on what element in x and y.
@@ -210,6 +210,16 @@ def edit_distance_bu(x, y, operations):
         Second input iterable. Must be sequential and elements must also support '==' operator.
     operations : list
         List of Operation() objects. List of available operations.
+
+    Returns
+    -------
+    out : int, list
+        int - Computed edit distance.
+        list - of (operation, int, int) tuples describing what operation
+        was performed on what element in x and y.
+        operation is None if nothing was done.
+        The first int is the index of the element in x.
+        The second int is the index of the element in y.
 
     Raises
     ------
@@ -296,33 +306,38 @@ def test_ed(x, y, operations, true_ed, edit_distance_func):
 
     Parameters
     ----------
-    x : str
-        First string.
-    y : str
-        Second string.
+    x : iterable
+        First input iterable. Must be sequential and elements must also support '==' operator.
+    y : iterable
+        Second input iterable. Must be sequential and elements must also support '==' operator.
     operations : list
-        List of available operations
+        List of Operation() objects. List of available operations.
     true_ed : int
         True solution
     edit_distance_func : function handle
         Function to be tested with following interface:
             Parameters
             ----------
-            x : str
-                First string.
-            y : str
-                Second string.
+            x : iterable
+                First input iterable. Must be sequential and elements must also support '==' operator.
+            y : iterable
+                Second input iterable. Must be sequential and elements must also support '==' operator.
             operations : list
-                List of available operations
+                List of Operation() objects. List of available operations.
 
             Returns
             -------
-            int
-                Computetd edit distance.
+            out : int, list
+                int - Computed edit distance.
+                list - of (operation, int, int) tuples describing what operation
+                was performed on what element in x and y.
+                operation is None if nothing was done.
+                The first int is the index of the element in x.
+                The second int is the index of the element in y.
 
     Returns
     -------
-    bool
+    out : bool
         Passed/Not passed the test.
     '''
 
