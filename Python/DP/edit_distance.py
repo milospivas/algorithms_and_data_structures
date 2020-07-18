@@ -54,7 +54,7 @@ class Operation:
         self.dy = dy
 
 
-### Naive recursive DP
+### Naive recursive DP ############################################################################
 
 def edit_distance_nr(x, y, operations):
     ''' Calculates edit distance between iterables x and y, using given operations.
@@ -113,7 +113,7 @@ def edit_distance_nr(x, y, operations):
     return sol
 
 
-### Recursive DP + caching
+### Recursive DP + caching ########################################################################
 
 def edit_distance_rc(x, y, operations):
     ''' Calculates edit distance between iterables x and y.
@@ -180,7 +180,7 @@ def edit_distance_rc(x, y, operations):
     return sol
 
 
-### Iterative, bottom-up DP with caching
+### Iterative, bottom-up DP with caching ###########################################################
 
 def edit_distance_bu(x, y, operations):
     ''' Calculates edit distance between iterables x and y.
@@ -297,7 +297,7 @@ def edit_distance_bu(x, y, operations):
     return cache[0,0]
 
 
-### testing
+### testing #######################################################################################
 
 def test_ed(x, y, operations, true_ed, edit_distance_func):
     ''' Auto tests edit distance function
@@ -344,55 +344,51 @@ def test_ed(x, y, operations, true_ed, edit_distance_func):
     return ed == true_ed
 
 
-help(Operation)
+# help(Operation)
 
-# Can't work with negative number of elements
-try:
-    o = Operation(42, -1, 0)
-except Exception as e:
-    print(e)
+# # Can't work with negative number of elements
+# try:
+#     o = Operation(42, -1, 0)
+# except Exception as e:
+#     print(e)
 
-try:
-    o = Operation(42, 0, -1)
-except Exception as e:
-    print(e)
+# try:
+#     o = Operation(42, 0, -1)
+# except Exception as e:
+#     print(e)
 
-help(edit_distance_nr)
-help(edit_distance_rc)
-help(edit_distance_bu)
+# help(edit_distance_nr)
+# help(edit_distance_rc)
+# help(edit_distance_bu)
 
-# building operations list (for calculating, the Levenshtein distance)
-delete = Operation(1, 1, 0)
-insert = Operation(1, 0, 1)
-replace = Operation(1, 1, 1)
-operations = [delete, insert, replace]
+# # building operations list (for calculating the Levenshtein distance)
+# delete = Operation(1, 1, 0)
+# insert = Operation(1, 0, 1)
+# replace = Operation(1, 1, 1)
+# operations = [delete, insert, replace]
 
-x = 'a'
-y = 'a'
-true_ed = 0
-assert test_ed(x, y, operations, true_ed, edit_distance_nr)
-assert test_ed(x, y, operations, true_ed, edit_distance_rc)
-assert test_ed(x, y, operations, true_ed, edit_distance_bu)
+# x = 'a'
+# y = 'a'
+# true_ed = 0
+# for edit_distance_func in [edit_distance_nr, edit_distance_rc, edit_distance_bu]:
+#     assert test_ed(x, y, operations, true_ed, edit_distance_func)
 
-x = 'abacab'
-y = 'ahab'
-true_ed = 3
-assert test_ed(x, y, operations, true_ed, edit_distance_nr)
-assert test_ed(x, y, operations, true_ed, edit_distance_rc)
-assert test_ed(x, y, operations, true_ed, edit_distance_bu)
+# x = 'abacab'
+# y = 'ahab'
+# true_ed = 3
+# for edit_distance_func in [edit_distance_nr, edit_distance_rc, edit_distance_bu]:
+#     assert test_ed(x, y, operations, true_ed, edit_distance_func)
 
-x = [1,2,1,3,1,2]   # represents 'abacab'
-y = [1,8,1,2]       # represents 'ahab'
-true_ed = 3
-assert test_ed(x, y, operations, true_ed, edit_distance_nr)
-assert test_ed(x, y, operations, true_ed, edit_distance_rc)
-assert test_ed(x, y, operations, true_ed, edit_distance_bu)
+# x = [1,2,1,3,1,2]   # represents 'abacab'
+# y = [1,8,1,2]       # represents 'ahab'
+# true_ed = 3
+# for edit_distance_func in [edit_distance_nr, edit_distance_rc, edit_distance_bu]:
+#     assert test_ed(x, y, operations, true_ed, edit_distance_func)
 
-import numpy as np
-x_arr = np.array(x)
-y_arr = np.array(y)
-assert test_ed(x_arr, y_arr, operations, true_ed, edit_distance_nr)
-assert test_ed(x_arr, y_arr, operations, true_ed, edit_distance_rc)
-assert test_ed(x_arr, y_arr, operations, true_ed, edit_distance_bu)
+# import numpy as np
+# x_arr = np.array(x)
+# y_arr = np.array(y)
+# for edit_distance_func in [edit_distance_nr, edit_distance_rc, edit_distance_bu]:
+#     assert test_ed(x, y, operations, true_ed, edit_distance_func)
 
-print('Exiting...')
+# print('Exiting...')
