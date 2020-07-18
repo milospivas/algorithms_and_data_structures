@@ -192,7 +192,8 @@ def parenthesize_bu(shapes):
 
     def __get_topological_order_of_indices():
         for subarray_length in range(2, len(shapes)+1):
-            for start in range(len(shapes) - subarray_length + 1):
+            number_of_subarrays = len(shapes) - subarray_length + 1
+            for start in range(number_of_subarrays):
                 stop = start + subarray_length
                 yield start, stop
 
