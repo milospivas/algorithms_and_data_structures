@@ -26,14 +26,14 @@ def knapsack_nr(m, v, M, n = None, i = 0):
         List of (float/int) values of items.
     M : int
         Total mass limit of the knapsack.
-    [n : int]
+    n : int, optional
         Current mass limit.
-    [i : int]
+    i : int, optional
         Current item index.
 
     Returns
     -------
-    (float, list)
+    out : float, list
         float - total accumulated value.
         list - items' indices.
     '''
@@ -74,16 +74,16 @@ def knapsack_rc(m, v, M, n = None, i = 0, cache = None):
         List of (float/int) values of items.
     M : int
         Total mass limit of the knapsack.
-    [n : int]
+    n : int, optional
         Current mass limit.
-    [i : int]
+    i : int, optional
         Current item index.
-    [cache : dict]
+    cache : dict, optional
         Hashmap of already computed solutions.
 
     Returns
     -------
-    (float, list)
+    out : float, list
         float - total accumulated value.
         list - items' indices.
     '''
@@ -138,7 +138,7 @@ def knapsack_bu(m, v, M):
 
     Returns
     -------
-    (float, list)
+    out : float, list
         float - total accumulated value.
         list - items' indices.
     '''
