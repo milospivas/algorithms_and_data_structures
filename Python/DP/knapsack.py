@@ -11,7 +11,7 @@
 '''
 
 
-# Naive recursive variant
+### Naive recursive variant  ##################################################################################################
 
 def knapsack_nr(masses, values, mass_limit):
     ''' Maximise the value of a knapsack, given the items and mass limit.
@@ -59,7 +59,7 @@ def knapsack_nr(masses, values, mass_limit):
     return sol
 
 
-# Recursive variant with caching (memoization)
+### Recursive variant with caching (memoization)  #############################################################################
 
 def knapsack_rc(masses, values, mass_limit):
     ''' Maximise the value of a knapsack, given the items and mass limit.
@@ -110,7 +110,7 @@ def knapsack_rc(masses, values, mass_limit):
     return sol
 
 
-# Iterative, bottom-up variant with caching (memoization)
+### Iterative, bottom-up variant with caching (memoization) ###################################################################
 
 def knapsack_bu(masses, values, mass_limit):
     ''' Maximise the value of a knapsack, given the items and mass limit.
@@ -172,19 +172,24 @@ def knapsack_bu(masses, values, mass_limit):
     return cache[mass_limit, 0]
 
 
-### testing
+### testing ###################################################################################################################
 
-m = [1,2,3,4]
-v = [1,2,3,42]
-M = 5
+masses = [1,2,3,4]
+values = [1,2,3,42]
+mass_limit = 5
+true_val = 43
+true_indices = [3,0]
 
 for knapsack_func in [knapsack_nr, knapsack_rc, knapsack_bu]:
     help(knapsack_func)
 
-    val, indices = knapsack_func(m, v, M)
+    val, indices = knapsack_func(masses, values, mass_limit)
+
+    test_passed = (val == true_val) and (indices == true_indices)
 
     print('val:', val)
     print('indices:', indices)
+    print('test passed:', test_passed)
 
 
 print('Exiting...')
