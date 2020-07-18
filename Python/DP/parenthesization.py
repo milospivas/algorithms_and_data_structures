@@ -125,11 +125,7 @@ def parenthesize_rc(shapes):
             Total cost of multiplication.
     '''
 
-    def __parenthesize(start, stop):
-
-        if len(shapes[start:stop]) <= 1:
-            return [], 0
-
+    def __find_optimal_midpoint(start, stop):
         min_cost = float('Inf')
         for mid in range(start+1, stop):
             indices_L, cost_L = cache[start, mid] if (start, mid) in cache else __parenthesize(start, mid)
@@ -146,7 +142,16 @@ def parenthesize_rc(shapes):
                 min_index_mid = mid
 
         min_indices = min_indices_L + min_indices_R + [min_index_mid]
+        
+        return min_indices, min_cost
 
+
+    def __parenthesize(start, stop):
+
+        if len(shapes[start:stop]) <= 1:
+            return [], 0
+
+        min_indices, min_cost = __find_optimal_midpoint(start, stop)
         cache[start, stop] = min_indices, min_cost
 
         return min_indices, min_cost
