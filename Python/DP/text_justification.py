@@ -43,7 +43,7 @@ def badness(words, start, next_start, line_character_limit):
 
 ### Naive recursive DP
 
-def justify_nr(words, line_width, i = 0):
+def justify_nr(words, line_character_limit):
     ''' Insert new lines into given text to justify it.
 
     Naive recursive method using dynamic programming (without caching - hence naive).
@@ -52,44 +52,40 @@ def justify_nr(words, line_width, i = 0):
     ----------
     words : list
         The list of words representing text to be justified.
-    line_width : int
+    line_character_limit : int
         Line width in number of characters.
-    i : int, optional
-        Index of the word from which to start justifying.
 
     Returns
     -------
     out : list, int
         list
-            A list of indices where to insert new lines.
+            A list of indices where new lines are to be inserted.
         int
             Accumulated badness score
-            (='inf' if there is a word larger than the line_width).
+            (='inf' if there is a word larger than line_character_limit).
     '''
 
-    # calculate the number of remaining words
-    n = len(words)
-    n_remaining = n-i
+    def __justify(start = 0):
 
-    if n_remaining == 0:
-        return [], 0
+        if start == len(words):
+            return [], 0
 
-    min_score = float('inf')
+        min_score = float('inf')
 
-    # for every of the remaining words
-    for j in range(i+1, n+1):
-    # pick a break-point for the new line
-        # justify the rest of words after new line
-        later_indices, score = justify_nr(words, line_width, j)
+        for next_start in range(start+1, len(words)+1):
 
-        # add the score for the current line
-        score += badness(words, i, j, line_width)
+            next_indices, next_score = __justify(next_start)
 
-        # keep min
-        if score < min_score:
-            min_score = score
-            min_indices = later_indices + [j]
+            score = next_score + badness(words, start, next_start, line_character_limit)
 
+            if score < min_score:
+                min_score = score
+                min_indices = next_indices + [next_start]
+
+        return min_indices, min_score
+
+    min_indices, min_score = __justify()
+    min_indices.sort()
     return min_indices, min_score
 
 
