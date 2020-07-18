@@ -55,6 +55,32 @@ def shape_of_product(shapes, start, stop):
     return (shapes[start][0], shapes[stop-1][1])
 
 
+def shapes_of_products(shapes, start, mid, stop):
+    ''' Returns the shapes of matrix products of matrices
+    with shapes shapes[start:mid] and shapes[mid:stop]
+
+    Parameters
+    ----------
+    shapes : list
+        List of (int, int) tuples, representing shapes of matrices.
+    start : int
+        Index of the first matrix' shape.
+    mid : int
+        Index of the middle matrix' shape.
+    stop : int
+        Index after the last matrix' shape.
+
+    Returns
+    -------
+    out : (int, int), (int, int)
+        Shapes of left and right matrix products.
+    '''
+
+    shape_L = shape_of_product(shapes, start, mid)
+    shape_R = shape_of_product(shapes, mid, stop)
+    return shape_L, shape_R
+
+
 ### Naive recursive DP #############################################################################
 
 def parenthesize_nr(shapes):
@@ -86,7 +112,7 @@ def parenthesize_nr(shapes):
             indices_L, cost_L = __parenthesize(start, mid)
             indices_R, cost_R = __parenthesize(mid, stop)
 
-            shape_L, shape_R = shape_of_product(shapes, start, mid), shape_of_product(shapes, mid, stop)
+            shape_L, shape_R = shapes_of_products(shapes, start, mid, stop)
 
             cost = cost_L + cost_R + cost_mm(shape_L, shape_R)
 
@@ -132,7 +158,7 @@ def parenthesize_rc(shapes):
             indices_L, cost_L = cache[start, mid] if (start, mid) in cache else __parenthesize(start, mid)
             indices_R, cost_R = cache[mid, stop] if (mid, stop) in cache else  __parenthesize(mid, stop)
 
-            shape_L, shape_R = shape_of_product(shapes, start, mid), shape_of_product(shapes, mid, stop)
+            shape_L, shape_R = shapes_of_products(shapes, start, mid, stop)
 
             cost = cost_L + cost_R + cost_mm(shape_L, shape_R)
 
@@ -204,7 +230,7 @@ def parenthesize_bu(shapes):
             indices_L, cost_L = cache[start, mid]
             indices_R, cost_R = cache[mid, stop]
 
-            shape_L, shape_R = shape_of_product(shapes, start, mid), shape_of_product(shapes, mid, stop)
+            shape_L, shape_R = shapes_of_products(shapes, start, mid, stop)
 
             cost = cost_L + cost_R + cost_mm(shape_L, shape_R)
 
