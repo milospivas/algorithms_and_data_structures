@@ -146,7 +146,7 @@ def justify_rc(words, line_character_limit):
 
 ### Iterative DP bottom-up
 
-def justify_bu(words, line_width):
+def justify_bu(words, line_character_limit):
     ''' Insert new lines into given text to justify it.
 
     Iterative, bottom-up method using dynamic programming.
@@ -155,59 +155,49 @@ def justify_bu(words, line_width):
     ----------
     words : list
         The list of words representing text to be justified.
-    line_width : int
+    line_character_limit : int
         Line width in number of characters.
 
     Returns
     -------
     out : list, int
         list
-            A list of indices where to insert new lines.
+            A list of indices where new lines are to be inserted.
         int
             Accumulated badness score
-            (='inf' if there is a word larger than the line_width).
+            (='inf' if there is a word larger than line_character_limit).
     '''
 
-    n = len(words)
+    def __cache_init():
+        cache = {}
+        cache[len(words)] = [], 0
+        return cache
 
-    # init cache
-    cache = {}
-    cache[n] = ([], 0)
+    def __get_topological_order():
+        for start in range(len(words)-1, -1, -1):
+            yield start
 
-    for i in range(n-1, -1, -1):
-    # iterate in topologicaly sorted order,
-    # from the end of the text to the begining
+    cache = __cache_init()
+    topological_order = __get_topological_order()
+
+    for start in topological_order:
 
         min_score = float('inf')
+        for next_start in range(start+1, len(words)+1):
 
-        # for every of the remaining words
-        for j in range(i+1, n+1):
-        # pick a break-point for the next line
-            # justify the rest of words after new line
+            next_indices, next_score = cache[next_start]
 
-            # retrieve the score for the next lines
-            _, score = cache[j]
+            score = next_score + badness(words, start, next_start, line_character_limit)
 
-            # add the score for the current line
-            score += badness(words, i, j, line_width)
-
-            # keep min
             if score < min_score:
                 min_score = score
-                min_index = j
+                min_indices = next_indices + [next_start]
 
-        # retrieve optimum indices
-        min_indices, _ = cache[min_index]
+        cache[start] = min_indices, min_score
 
-        # add the break-point index (if it is a new index)
-        if (len(min_indices) == 0) or (min_index != min_indices[-1]):
-            min_indices += [min_index]
-
-        # store min in cache
-        cache[i] = (min_indices, min_score)
-
-    # solution is in cache for the whole text
-    return cache[0]
+    min_indices, min_score = cache[0]
+    min_indices.sort()
+    return min_indices, min_score
 
 
 ### testing
