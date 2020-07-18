@@ -50,6 +50,7 @@ def shape_of_product(shapes, start, stop):
     out : (int, int)
         The shape of the matrix product.
     '''
+
     return (shapes[start][0], shapes[stop-1][1])
 
 
@@ -105,21 +106,15 @@ def parenthesize_nr(shapes):
 
 ### Recursive DP with caching (memoization)
 
-def parenthesize_rc(A_shapes, i = 0, j = None, cache = None):
+def parenthesize_rc(shapes):
     ''' Finds optimal way to parenthesize a matrix multiplication expression.
 
     Recursive, dynamic programming method with caching (memoization).
 
     Parameters
     ----------
-    A_shapes : list
+    shapes : list
         List of (int, int) tuples, representing shapes of matrices.
-    i : int, optional
-        Index of the first matrix in the expression.
-    j : int, optional
-        Index of the last matrix in the expression.
-    cache : dict, optional
-        The hashmap of already computed solutions.
 
     Returns
     -------
@@ -130,48 +125,36 @@ def parenthesize_rc(A_shapes, i = 0, j = None, cache = None):
             Total cost of multiplication.
     '''
 
-    if j is None:
-        j = len(A_shapes)
+    def __parenthesize(start, stop):
 
-    if i == j:
-        return [], 0
+        if len(shapes[start:stop]) <= 1:
+            return [], 0
 
-    if i == j-1:
-        return [], 0
+        min_cost = float('Inf')
+        for mid in range(start+1, stop):
+            indices_L, cost_L = cache[start, mid] if (start, mid) in cache else __parenthesize(start, mid)
+            indices_R, cost_R = cache[mid, stop] if (mid, stop) in cache else  __parenthesize(mid, stop)
 
-    if cache is None:
-        cache = {}
+            shape_L, shape_R = shape_of_product(shapes, start, mid), shape_of_product(shapes, mid, stop)
 
-    min_cost = float('Inf')
+            cost = cost_L + cost_R + cost_mm(shape_L, shape_R)
 
-    for k in range(i+1, j):
-        if (i, k) in cache:
-            indices_l, cost_l = cache[(i, k)]
-        else:
-            indices_l, cost_l = parenthesize_rc(A_shapes, i, k, cache)
+            if cost < min_cost:
+                min_cost = cost
+                min_indices_L = indices_L
+                min_indices_R = indices_R
+                min_index_mid = mid
 
-        if (k, j) in cache:
-            indices_r, cost_r = cache[(k, j)]
-        else:
-            indices_r, cost_r = parenthesize_rc(A_shapes, k, j, cache)
+        min_indices = min_indices_L + min_indices_R + [min_index_mid]
 
-        L_shape = (A_shapes[i][0], A_shapes[k-1][1])
-        R_shape = (A_shapes[k][0], A_shapes[j-1][1])
-        cost = cost_mm(L_shape, R_shape)
+        cache[start, stop] = min_indices, min_cost
 
-        cost += cost_l + cost_r
+        return min_indices, min_cost
 
-        if cost < min_cost:
-            min_cost = cost
-            min_index = k
-            min_indices_l = indices_l
-            min_indices_r = indices_r
-
-    min_indices = min_indices_l + min_indices_r + [min_index]
-
-    cache[(i, j)] = min_indices, min_cost
-
-    return min_indices, min_cost
+    cache = {}
+    start, stop = 0, len(shapes)
+    sol = __parenthesize(start, stop)
+    return sol
 
 
 ### Iterative, bottom-up DP with caching (memoization)
