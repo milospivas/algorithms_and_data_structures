@@ -4,7 +4,7 @@
     Author: Miloš Pivaš, student
 '''
 
-### shared function(s)
+### shared function(s) ##################################################################
 
 def badness(words, start, next_start, line_character_limit):
     ''' Evaluate 'badness' of having words[start:next_start] form a line
@@ -41,7 +41,7 @@ def badness(words, start, next_start, line_character_limit):
     return b
 
 
-### Naive recursive DP
+### Naive recursive DP ##################################################################
 
 def justify_nr(words, line_character_limit):
     ''' Insert new lines into given text to justify it.
@@ -89,7 +89,7 @@ def justify_nr(words, line_character_limit):
     return min_indices, min_score
 
 
-### Recursive DP with caching (memoization)
+### Recursive DP with caching (memoization) #############################################
 
 def justify_rc(words, line_character_limit):
     ''' Insert new lines into given text to justify it.
@@ -113,7 +113,7 @@ def justify_rc(words, line_character_limit):
             (='inf' if there is a word larger than line_character_limit).
     '''
 
-    def cache_init():
+    def __cache_init():
         cache = {}
         cache[len(words)] = [], 0
         return cache
@@ -138,13 +138,13 @@ def justify_rc(words, line_character_limit):
     if len(words) == 0:
         return [], 0
 
-    cache = cache_init()
+    cache = __cache_init()
     min_indices, min_score = __justify_with_caching()
     min_indices.sort()
     return min_indices, min_score
 
 
-### Iterative DP bottom-up
+### Iterative DP bottom-up ##############################################################
 
 def justify_bu(words, line_character_limit):
     ''' Insert new lines into given text to justify it.
@@ -200,10 +200,10 @@ def justify_bu(words, line_character_limit):
     return min_indices, min_score
 
 
-### testing
+### testing #############################################################################
 
 def get_justified_text(words, indices):
-    ''' Produces justified text from words with new lines at indices.
+    ''' Produces justified text from words with new lines at given indices.
 
     Parameters
     ----------
@@ -229,6 +229,7 @@ def get_justified_text(words, indices):
             txt += ' '
 
     return txt
+
 
 def test(words, line_character_limit, justfy_func):
     ''' Tests given justification function.
@@ -271,8 +272,8 @@ def test(words, line_character_limit, justfy_func):
     print(txt)
 
 
-for justify_func in [justify_nr, justify_rc, justify_bu]:
-    help(justify_func)
+for functions in [justify_nr, justify_rc, justify_bu, get_justified_text, test]:
+    help(functions)
 
 text = '12345678901 123 123 123 123'
 line_character_limit = 11
