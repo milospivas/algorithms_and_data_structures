@@ -4,21 +4,22 @@
     Author: Miloš Pivaš, student
 '''
 
+### shared function(s)
 
-def badness(words, i, j, line_width):
-    ''' Evaluate 'badness' of having words[i:j] form a line
+def badness(words, start, next_start, line_character_limit):
+    ''' Evaluate 'badness' of having words[start:next_start] form a line
     in a text of given limit for character width.
 
     Parameters
     ----------
     words : list
         The list of words representing text to be justified.
-    i : int
+    start : int
         Index of the first word in the line.
-    j : int
+    next_start : int
         Index of the first word in the next line.
-    line_width : int
-        Line width in characters
+    line_character_limit : int
+        Maximum number of characters that can fit in a line of text.
 
     Returns
     -------
@@ -26,15 +27,13 @@ def badness(words, i, j, line_width):
         Evaluated badness.
     '''
 
-    # calculating character width of the words
-    width = 0
-    for word in words[i:j]:
-        width += len(word)
+    number_of_word_characters = 0
+    for word in words[start:next_start]:
+        number_of_word_characters += len(word)
 
-    # adding the number of spaces
-    width += len(words[i:j]) - 1
+    spaces_between_words = len(words[start:next_start]) - 1
 
-    b = (line_width - width)**3
+    b = (line_character_limit - number_of_word_characters - spaces_between_words)**3
 
     if b < 0:
         b = float('inf')
