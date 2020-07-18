@@ -17,7 +17,7 @@ def fib_nr(n):
 
     Returns
     -------
-    int
+    out : int
         n-th Fibonacci number (starting from 0, 1,...)
     '''
 
@@ -38,7 +38,7 @@ def fib_nr(n):
 def fib_rc(n, cache = None):
     ''' Returns n-th Fibonacci number.
 
-    Recursive function with caching (memoization)
+    Recursive function with caching (memoization).
 
     Parameters
     ----------
@@ -50,8 +50,8 @@ def fib_rc(n, cache = None):
 
     Returns
     -------
-    int
-        n-th Fibonacci number (starting from 0, 1,...)
+    out : int
+        n-th Fibonacci number (starting from 0, 1,...).
     '''
 
     if n < 0:
@@ -88,8 +88,8 @@ def fib_bu(n):
 
     Returns
     -------
-    int
-        n-th Fibonacci number (starting from 0, 1,...)
+    out : int
+        n-th Fibonacci number (starting from 0, 1,...).
     '''
 
     if n < 0:
@@ -121,12 +121,12 @@ def test_fib(fib, ins = None, outs = None):
     Parameters
     ----------
     fib : function handle
-        The function to be tested
+        The function to be tested.
 
     Returns
     -------
-    bool
-        Passed/Not passed the test
+    out : bool
+        Passed/Not passed the test.
     '''
 
     help(fib)
