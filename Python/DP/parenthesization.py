@@ -33,21 +33,37 @@ def cost_mm(A_shape, B_shape):
     return A_shape[0] * A_shape[1] * B_shape[1]
 
 
+def shape_of_product(shapes, start, stop):
+    ''' Returns the shape of the matrix product of matrices with shapes shapes[start:stop]
+
+    Parameters
+    ----------
+    shapes : list
+        List of (int, int) tuples, representing shapes of matrices.
+    start : int
+        Index of the first matrix' shape.
+    stop : int
+        Index after the last matrix' shape.
+
+    Returns
+    -------
+    out : (int, int)
+        The shape of the matrix product.
+    '''
+    return (shapes[start][0], shapes[stop-1][1])
+
+
 ### Naive recursive DP
 
-def parenthesize_nr(A_shapes, i = 0, j = None):
+def parenthesize_nr(shapes):
     ''' Finds optimal way to parenthesize a matrix multiplication expression.
 
     Naive recursive method (without caching).
 
     Parameters
     ----------
-    A_shapes : list
+    shapes : list
         List of (int, int) tuples, representing shapes of matrices.
-    i : int, optional
-        Index of the first matrix in the expression.
-    j : int, optional
-        Index of the last matrix in the expression.
 
     Returns
     -------
@@ -58,36 +74,33 @@ def parenthesize_nr(A_shapes, i = 0, j = None):
             Total cost of multiplication.
     '''
 
-    if j is None:
-        j = len(A_shapes)
+    def __parenthesize(start, stop):
 
-    if i == j:
-        return [], 0
+        if len(shapes[start:stop]) <= 1:
+            return [], 0
 
-    if i == j-1:
-        return [], 0
+        min_cost = float('Inf')
+        for mid in range(start+1, stop):
+            indices_L, cost_L = __parenthesize(start, mid)
+            indices_R, cost_R = __parenthesize(mid, stop)
 
-    min_cost = float('Inf')
+            shape_L, shape_R = shape_of_product(shapes, start, mid), shape_of_product(shapes, mid, stop)
 
-    for k in range(i+1, j):
-        indices_l, cost_l = parenthesize_nr(A_shapes, i, k)
-        indices_r, cost_r = parenthesize_nr(A_shapes, k, j)
+            cost = cost_L + cost_R + cost_mm(shape_L, shape_R)
 
-        L_shape = (A_shapes[i][0], A_shapes[k-1][1])
-        R_shape = (A_shapes[k][0], A_shapes[j-1][1])
-        cost = cost_mm(L_shape, R_shape)
+            if cost < min_cost:
+                min_cost = cost
+                min_indices_L = indices_L
+                min_indices_R = indices_R
+                min_index_mid = mid
 
-        cost += cost_l + cost_r
+        min_indices = min_indices_L + min_indices_R + [min_index_mid]
 
-        if cost < min_cost:
-            min_cost = cost
-            min_index = k
-            min_indices_l = indices_l
-            min_indices_r = indices_r
+        return min_indices, min_cost
 
-    min_indices = min_indices_l + min_indices_r + [min_index]
-
-    return min_indices, min_cost
+    start, stop = 0, len(shapes)
+    sol = __parenthesize(start, stop)
+    return sol
 
 
 ### Recursive DP with caching (memoization)
@@ -226,8 +239,6 @@ def test_parenthesization(A_shape, parenthesize_func):
     ''' Tests parenthesize_func on A_shape
     '''
 
-    help(parenthesize_func)
-
     indices, cost = parenthesize_func(A_shape)
 
     print('shapes:', A_shape)
@@ -236,25 +247,13 @@ def test_parenthesization(A_shape, parenthesize_func):
     print()
 
 
-# test naive recursion
-A_shape = [(2, 1), (1, 2), (2, 1)]
-test_parenthesization(A_shape, parenthesize_nr)
+for parenthesize_func in [parenthesize_nr, parenthesize_rc, parenthesize_bu]:
+    help(parenthesize_func)
 
-A_shape = [(1, 2), (2, 1), (1, 2)]
-test_parenthesization(A_shape, parenthesize_nr)
+    A_shape = [(2, 1), (1, 2), (2, 1)]
+    test_parenthesization(A_shape, parenthesize_func)
 
-# test recursion with caching
-A_shape = [(2, 1), (1, 2), (2, 1)]
-test_parenthesization(A_shape, parenthesize_rc)
-
-A_shape = [(1, 2), (2, 1), (1, 2)]
-test_parenthesization(A_shape, parenthesize_rc)
-
-# test bottom-up iteration with caching
-A_shape = [(2, 1), (1, 2), (2, 1)]
-test_parenthesization(A_shape, parenthesize_bu)
-
-A_shape = [(1, 2), (2, 1), (1, 2)]
-test_parenthesization(A_shape, parenthesize_bu)
+    A_shape = [(1, 2), (2, 1), (1, 2)]
+    test_parenthesization(A_shape, parenthesize_func)
 
 print('Exiting...')
