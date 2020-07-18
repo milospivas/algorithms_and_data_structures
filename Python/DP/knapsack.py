@@ -13,23 +13,19 @@
 
 # Naive recursive variant
 
-def knapsack_nr(m, v, M, n = None, i = 0):
+def knapsack_nr(masses, values, mass_limit):
     ''' Maximise the value of a knapsack, given the items and mass limit.
 
     Naive recursive variant (no caching).
 
     Parameters
     ----------
-    m : list
+    masses : list
         List of (int) masses of items.
-    v : list
+    values : list
         List of (float/int) values of items.
-    M : int
+    mass_limit : int
         Total mass limit of the knapsack.
-    n : int, optional
-        Current mass limit.
-    i : int, optional
-        Current item index.
 
     Returns
     -------
@@ -38,24 +34,28 @@ def knapsack_nr(m, v, M, n = None, i = 0):
         list - items' indices.
     '''
 
-    if n is None:
-        n = M
+    def __knapsack(curr_mass_limit = mass_limit, curr_idx = 0):
 
-    if i == len(m):
-        return 0, []
+        if curr_idx == len(masses):
+            return 0, []
 
-    # try excluding the item
-    val_excl, indices_excl = knapsack_nr(m, v, M, n, i + 1)
-    sol = val_excl, indices_excl
+        # try excluding the current item
+        val_excluding, indices_excluding = __knapsack(curr_mass_limit, curr_idx + 1)
 
-    # try including the item
-    if n - m[i] >= 0:
-        val_incl, indices_incl = knapsack_nr(m, v, M, n - m[i], i + 1)
-        val_incl += v[i]
+        # try including the current item
+        next_mass_limit = curr_mass_limit - masses[curr_idx]
+        if next_mass_limit >= 0:
+            val_including, indices_including = __knapsack(next_mass_limit, curr_idx + 1)
+            val_including += values[curr_idx]
+            indices_including += [curr_idx]
+        else:
+            val_including, indices_including = 0, []
 
-        if val_incl > val_excl:
-            sol = val_incl, indices_incl + [i]
+        sol = (val_including, indices_including) if (val_including > val_excluding) else (val_excluding, indices_excluding)
 
+        return sol
+
+    sol = __knapsack()
     return sol
 
 
