@@ -112,18 +112,18 @@ def knapsack_rc(masses, values, mass_limit):
 
 # Iterative, bottom-up variant with caching (memoization)
 
-def knapsack_bu(m, v, M):
+def knapsack_bu(masses, values, mass_limit):
     ''' Maximise the value of a knapsack, given the items and mass limit.
 
     Iterative, bottom-up, dynamic programming method with caching.
 
     Parameters
     ----------
-    m : list
+    masses : list
         List of (int) masses of items.
-    v : list
+    values : list
         List of (float/int) values of items.
-    M : int
+    mass_limit : int
         Total mass limit of the knapsack.
 
     Returns
@@ -133,35 +133,43 @@ def knapsack_bu(m, v, M):
         list - items' indices.
     '''
 
-    # cache init
-    cache = {}
-    for n in range(0, M+1):
-        cache[(n, len(m))] = 0, []  # no items left, any mass
-    for i in range(len(m)+1):
-        cache[(0, i)] = 0, []       # no mass left, any items
+    def __cache_init():
+        cache = {}
+        for curr_mass_limit in range(0, mass_limit+1):
+            cache[curr_mass_limit, len(masses)] = 0, [] # any mass, no items left
+        for curr_idx in range(len(masses)+1):
+            cache[0, curr_idx] = 0, []                  # no mass left, any items
+        return cache
 
-    # topological order:
-    # from smallest to largest size:
-    for n in range(1, M+1):
-        # from last to first item:
-        for i in range(len(m)-1, -1, -1):
+    def __get_topological_order():
+        for curr_mass_limit in range(1, mass_limit+1):
+            for curr_idx in range(len(masses)-1, -1, -1):
+                yield curr_mass_limit, curr_idx
 
-            # try excluding the item
-            val_excl, indices_excl = cache[(n, i+1)]
 
-            sol = val_excl, indices_excl
+    cache = __cache_init()
 
-            # try including the item
-            if n - m[i] >= 0:
-                val_incl, indices_incl = cache[(n-m[i], i+1)]
-                val_incl += v[i]
+    topological_order = __get_topological_order()
 
-                if val_incl > val_excl:
-                    sol = val_incl, indices_incl + [i]
+    for curr_mass_limit, curr_idx in topological_order:
 
-            cache[(n, i)] = sol
+        # try excluding the current item
+        val_excluding, indices_excluding = cache[curr_mass_limit, curr_idx + 1]
 
-    return cache[(M, 0)]
+        # try including the current item
+        next_mass_limit = curr_mass_limit - masses[curr_idx]
+        if next_mass_limit >= 0:
+            val_including, indices_including = cache[next_mass_limit, curr_idx + 1]
+            val_including += values[curr_idx]
+            indices_including += [curr_idx]
+        else:
+            val_including, indices_including = -float('Inf'), []
+
+        sol = (val_including, indices_including) if (val_including > val_excluding) else (val_excluding, indices_excluding)
+
+        cache[curr_mass_limit, curr_idx] = sol
+
+    return cache[mass_limit, 0]
 
 
 ### testing
