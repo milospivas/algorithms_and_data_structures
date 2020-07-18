@@ -119,11 +119,13 @@ def justify_rc(words, line_character_limit):
         return cache
 
     def __justify_with_caching(start = 0):
+        if start in cache:
+            return cache[start]
 
         min_score = float('inf')
         for next_start in range(start+1, len(words)+1):
 
-            next_indices, next_score = cache[next_start] if next_start in cache else __justify_with_caching(next_start)
+            next_indices, next_score = __justify_with_caching(next_start)
 
             score = next_score + badness(words, start, next_start, line_character_limit)
 
@@ -134,9 +136,6 @@ def justify_rc(words, line_character_limit):
         cache[start] = min_indices, min_score
 
         return min_indices, min_score
-
-    if len(words) == 0:
-        return [], 0
 
     cache = __cache_init()
     min_indices, min_score = __justify_with_caching()
