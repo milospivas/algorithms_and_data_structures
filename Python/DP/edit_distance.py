@@ -11,9 +11,9 @@
 
 class Operation:
     ''' Describes an operation in computing edit distance, via its cost and which elements it uses.
-    
+
     For more info on edit distance itself, see: https://en.wikipedia.org/wiki/Edit_distance
-    
+
     Attributes
     ----------
     cost : int
@@ -28,7 +28,7 @@ class Operation:
     Exception
         Constructor raises 'Can\'t work with negative number of elements.'
         exception if negative values for dx or dy are passed to it.
-    
+
     Examples
     --------
     delete = Operation(cost=1, dx=1, dy=0)
@@ -58,11 +58,11 @@ class Operation:
 
 def edit_distance_nr(x, y, operations, i = 0, j = 0):
     ''' Calculates edit distance between iterables x and y.
-    
+
     Naive recursive, dynamic programming method (without caching).
-    
+
     For more info on edit distance itself, see: https://en.wikipedia.org/wiki/Edit_distance
-    
+
     Parameters
     ----------
     x : iterable
@@ -90,7 +90,7 @@ def edit_distance_nr(x, y, operations, i = 0, j = 0):
     # base case
     if (i == len(x)) and (j == len(y)):
         return 0, []
-    
+
     # try all available operations that surely transform x into y,
     # including not doing anything (if the elements match),
     # and pick the one with the minimum cost
@@ -106,14 +106,14 @@ def edit_distance_nr(x, y, operations, i = 0, j = 0):
         if (next_i <= len(x)) and (next_j <= len(y)):
             if (o is None) and (x[i] != y[j]):  # if not doing anything, we need the elements to match
                 continue
-                
+
             next_cost, next_operations = edit_distance_nr(x, y, operations, next_i, next_j)
             cost = next_cost + curr_cost
 
             if cost < min_cost:
                 min_cost = cost
                 min_next_operations = next_operations + [(o, i, j)]
-    
+
     return min_cost, min_next_operations
 
 
@@ -123,9 +123,9 @@ def edit_distance_rc(x, y, operations, i = 0, j = 0, cache = None):
     ''' Calculates edit distance between iterables x and y.
 
     Recursive, dynamic programming method with caching (memoization).
-    
+
     For more info on edit distance itself, see: https://en.wikipedia.org/wiki/Edit_distance
-    
+
     Parameters
     ----------
     x : iterable
@@ -155,7 +155,7 @@ def edit_distance_rc(x, y, operations, i = 0, j = 0, cache = None):
     # base case
     if (i == len(x)) and (j == len(y)):
         return 0, []
-    
+
     # cache init
     if cache is None:
         cache = {}
@@ -186,7 +186,7 @@ def edit_distance_rc(x, y, operations, i = 0, j = 0, cache = None):
             if cost < min_cost:
                 min_cost = cost
                 min_next_operations = next_operations + [(o, i, j)]
-    
+
     # save the solution in cache
     cache[(i, j)] = min_cost, min_next_operations
 
@@ -197,11 +197,11 @@ def edit_distance_rc(x, y, operations, i = 0, j = 0, cache = None):
 
 def edit_distance_bu(x, y, operations):
     ''' Calculates edit distance between iterables x and y.
-    
+
     Iterative, bottom-up, dynamic programming method.
 
     For more info on edit distance itself, see: https://en.wikipedia.org/wiki/Edit_distance
-    
+
     Parameters
     ----------
     x : iterable
@@ -221,7 +221,7 @@ def edit_distance_bu(x, y, operations):
     for o in operations:
         if o.dx > 1 or o.dy > 1:
             raise Exception('Can\'t work with operations that use more than 1 element')
-    
+
     # cache init
     cache = {}
 
@@ -277,7 +277,7 @@ def edit_distance_bu(x, y, operations):
             # if off the grid, move to the next starting point
             if i < 0 or j > len(y):
                 break
-        
+
         # move to the start to the next line
         if j_start-1 >= 0:      # if still on the lower edge,
             j_start -= 1        #   move "left"

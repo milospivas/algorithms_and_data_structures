@@ -6,7 +6,7 @@
 
 
 def badness(words, i, j, line_width):
-    ''' Evaluate 'badness' of having words[i:j] form a line 
+    ''' Evaluate 'badness' of having words[i:j] form a line
     in a text of given limit for character width.
 
     Parameters
@@ -30,7 +30,7 @@ def badness(words, i, j, line_width):
     width = 0
     for word in words[i:j]:
         width += len(word)
-    
+
     # adding the number of spaces
     width += len(words[i:j]) - 1
 
@@ -38,7 +38,7 @@ def badness(words, i, j, line_width):
 
     if b < 0:
         b = float('inf')
-    
+
     return b
 
 
@@ -64,7 +64,7 @@ def justify_nr(words, line_width, i = 0):
     list
         A list of indices where to insert new lines.
     int
-        Accumulated badness score 
+        Accumulated badness score
         (='inf' if there is a word larger than the line_width).
     '''
 
@@ -82,10 +82,10 @@ def justify_nr(words, line_width, i = 0):
     # pick a break-point for the new line
         # justify the rest of words after new line
         later_indices, score = justify_nr(words, line_width, j)
-        
+
         # add the score for the current line
         score += badness(words, i, j, line_width)
-        
+
         # keep min
         if score < min_score:
             min_score = score
@@ -118,7 +118,7 @@ def justify_rc(words, line_width, i = 0, cache = None):
     list
         A list of indices where to insert new lines.
     int
-        Accumulated badness score 
+        Accumulated badness score
         (='inf' if there is a word larger than the line_width).
     '''
 
@@ -149,7 +149,7 @@ def justify_rc(words, line_width, i = 0, cache = None):
 
         # add the score for the current line
         score += badness(words, i, j, line_width)
-        
+
         # keep min
         if score < min_score:
             min_score = score
@@ -178,7 +178,7 @@ def justify_bu(words, line_width):
     list
         A list of indices where to insert new lines.
     int
-        Accumulated badness score 
+        Accumulated badness score
         (='inf' if there is a word larger than the line_width).
     '''
 
@@ -191,9 +191,9 @@ def justify_bu(words, line_width):
     for i in range(n-1, -1, -1):
     # iterate in topologicaly sorted order,
     # from the end of the text to the begining
-    
+
         min_score = float('inf')
-        
+
         # for every of the remaining words
         for j in range(i+1, n+1):
         # pick a break-point for the next line
@@ -201,7 +201,7 @@ def justify_bu(words, line_width):
 
             # retrieve the score for the next lines
             _, score = cache[j]
-            
+
             # add the score for the current line
             score += badness(words, i, j, line_width)
 
@@ -209,10 +209,10 @@ def justify_bu(words, line_width):
             if score < min_score:
                 min_score = score
                 min_index = j
-        
+
         # retrieve optimum indices
         min_indices, _ = cache[min_index]
-        
+
         # add the break-point index (if it is a new index)
         if (len(min_indices) == 0) or (min_index != min_indices[-1]):
             min_indices += [min_index]
@@ -238,7 +238,7 @@ def test(words, line_width, justfy_function):
     justify_function : function handle
         A function to use for justification.
         The function needs to follow this format:
-    
+
             Parameters
             ----------
             words : list
@@ -257,7 +257,7 @@ def test(words, line_width, justfy_function):
                 Accumulated badness score
                 (='inf' if there is a word larger than the line_width).
     '''
-    
+
     help(justfy_function)
 
     indices, score = justfy_function(words, line_width)

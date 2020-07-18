@@ -20,7 +20,7 @@ def fib_nr(n):
     int
         n-th Fibonacci number (starting from 0, 1,...)
     '''
-    
+
     if n < 0:
         return None
 
@@ -44,16 +44,16 @@ def fib_rc(n, cache = None):
     ----------
     n : int
         Index of the Fibonacci number to be returned.
-    
+
     cache : dict
         Cache (memo table) for storing previously calculated numbers.
-    
+
     Returns
     -------
     int
         n-th Fibonacci number (starting from 0, 1,...)
     '''
-    
+
     if n < 0:
         return None
 
@@ -65,10 +65,10 @@ def fib_rc(n, cache = None):
 
     if cache is None:
         cache = {}
-        
+
     if n in cache:
         return cache[n]
-        
+
     f = fib_rc(n-1, cache) + fib_rc(n-2, cache)
     cache[n] = f
     return f
@@ -85,12 +85,12 @@ def fib_bu(n):
     ----------
     n : int
         Index of the Fibonacci number to be returned.
-    
+
     Returns
     -------
     int
         n-th Fibonacci number (starting from 0, 1,...)
-    '''    
+    '''
 
     if n < 0:
         return None
@@ -108,7 +108,7 @@ def fib_bu(n):
         f2 = f0 + f1
         f0 = f1
         f1 = f2
-    
+
     return f2
 
 
@@ -139,7 +139,7 @@ def test_fib(fib, ins = None, outs = None):
     for x, y in zip(ins, outs):
         if y != fib(x):
             return False
-    
+
     return True
 
 

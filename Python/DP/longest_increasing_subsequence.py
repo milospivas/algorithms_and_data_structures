@@ -13,7 +13,7 @@ def longest_increasing_subsequence(a, sort_func = None, empty_object = None, app
 
     Subsequence doesn't have to be made out of contiguous elements.
     Uses longest common subsequence with the sorted input.
-    
+
     Parameters
     ----------
     a : iterable
@@ -26,7 +26,7 @@ def longest_increasing_subsequence(a, sort_func = None, empty_object = None, app
         Function that appends values to the end of the object of the same class as x and y.
     [is_inplace : bool]
         Type of the append function. True if it operates in-place, False otherwise.
-    
+
     Returns
     -------
     iterable
@@ -69,7 +69,7 @@ def longest_increasing_subsequence_nr(a):
     ----------
     a : str
         Input string.
-    
+
     Returns
     -------
     str
@@ -96,7 +96,7 @@ def longest_increasing_subsequence_nr(a):
         str
             Longest increasing subsequence *in reversed order.
         '''
-        
+
         if i == len(a):
             return ''
 
@@ -113,7 +113,7 @@ def longest_increasing_subsequence_nr(a):
                 sol = list_incl
 
         return sol
-    
+
     sol_rev = lis_nr(a)
     sol = sol_rev[::-1]
 
@@ -144,6 +144,6 @@ def longest_increasing_subsequence_nr(a):
 # print('Exiting...')
 
 
-    
+
 
 

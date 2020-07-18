@@ -32,7 +32,7 @@ def longest_common_subsequence(x, y, empty_object = None, append_func = None, is
     -------
     iterable
         Longest common subsequence.
-    
+
     Raises
     ------
     Exception
@@ -48,13 +48,13 @@ def longest_common_subsequence(x, y, empty_object = None, append_func = None, is
 
     performed_operations.sort(key = lambda oij : oij[1])
 
-    
+
     if type(x) is str:
         empty_object, append_func, is_inplace = '', str.__add__, False
 
     elif type(x) is list:
         empty_object, append_func, is_inplace = [], list.append, True
-    
+
     if (empty_object is None) or (append_func is None) or (is_inplace is None):
         raise Exception('Please provide an empty object, the append operator and its type.')
 

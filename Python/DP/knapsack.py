@@ -2,7 +2,7 @@
     N items have mass m[i], and value v[i].
     Find the optimal subset of items that maximize the total value,
     but whose total mass doesn't exceed the maximum carrying capacity of the knapsack - M.
-    
+
     The problem is solvable in pseudopolynomial time O(N*M).
     It is pseudopolynomial because the input is given in O(N) + O(logM) space.
     (M is just a number - it is written in logM space).
@@ -30,7 +30,7 @@ def knapsack_nr(m, v, M, n = None, i = 0):
         Current mass limit.
     [i : int]
         Current item index.
-    
+
     Returns
     -------
     (float, list)
@@ -43,7 +43,7 @@ def knapsack_nr(m, v, M, n = None, i = 0):
 
     if i == len(m):
         return 0, []
-    
+
     # try excluding the item
     val_excl, indices_excl = knapsack_nr(m, v, M, n, i + 1)
     sol = val_excl, indices_excl
@@ -55,7 +55,7 @@ def knapsack_nr(m, v, M, n = None, i = 0):
 
         if val_incl > val_excl:
             sol = val_incl, indices_incl + [i]
-    
+
     return sol
 
 
@@ -80,7 +80,7 @@ def knapsack_rc(m, v, M, n = None, i = 0, cache = None):
         Current item index.
     [cache : dict]
         Hashmap of already computed solutions.
-    
+
     Returns
     -------
     (float, list)
@@ -115,10 +115,10 @@ def knapsack_rc(m, v, M, n = None, i = 0, cache = None):
 
         if val_incl > val_excl:
             sol = val_incl, indices_incl + [i]
-  
+
     cache[(n, i)] = sol
     return sol
-    
+
 
 # Iterative, bottom-up variant with caching (memoization)
 
@@ -135,7 +135,7 @@ def knapsack_bu(m, v, M):
         List of (float/int) values of items.
     M : int
         Total mass limit of the knapsack.
-    
+
     Returns
     -------
     (float, list)
@@ -168,11 +168,11 @@ def knapsack_bu(m, v, M):
 
                 if val_incl > val_excl:
                     sol = val_incl, indices_incl + [i]
-        
+
             cache[(n, i)] = sol
-    
+
     return cache[(M, 0)]
-    
+
 
 ### testing
 
