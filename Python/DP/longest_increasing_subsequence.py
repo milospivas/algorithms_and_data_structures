@@ -18,18 +18,18 @@ def longest_increasing_subsequence(a, sort_func = None, empty_object = None, app
     ----------
     a : iterable
         Input iterable. Must be sequential and elements must also support '==' operator.
-    [sort_func : function handle]
+    sort_func : function handle, optional
         Function that sorts the input iterable.
-    [empty_object : any]
+    empty_object : any, optional
         Empty object of the same class as x and y.
-    [append_func : function handle]
+    append_func : function handle, optional
         Function that appends values to the end of the object of the same class as x and y.
-    [is_inplace : bool]
+    is_inplace : bool, optional
         Type of the append function. True if it operates in-place, False otherwise.
 
     Returns
     -------
-    iterable
+    out : iterable
         Longest increasing subsequence.
 
     Raises
@@ -72,7 +72,7 @@ def longest_increasing_subsequence_nr(a):
 
     Returns
     -------
-    str
+    out : str
         Longest increasing subsequence.
     '''
 
@@ -86,14 +86,14 @@ def longest_increasing_subsequence_nr(a):
         ----------
         a : str
             Input string.
-        [i : int]
+        i : int, optional
             Index of the first element from which to start computing the LIS.
-        [prev : str]
+        prev : str, optional
             Previous included element in the list (current maximum).
 
         Returns
         -------
-        str
+        out : str
             Longest increasing subsequence *in reversed order.
         '''
 
