@@ -49,7 +49,7 @@ def knapsack_nr(masses, values, mass_limit):
             val_including += values[curr_idx]
             indices_including += [curr_idx]
         else:
-            val_including, indices_including = 0, []
+            val_including, indices_including = -float('Inf'), []
 
         sol = (val_including, indices_including) if (val_including > val_excluding) else (val_excluding, indices_excluding)
 
@@ -61,25 +61,19 @@ def knapsack_nr(masses, values, mass_limit):
 
 # Recursive variant with caching (memoization)
 
-def knapsack_rc(m, v, M, n = None, i = 0, cache = None):
+def knapsack_rc(masses, values, mass_limit):
     ''' Maximise the value of a knapsack, given the items and mass limit.
 
     Recursive DP method, with caching.
 
     Parameters
     ----------
-    m : list
+    masses : list
         List of (int) masses of items.
-    v : list
+    values : list
         List of (float/int) values of items.
-    M : int
+    mass_limit : int
         Total mass limit of the knapsack.
-    n : int, optional
-        Current mass limit.
-    i : int, optional
-        Current item index.
-    cache : dict, optional
-        Hashmap of already computed solutions.
 
     Returns
     -------
@@ -88,35 +82,31 @@ def knapsack_rc(m, v, M, n = None, i = 0, cache = None):
         list - items' indices.
     '''
 
-    if n is None:
-        n = M
+    def __knapsack_with_caching(curr_mass_limit = mass_limit, curr_idx = 0):
 
-    if i == len(m):
-        return 0, []
+        if curr_idx == len(masses):
+            return 0, []
 
-    if cache is None:
-        cache = {}
+        # try excluding the current item
+        val_excluding, indices_excluding = cache[curr_mass_limit, curr_idx + 1] if (curr_mass_limit, curr_idx+1) in cache else __knapsack_with_caching(curr_mass_limit, curr_idx+1)
 
-    # try excluding the item
-    if (n, i+1) in cache:
-        val_excl, indices_excl = cache[(n, i+1)]
-    else:
-        val_excl, indices_excl = knapsack_rc(m, v, M, n, i + 1, cache)
-
-    sol = val_excl, indices_excl
-
-    # try including the item
-    if n - m[i] >= 0:
-        if (n-m[i], i+1) in cache:
-            val_incl, indices_incl = cache[(n-m[i], i+1)]
+        # try including the current item
+        next_mass_limit = curr_mass_limit - masses[curr_idx]
+        if next_mass_limit >= 0:
+            val_including, indices_including = cache[next_mass_limit, curr_idx + 1] if (next_mass_limit, curr_idx+1) in cache else __knapsack_with_caching(next_mass_limit, curr_idx+1)
+            val_including += values[curr_idx]
+            indices_including += [curr_idx]
         else:
-            val_incl, indices_incl = knapsack_rc(m, v, M, n - m[i], i + 1, cache)
-            val_incl += v[i]
+            val_including, indices_including = -float('Inf'), []
 
-        if val_incl > val_excl:
-            sol = val_incl, indices_incl + [i]
+        sol = (val_including, indices_including) if (val_including > val_excluding) else (val_excluding, indices_excluding)
 
-    cache[(n, i)] = sol
+        cache[curr_mass_limit, curr_idx] = sol
+
+        return sol
+
+    cache = {}
+    sol = __knapsack_with_caching()
     return sol
 
 
