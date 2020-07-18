@@ -22,7 +22,7 @@ def badness(words, i, j, line_width):
 
     Returns
     -------
-    int
+    out: int
         Evaluated badness.
     '''
 
@@ -55,17 +55,17 @@ def justify_nr(words, line_width, i = 0):
         The list of words representing text to be justified.
     line_width : int
         Line width in number of characters.
-    [i : int]
+    i : int, optional
         Index of the word from which to start justifying.
 
     Returns
     -------
-    (list, int)
-    list
-        A list of indices where to insert new lines.
-    int
-        Accumulated badness score
-        (='inf' if there is a word larger than the line_width).
+    out : list, int
+        list
+            A list of indices where to insert new lines.
+        int
+            Accumulated badness score
+            (='inf' if there is a word larger than the line_width).
     '''
 
     # calculate the number of remaining words
@@ -107,19 +107,19 @@ def justify_rc(words, line_width, i = 0, cache = None):
         The list of words representing text to be justified.
     line_width : int
         Line width in number of characters.
-    [i : int]
+    i : int, optional
         Index of the word from which to start justifying.
-    [cache : dict]
+    cache : dict, optional
         Dictionary of already calculated solutions.
 
     Returns
     -------
-    (list, int)
-    list
-        A list of indices where to insert new lines.
-    int
-        Accumulated badness score
-        (='inf' if there is a word larger than the line_width).
+    out : list, int
+        list
+            A list of indices where to insert new lines.
+        int
+            Accumulated badness score
+            (='inf' if there is a word larger than the line_width).
     '''
 
     # calculate the number of remaining words
@@ -174,12 +174,12 @@ def justify_bu(words, line_width):
 
     Returns
     -------
-    (list, int)
-    list
-        A list of indices where to insert new lines.
-    int
-        Accumulated badness score
-        (='inf' if there is a word larger than the line_width).
+    out : list, int
+        list
+            A list of indices where to insert new lines.
+        int
+            Accumulated badness score
+            (='inf' if there is a word larger than the line_width).
     '''
 
     n = len(words)
@@ -245,17 +245,17 @@ def test(words, line_width, justfy_function):
                 The list of words representing text to be justified.
             line_width : int
                 Line width in number of characters.
-            [i : int]
+            i : int, optional
                 Index of the word from which to start justifying.
 
             Returns
             -------
-            (list, int)
-            list
-                A list of indices where to insert new lines.
-            int
-                Accumulated badness score
-                (='inf' if there is a word larger than the line_width).
+            out : list, int
+                list
+                    A list of indices where to insert new lines.
+                int
+                    Accumulated badness score
+                    (='inf' if there is a word larger than the line_width).
     '''
 
     help(justfy_function)
