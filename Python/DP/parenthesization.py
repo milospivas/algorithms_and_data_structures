@@ -256,25 +256,48 @@ def parenthesize_bu(shapes):
 
 ### testing ########################################################################################
 
-def test_parenthesization(shapes, parenthesize_func):
-    ''' Tests parenthesize_func on shapes
+def test_parenthesization(shapes, true_indices, true_cost, parenthesize_func):
+    ''' Tests parenthesize_func on shapes.
+
+    Parameters
+    ----------
+    shapes : list
+        List of (int, int) tuples, representing shapes of matrices.
+    true_indices : list
+        Represents the order of multiplications via a list of indices.
+    true_cost : int
+        Total cost of multiplication.
+    parenthesize_func : function handle
+        Parenthesization function to test.
+
+    Returns
+    -------
+    out : bool
+        Passed/Not passed the test.
     '''
 
     indices, cost = parenthesize_func(shapes)
 
+    test_passed = (indices == true_indices) and (cost == true_cost)
+
     print('shapes:', shapes)
     print('product indices:', indices)
     print('cost:', cost)
-    print()
+    print('test_passed:', test_passed)
+    return test_passed
 
 
 for parenthesize_func in [parenthesize_nr, parenthesize_rc, parenthesize_bu]:
     help(parenthesize_func)
 
     shapes = [(2, 1), (1, 2), (2, 1)]
-    test_parenthesization(shapes, parenthesize_func)
+    true_indices = [2,1]
+    true_cost = 4
+    test_parenthesization(shapes, true_indices, true_cost, parenthesize_func)
 
     shapes = [(1, 2), (2, 1), (1, 2)]
-    test_parenthesization(shapes, parenthesize_func)
+    true_indices = [1,2]
+    true_cost = 4
+    test_parenthesization(shapes, true_indices, true_cost, parenthesize_func)
 
 print('Exiting...')
