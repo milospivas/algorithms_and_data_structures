@@ -36,7 +36,7 @@ def knapsack_nr(masses, values, mass_limit):
 
     def __knapsack(curr_mass_limit = mass_limit, curr_idx = 0):
 
-        if curr_idx == len(masses):
+        if curr_mass_limit == 0 or curr_idx == len(masses):
             return 0, []
 
         # try excluding the current item
@@ -82,10 +82,18 @@ def knapsack_rc(masses, values, mass_limit):
         list - items' indices.
     '''
 
+    def __cache_init():
+        cache = {}
+        for curr_mass_limit in range(0, mass_limit+1):
+            cache[curr_mass_limit, len(masses)] = 0, [] # any mass, no items left
+        for curr_idx in range(len(masses)+1):
+            cache[0, curr_idx] = 0, []                  # no mass left, any items
+        return cache
+
     def __knapsack_with_caching(curr_mass_limit = mass_limit, curr_idx = 0):
 
-        if curr_idx == len(masses):
-            return 0, []
+        if (curr_mass_limit, curr_idx) in cache:
+            return cache[curr_mass_limit, curr_idx]
 
         # try excluding the current item
         val_excluding, indices_excluding = cache[curr_mass_limit, curr_idx + 1] if (curr_mass_limit, curr_idx+1) in cache else __knapsack_with_caching(curr_mass_limit, curr_idx+1)
@@ -105,7 +113,7 @@ def knapsack_rc(masses, values, mass_limit):
 
         return sol
 
-    cache = {}
+    cache = __cache_init()
     sol = __knapsack_with_caching()
     return sol
 
