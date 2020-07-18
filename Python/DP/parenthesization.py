@@ -6,6 +6,7 @@
     Author: Miloš Pivaš
 '''
 
+### shared functions ###############################################################################
 
 def cost_mm(shapes, B_shape):
     ''' Calculates the cost of computing a matrix multiplication.
@@ -54,7 +55,7 @@ def shape_of_product(shapes, start, stop):
     return (shapes[start][0], shapes[stop-1][1])
 
 
-### Naive recursive DP
+### Naive recursive DP #############################################################################
 
 def parenthesize_nr(shapes):
     ''' Finds optimal way to parenthesize a matrix multiplication expression.
@@ -104,7 +105,7 @@ def parenthesize_nr(shapes):
     return sol
 
 
-### Recursive DP with caching (memoization)
+### Recursive DP with caching (memoization) ########################################################
 
 def parenthesize_rc(shapes):
     ''' Finds optimal way to parenthesize a matrix multiplication expression.
@@ -162,7 +163,7 @@ def parenthesize_rc(shapes):
     return sol
 
 
-### Iterative, bottom-up DP with caching (memoization)
+### Iterative, bottom-up DP with caching (memoization) #############################################
 
 def parenthesize_bu(shapes):
     ''' Finds optimal way to parenthesize a matrix multiplication expression.
@@ -227,7 +228,8 @@ def parenthesize_bu(shapes):
     return cache[0, len(shapes)]
 
 
-### testing
+### testing ########################################################################################
+
 def test_parenthesization(shapes, parenthesize_func):
     ''' Tests parenthesize_func on shapes
     '''
