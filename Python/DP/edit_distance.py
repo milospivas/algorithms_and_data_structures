@@ -115,10 +115,12 @@ def edit_distance_nr(x, y, operations):
 
 ### Recursive DP + caching
 
-def edit_distance_rc(x, y, operations, i = 0, j = 0, cache = None):
+def edit_distance_rc(x, y, operations):
     ''' Calculates edit distance between iterables x and y.
 
     Recursive, dynamic programming method with caching (memoization).
+
+    Besides the given operations, doing nothing (if elements match) is always a possibility.
 
     For more info on edit distance itself, see: https://en.wikipedia.org/wiki/Edit_distance
 
@@ -130,12 +132,6 @@ def edit_distance_rc(x, y, operations, i = 0, j = 0, cache = None):
         Second input iterable. Must be sequential and elements must also support '==' operator.
     operations : list
         List of Operation() objects. List of available operations.
-    i : int, optional
-        Starting index of the first iterable.
-    j : int, optional
-        Starting index of the second iterable.
-    cache : dict, optional
-        Hashmap of already computed solutions.
 
     Returns
     -------
@@ -148,45 +144,40 @@ def edit_distance_rc(x, y, operations, i = 0, j = 0, cache = None):
         The second int is the index of the element in y.
     '''
 
-    # base case
-    if (i == len(x)) and (j == len(y)):
-        return 0, []
-
-    # cache init
-    if cache is None:
+    def __cache_init():
         cache = {}
+        cache[len(x), len(y)] = 0, []
+        return cache
 
-    # try all available operations that surely transform x into y,
-    # including not doing anything (if the elements match),
-    # and pick the one with the minimum cost
-    min_cost = float('Inf')
-    for o in operations+[None]:
-        if o is None:   # if not doing anything, we move to next elements with 0 cost
-            next_i, next_j = i + 1, j + 1
-            curr_cost = 0
-        else:
-            next_i, next_j = i + o.dx, j + o.dy
-            curr_cost = o.cost
+    def __edit_distance_with_caching(i = 0, j = 0):
 
-        if (next_i <= len(x)) and (next_j <= len(y)):
-            if (o is None) and (x[i] != y[j]):  # if not doing anything, we need the elements to match
-                continue
+        if (i, j) in cache:
+            return cache[i, j]
 
-            if (next_i, next_j) in cache:
-                next_cost, next_operations = cache[(next_i, next_j)]
-            else:
-                next_cost, next_operations = edit_distance_rc(x, y, operations, next_i, next_j, cache)
+        min_cost = float('Inf')
+        for operation in all_operations:
+            curr_cost, next_i, next_j = operation.cost, i + operation.dx, j + operation.dy
 
-            cost = next_cost + curr_cost
+            if (next_i <= len(x)) and (next_j <= len(y)):
+                if (operation == do_nothing) and (x[i] != y[j]):
+                    continue
 
-            if cost < min_cost:
-                min_cost = cost
-                min_next_operations = next_operations + [(o, i, j)]
+                next_cost, next_operations = __edit_distance_with_caching(next_i, next_j)
+                cost = next_cost + curr_cost
 
-    # save the solution in cache
-    cache[(i, j)] = min_cost, min_next_operations
+                if cost < min_cost:
+                    min_cost = cost
+                    min_next_operations = next_operations + [(operation, i, j)]
 
-    return min_cost, min_next_operations
+        cache[i, j] = min_cost, min_next_operations
+
+        return min_cost, min_next_operations
+
+    cache = __cache_init()
+    do_nothing = Operation(cost = 0, dx = 1, dy = 1)
+    all_operations = operations + [do_nothing]
+    sol = __edit_distance_with_caching()
+    return sol
 
 
 ### Iterative, bottom-up DP with caching
