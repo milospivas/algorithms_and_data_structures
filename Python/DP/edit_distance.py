@@ -187,6 +187,8 @@ def edit_distance_bu(x, y, operations):
 
     Iterative, bottom-up, dynamic programming method.
 
+    Besides the given operations, doing nothing (if elements match) is always a possibility.
+
     For more info on edit distance itself, see: https://en.wikipedia.org/wiki/Edit_distance
 
     Parameters
@@ -215,75 +217,84 @@ def edit_distance_bu(x, y, operations):
         if any given operation uses more than 1 element per iterable.
     '''
 
-    for o in operations:
-        if o.dx > 1 or o.dy > 1:
+    def __cache_init():
+        cache = {}
+        cache[len(x), len(y)] = 0, []
+        return cache
+
+    def __get_topological_order():
+        ''' We look at the cache as a len(x)+1 by len(y)+1 matrix M[i][j].
+            We start in the lower right corner, cache[(len(x), len(y))],
+            after the ends of x and y. That's our base case.
+            Then we will move to the first field - one "left".
+            And then we will move "up-right", on each line parallel to the antidiagonal,
+            like so:\n
+            _________/9\n
+            _______/8/5\n
+            _____/7/4/2\n
+            ___/6/3/1/0\n
+        '''
+
+        # the first field after the base case:
+        i_line_start, j_line_start = len(x), len(y)-1
+        on_the_grid = True
+        while on_the_grid:
+
+            i, j = i_line_start, j_line_start
+            on_the_line = True
+            while on_the_line:
+
+                yield i, j
+
+                # move to the next element in the line ("up-right")
+                i -= 1
+                j += 1
+
+                if i < 0 or j > len(y):
+                    on_the_line = False
+
+            # move to the next line:
+            if j_line_start-1 >= 0:     # until the start of the lower edge,
+                j_line_start -= 1       #   move "left"
+            elif i_line_start-1 >= 0:   # else, until the start of the left edge
+                i_line_start -= 1       #   move "up"
+            else:                       # else:
+                on_the_grid = False     #   we're done
+
+
+    for operation in operations:
+        if operation.dx > 1 or operation.dy > 1:
             raise Exception('Can\'t work with operations that use more than 1 element')
 
-    # cache init
-    cache = {}
+    cache = __cache_init()
+    do_nothing = Operation(cost = 0, dx = 1, dy = 1)
+    all_operations = operations + [do_nothing]
 
-    # We look at the cache as a len(x)+1 by len(y)+1 matrix M[i][j].
-    # We start in the lower right corner, after the ends of x and y:
-    cache[(len(x), len(y))] = 0, []     # our base case.
+    topological_order = __get_topological_order()
 
-    # then move to the first field - one "left"
-    i_start, j_start = len(x), len(y)-1     # (corresponds with empty x, end of y)
+    for i, j in topological_order:
+        min_cost = float('Inf')
+        for operation in all_operations:
+            curr_cost, next_i, next_j = operation.cost, i + operation.dx, j + operation.dy
 
-    # and then we will move "up-right", on each line parallel to the antidiagonal.
-    # .........9
-    # .......8 5
-    # .....7 4 2
-    # ...6 3 1 0
+            if (next_i <= len(x)) and (next_j <= len(y)):
+                if (operation == do_nothing) and (x[i] != y[j]):
+                    continue
 
-    while True:
-        # get the starting point of the current line
-        i, j = i_start, j_start
+                next_cost, next_operations = cache[next_i, next_j]
+                cost = next_cost + curr_cost
 
-        while True:
-            # try all available operations that surely transform x into y,
-            # including not doing anything (if the elements match),
-            # and pick the one with the minimum cost
-            min_cost = float('Inf')
-            for o in operations+[None]:
-                if o is None:   # if not doing anything, we move to next elements with 0 cost
-                    curr_cost, next_i, next_j = 0, i + 1, j + 1
-                else:
-                    curr_cost, next_i, next_j = o.cost, i + o.dx, j + o.dy
+                if cost < min_cost:
+                    min_cost = cost
+                    min_next_operations = next_operations + [(operation, i, j)]
 
-                if (next_i <= len(x)) and (next_j <= len(y)):
-                    if (o is None) and (x[i] != y[j]):  # if not doing anything, we need the elements to match
-                        continue
+        cache[i, j] = min_cost, min_next_operations
 
-                    next_cost, next_operations = cache[(next_i, next_j)]
-                    cost = next_cost + curr_cost
+        # this optimises the cache space to use only O(len(x)+len(y)) space, instead of O(len(x)*len(y)),
+        # by removing the no longer needed elements from the second-previous line bellow
+        cache.pop((i+2, j), None)
 
-                    if cost < min_cost:
-                        min_cost = cost
-                        min_next_operations = next_operations + [(o, i, j)]
-
-            # save the solution in cache
-            cache[(i, j)] = min_cost, min_next_operations
-
-            # this optimises the cache space to use only O(len(x)+len(y)) space, instead of O(len(x)*len(y)),
-            # by removing the no longer needed elements from the second-previous line
-            cache.pop((i+2, j), None)
-
-            # move to the next element in the line ("up-right")
-            i -= 1
-            j += 1
-            # if off the grid, move to the next starting point
-            if i < 0 or j > len(y):
-                break
-
-        # move to the start to the next line
-        if j_start-1 >= 0:      # if still on the lower edge,
-            j_start -= 1        #   move "left"
-        elif i_start-1 >= 0:    # else, if still on the left edge
-            i_start -= 1        #   move "up"
-        else:                   # else:
-            break               #   we're done
-
-    return cache[(0,0)]
+    return cache[0,0]
 
 
 ### testing
