@@ -13,6 +13,7 @@ def longest_common_subsequence(x, y, empty_object = None, append_func = None, is
     ''' Finds the longest common subsequence in two given iterables.
 
     Subsequence is sequential but doesn't have to be contiguous.
+
     Uses edit distance algorithm.
 
     Parameters
@@ -21,16 +22,16 @@ def longest_common_subsequence(x, y, empty_object = None, append_func = None, is
         First input iterable. Must be sequential and elements must also support '==' operator.
     y : iterable
         Second input iterable. Must be sequential and elements must also support '==' operator.
-    [empty_object : any]
+    empty_object : any, optional
         Empty object of the same class as x and y.
-    [append_func : function handle]
+    append_func : function handle, optional
         Function that appends values to the end of the object of the same class as x and y.
-    [is_inplace : bool]
+    is_inplace : bool, optional
         Type of the append function. True if it operates in-place, False otherwise.
 
     Returns
     -------
-    iterable
+    out : iterable
         Longest common subsequence.
 
     Raises
