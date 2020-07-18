@@ -1,4 +1,5 @@
 ''' Dynamic Programming: Parenthesization
+
     Optimal evaluation of associative expression A[0]*A[1]*...*A[n-1]
     representing multiplication of rectangular matrices.
 
@@ -21,7 +22,7 @@ def cost_mm(A_shape, B_shape):
 
     Returns
     -------
-    int
+    out : int
         The cost of computing the multiplication.
         (inf if the multiplication is impossible)
     '''
@@ -43,17 +44,18 @@ def parenthesize_nr(A_shapes, i = 0, j = None):
     ----------
     A_shapes : list
         List of (int, int) tuples, representing shapes of matrices.
-    [i : int]
+    i : int, optional
         Index of the first matrix in the expression.
-    [j : int]
+    j : int, optional
         Index of the last matrix in the expression.
 
     Returns
     -------
-    list
-        Represents the order of multiplications via a list of indices.
-    int
-        Total cost of multiplication.
+    out : list, int
+        list
+            Represents the order of multiplications via a list of indices.
+        int
+            Total cost of multiplication.
     '''
 
     if j is None:
@@ -99,19 +101,20 @@ def parenthesize_rc(A_shapes, i = 0, j = None, cache = None):
     ----------
     A_shapes : list
         List of (int, int) tuples, representing shapes of matrices.
-    [i : int]
+    i : int, optional
         Index of the first matrix in the expression.
-    [j : int]
+    j : int, optional
         Index of the last matrix in the expression.
-    [cache : dict]
+    cache : dict, optional
         The hashmap of already computed solutions.
 
     Returns
     -------
-    list
-        Represents the order of multiplications via a list of indices.
-    int
-        Total cost of multiplication.
+    out : list, int
+        list
+            Represents the order of multiplications via a list of indices.
+        int
+            Total cost of multiplication.
     '''
 
     if j is None:
@@ -172,13 +175,14 @@ def parenthesize_bu(A_shapes):
 
     Returns
     -------
-    list
-        Represents the order of multiplications via a list of indices.
-    int
-        Total cost of multiplication.
+    out : list, int
+        list
+            Represents the order of multiplications via a list of indices.
+        int
+            Total cost of multiplication.
     '''
 
-    N = len(A_shape)
+    N = len(A_shapes)
 
     # cache init
     cache = {}
