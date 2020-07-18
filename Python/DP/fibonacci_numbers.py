@@ -35,7 +35,7 @@ def fib_nr(n):
 
 ### Recursion + caching (memoization)
 
-def fib_rc(n, cache = None):
+def fib_rc(n, cache = {}):
     ''' Returns n-th Fibonacci number.
 
     Recursive function with caching (memoization).
@@ -62,9 +62,6 @@ def fib_rc(n, cache = None):
 
     if n == 1:
         return 1
-
-    if cache is None:
-        cache = {}
 
     if n in cache:
         return cache[n]
