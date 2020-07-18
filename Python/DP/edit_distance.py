@@ -56,10 +56,12 @@ class Operation:
 
 ### Naive recursive DP
 
-def edit_distance_nr(x, y, operations, i = 0, j = 0):
-    ''' Calculates edit distance between iterables x and y.
+def edit_distance_nr(x, y, operations):
+    ''' Calculates edit distance between iterables x and y, using given operations.
 
     Naive recursive, dynamic programming method (without caching).
+
+    Besides the given operations, doing nothing (if elements match) is always a possibility.
 
     For more info on edit distance itself, see: https://en.wikipedia.org/wiki/Edit_distance
 
@@ -71,10 +73,6 @@ def edit_distance_nr(x, y, operations, i = 0, j = 0):
         Second input iterable. Must be sequential and elements must also support '==' operator.
     operations : list
         List of Operation() objects. List of available operations.
-    i : int, optional
-        Starting index of the first iterable.
-    j : int, optional
-        Starting index of the second iterable.
 
     Returns
     -------
@@ -87,34 +85,32 @@ def edit_distance_nr(x, y, operations, i = 0, j = 0):
         The second int is the index of the element in y.
     '''
 
-    # base case
-    if (i == len(x)) and (j == len(y)):
-        return 0, []
+    def __edit_distance(i = 0, j = 0):
 
-    # try all available operations that surely transform x into y,
-    # including not doing anything (if the elements match),
-    # and pick the one with the minimum cost
-    min_cost = float('Inf')
-    for o in operations+[None]:
-        if o is None:   # if not doing anything, we move to next elements with 0 cost
-            next_i, next_j = i + 1, j + 1
-            curr_cost = 0
-        else:
-            next_i, next_j = i + o.dx, j + o.dy
-            curr_cost = o.cost
+        if (i == len(x)) and (j == len(y)):
+            return 0, []
 
-        if (next_i <= len(x)) and (next_j <= len(y)):
-            if (o is None) and (x[i] != y[j]):  # if not doing anything, we need the elements to match
-                continue
+        min_cost = float('Inf')
+        for operation in all_operations:
+            curr_cost, next_i, next_j = operation.cost, i + operation.dx, j + operation.dy
 
-            next_cost, next_operations = edit_distance_nr(x, y, operations, next_i, next_j)
-            cost = next_cost + curr_cost
+            if (next_i <= len(x)) and (next_j <= len(y)):
+                if (operation == do_nothing) and (x[i] != y[j]):
+                    continue
 
-            if cost < min_cost:
-                min_cost = cost
-                min_next_operations = next_operations + [(o, i, j)]
+                next_cost, next_operations = __edit_distance(next_i, next_j)
+                cost = next_cost + curr_cost
 
-    return min_cost, min_next_operations
+                if cost < min_cost:
+                    min_cost = cost
+                    min_next_operations = next_operations + [(operation, i, j)]
+
+        return min_cost, min_next_operations
+
+    do_nothing = Operation(cost = 0, dx = 1, dy = 1)
+    all_operations = operations + [do_nothing]
+    sol = __edit_distance()
+    return sol
 
 
 ### Recursive DP + caching
@@ -346,55 +342,55 @@ def test_ed(x, y, operations, true_ed, edit_distance_func):
     return ed == true_ed
 
 
-# help(Operation)
+help(Operation)
 
-# # Can't work with negative number of elements
-# try:
-#     o = Operation(42, -1, 0)
-# except Exception as e:
-#     print(e)
+# Can't work with negative number of elements
+try:
+    o = Operation(42, -1, 0)
+except Exception as e:
+    print(e)
 
-# try:
-#     o = Operation(42, 0, -1)
-# except Exception as e:
-#     print(e)
+try:
+    o = Operation(42, 0, -1)
+except Exception as e:
+    print(e)
 
-# help(edit_distance_nr)
-# help(edit_distance_rc)
-# help(edit_distance_bu)
+help(edit_distance_nr)
+help(edit_distance_rc)
+help(edit_distance_bu)
 
-# # building operations list (for calculating, the Levenshtein distance)
-# delete = Operation(1, 1, 0)
-# insert = Operation(1, 0, 1)
-# replace = Operation(1, 1, 1)
-# operations = [delete, insert, replace]
+# building operations list (for calculating, the Levenshtein distance)
+delete = Operation(1, 1, 0)
+insert = Operation(1, 0, 1)
+replace = Operation(1, 1, 1)
+operations = [delete, insert, replace]
 
-# x = 'a'
-# y = 'a'
-# true_ed = 0
-# assert test_ed(x, y, operations, true_ed, edit_distance_nr)
-# assert test_ed(x, y, operations, true_ed, edit_distance_rc)
-# assert test_ed(x, y, operations, true_ed, edit_distance_bu)
+x = 'a'
+y = 'a'
+true_ed = 0
+assert test_ed(x, y, operations, true_ed, edit_distance_nr)
+assert test_ed(x, y, operations, true_ed, edit_distance_rc)
+assert test_ed(x, y, operations, true_ed, edit_distance_bu)
 
-# x = 'abacab'
-# y = 'ahab'
-# true_ed = 3
-# assert test_ed(x, y, operations, true_ed, edit_distance_nr)
-# assert test_ed(x, y, operations, true_ed, edit_distance_rc)
-# assert test_ed(x, y, operations, true_ed, edit_distance_bu)
+x = 'abacab'
+y = 'ahab'
+true_ed = 3
+assert test_ed(x, y, operations, true_ed, edit_distance_nr)
+assert test_ed(x, y, operations, true_ed, edit_distance_rc)
+assert test_ed(x, y, operations, true_ed, edit_distance_bu)
 
-# x = [1,2,1,3,1,2]   # represents 'abacab'
-# y = [1,8,1,2]       # represents 'ahab'
-# true_ed = 3
-# assert test_ed(x, y, operations, true_ed, edit_distance_nr)
-# assert test_ed(x, y, operations, true_ed, edit_distance_rc)
-# assert test_ed(x, y, operations, true_ed, edit_distance_bu)
+x = [1,2,1,3,1,2]   # represents 'abacab'
+y = [1,8,1,2]       # represents 'ahab'
+true_ed = 3
+assert test_ed(x, y, operations, true_ed, edit_distance_nr)
+assert test_ed(x, y, operations, true_ed, edit_distance_rc)
+assert test_ed(x, y, operations, true_ed, edit_distance_bu)
 
-# import numpy as np
-# x_arr = np.array(x)
-# y_arr = np.array(y)
-# assert test_ed(x_arr, y_arr, operations, true_ed, edit_distance_nr)
-# assert test_ed(x_arr, y_arr, operations, true_ed, edit_distance_rc)
-# assert test_ed(x_arr, y_arr, operations, true_ed, edit_distance_bu)
+import numpy as np
+x_arr = np.array(x)
+y_arr = np.array(y)
+assert test_ed(x_arr, y_arr, operations, true_ed, edit_distance_nr)
+assert test_ed(x_arr, y_arr, operations, true_ed, edit_distance_rc)
+assert test_ed(x_arr, y_arr, operations, true_ed, edit_distance_bu)
 
-# print('Exiting...')
+print('Exiting...')
