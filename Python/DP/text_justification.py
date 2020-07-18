@@ -202,67 +202,85 @@ def justify_bu(words, line_character_limit):
 
 ### testing
 
-def test(words, line_width, justfy_function):
+def get_justified_text(words, indices):
+    ''' Produces justified text from words with new lines at indices.
+
+    Parameters
+    ----------
+    words : list
+        The list of words representing text to be justified.
+    indices : list
+        A list of indices where new lines are to be inserted.
+
+    Returns
+    -------
+    out : str
+        Justified text.
+    '''
+
+    txt = ''
+    new_line_idx = 0
+    for word_idx, word in enumerate(words):
+        txt += word
+        if word_idx == indices[new_line_idx]-1:
+            txt += '\n'
+            new_line_idx += 1
+        else:
+            txt += ' '
+
+    return txt
+
+def test(words, line_character_limit, justfy_func):
     ''' Tests given justification function.
 
     Parameters
     ----------
     words : list
         The list of words representing text to be justified.
-    line_width : int
+    line_character_limit : int
         Line width in number of characters.
-    justify_function : function handle
-        A function to use for justification.
-        The function needs to follow this format:
+    justify_func : function handle
+        The justification function to test.
+        The function needs to have this interface:
 
             Parameters
             ----------
             words : list
                 The list of words representing text to be justified.
-            line_width : int
+            line_character_limit : int
                 Line width in number of characters.
-            i : int, optional
-                Index of the word from which to start justifying.
 
             Returns
             -------
             out : list, int
                 list
-                    A list of indices where to insert new lines.
+                    A list of indices where new lines are to be inserted.
                 int
                     Accumulated badness score
-                    (='inf' if there is a word larger than the line_width).
+                    (='inf' if there is a word larger than line_character_limit).
     '''
 
-    help(justfy_function)
+    indices, score = justfy_func(words, line_character_limit)
+    txt = get_justified_text(words, indices)
 
-    indices, score = justfy_function(words, line_width)
-    indices.sort()
     print('words:', words)
-    print('line_width:', line_width)
+    print('line_character_limit:', line_character_limit)
     print('score:', score)
     print('indices:', indices)
-
     print('justified text:')
-    k = 0
-    for i, word in enumerate(words):
-        print(word, end='')
-        if i == indices[k]-1:
-            print('\n', end='')
-            k += 1
-        else:
-            print(' ', end='')
+    print(txt)
 
+
+for justify_func in [justify_nr, justify_rc, justify_bu]:
+    help(justify_func)
 
 text = '12345678901 123 123 123 123'
+line_character_limit = 11
 words = text.split(' ')
-line_width = 11
 
-test(words, line_width, justify_nr)
+for justify_func in [justify_nr, justify_rc, justify_bu]:
 
-test(words, line_width, justify_rc)
-
-test(words, line_width, justify_bu)
+    test(words, line_character_limit, justify_func)
 
 
 print('Exiting...')
