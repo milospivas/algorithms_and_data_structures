@@ -1,6 +1,6 @@
 {
     "python.pythonPath": "C:\\Users\\Ultrabook\\AppData\\Local\\Programs\\Python\\Python38\\python.exe",
-    "python.autoComplete.extraPaths": ["./Python/DP", "./Python/Lists, Graphs and Trees"],
+    "python.autoComplete.extraPaths": ["./Python/DP", "./Python/Lists, Graphs and Trees", "./Python/Design Patterns"],
     "files.associations": {
         "*.tcc": "cpp",
         "vector": "cpp",
