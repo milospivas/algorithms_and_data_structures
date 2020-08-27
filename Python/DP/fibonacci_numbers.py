@@ -3,6 +3,8 @@
     Author: Miloš Pivaš, student
 '''
 
+import math
+
 ### Naive recursion
 
 def fib_nr(n):
@@ -108,6 +110,30 @@ def fib_bu(n):
 
     return f2
 
+### Binet's formula (cheating for O(1) time and space)
+
+def fib_binet(n):
+    ''' Returns n-th Fibonacci number.
+
+    Calculates it via Binet's formula.
+
+    Parameters
+    ----------
+    n : int
+        Index of the Fibonacci number to be returned.
+
+    Returns
+    -------
+    out : int
+        n-th Fibonacci number (starting from 0, 1,...).
+    '''
+
+    if n < 0:
+        return None
+
+    sqrt5 = math.sqrt(5)
+    fib = 1/sqrt5 * (((1 + sqrt5)/2)**n - ((1 - sqrt5)/2)**n)
+    return int(fib)
 
 
 ### testing
@@ -143,7 +169,8 @@ def test_fib(fib, ins = None, outs = None):
 test_functions = [
     fib_nr,     # naive recursion
     fib_rc,     # recursion with caching (memoization)
-    fib_bu      # iterative bottom-up
+    fib_bu,     # iterative bottom-up
+    fib_binet   # Binet's formula
 ]
 
 for fib_func in test_functions:
