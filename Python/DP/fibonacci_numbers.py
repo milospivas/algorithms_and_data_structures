@@ -140,13 +140,13 @@ def test_fib(fib, ins = None, outs = None):
     return True
 
 
-# testing naive recursion
-assert test_fib(fib_nr)
+test_functions = [
+    fib_nr,     # naive recursion
+    fib_rc,     # recursion with caching (memoization)
+    fib_bu      # iterative bottom-up
+]
 
-# testing recursion with caching (memoization)
-assert test_fib(fib_rc)
-
-# testing iterative bottom-up
-assert test_fib(fib_bu)
+for fib_func in test_functions:
+    assert test_fib(fib_func)
 
 print('Exiting...')
